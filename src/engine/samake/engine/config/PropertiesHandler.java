@@ -1,0 +1,110 @@
+package samake.engine.config;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class PropertiesHandler {
+	
+	private static Properties properties;
+	
+	private static String engineVersion;
+	private static String gameVersion;
+	private static String gameTitle;
+	
+	private static int windowWidth;
+	private static int windowHeight;
+	private static boolean vSync;
+	private static int fpsLimit;
+	private static int fov;
+	private static int anisotropicFiltering;
+	
+	public static void initialize() throws Exception {
+		
+		properties = new Properties();
+		properties.load(new FileInputStream(new File(System.getProperty("basePath"), "settings/main.properties")));
+		
+		setEngineVersion(properties.getProperty("ENGINE_VERSION"));
+		setGameVersion(properties.getProperty("GAME_VERSION"));
+		setGameTitle(properties.getProperty("GAME_TITLE"));
+		
+		setWindowWidth(Integer.valueOf(properties.getProperty("WINDOW_WIDTH")));
+		setWindowHeight(Integer.valueOf(properties.getProperty("WINDOW_HEIGHT")));
+		setvSync(Boolean.valueOf(properties.getProperty("VSYNC")));
+		setFpsLimit(Integer.valueOf(properties.getProperty("FPS_LIMIT")));
+		setFOV(Integer.valueOf(properties.getProperty("FOV")));
+		setAnisotropicFiltering(Integer.valueOf(properties.getProperty("ANISOTROPIC_FILTERING")));
+	}
+
+	public static int getWindowWidth() {
+		return windowWidth;
+	}
+
+	public static void setWindowWidth(int windowWidth) {
+		PropertiesHandler.windowWidth = windowWidth;
+	}
+
+	public static int getWindowHeight() {
+		return windowHeight;
+	}
+
+	public static void setWindowHeight(int windowHeight) {
+		PropertiesHandler.windowHeight = windowHeight;
+	}
+
+	public static boolean isvSync() {
+		return vSync;
+	}
+
+	public static void setvSync(boolean vSync) {
+		PropertiesHandler.vSync = vSync;
+	}
+
+	public static int getFpsLimit() {
+		return fpsLimit;
+	}
+
+	public static void setFpsLimit(int fpsLimit) {
+		PropertiesHandler.fpsLimit = fpsLimit;
+	}
+
+	public static String getEngineVersion() {
+		return engineVersion;
+	}
+
+	public static void setEngineVersion(String engineVersion) {
+		PropertiesHandler.engineVersion = engineVersion;
+	}
+
+	public static String getGameVersion() {
+		return gameVersion;
+	}
+
+	public static void setGameVersion(String gameVersion) {
+		PropertiesHandler.gameVersion = gameVersion;
+	}
+
+	public static String getGameTitle() {
+		return gameTitle;
+	}
+
+	public static void setGameTitle(String gameTitle) {
+		PropertiesHandler.gameTitle = gameTitle;
+	}
+
+	public static int getFOV() {
+		return fov;
+	}
+
+	public static void setFOV(int fov) {
+		PropertiesHandler.fov = fov;
+	}
+
+	public static int getAnisotropicFiltering() {
+		return anisotropicFiltering;
+	}
+
+	public static void setAnisotropicFiltering(int anisotropicFiltering) {
+		PropertiesHandler.anisotropicFiltering = anisotropicFiltering;
+	}
+}
