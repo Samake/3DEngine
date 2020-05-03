@@ -107,6 +107,7 @@ public class Renderer {
 		GL43.glEnable(GL43.GL_DEPTH_TEST);
 		GL43.glEnable(GL43.GL_STENCIL_TEST); 
 		GL43.glEnable(GL43.GL_TEXTURE_2D);
+		GL43.glEnable(GL43.GL_TEXTURE_3D);
 		GL43.glEnable(GL43.GL_FRAMEBUFFER_SRGB);
 		GL43.glEnable(GL43.GL_BLEND);
 		GL43.glBlendFunc(GL43.GL_SRC_ALPHA, GL43.GL_ONE_MINUS_SRC_ALPHA); 
@@ -125,7 +126,8 @@ public class Renderer {
 		GL43.glDisable(GL43.GL_CULL_FACE);
 		GL43.glDisable(GL43.GL_DEPTH_TEST);	
 		GL43.glDisable(GL43.GL_STENCIL_TEST); 
-		GL43.glDisable(GL43.GL_TEXTURE_2D);  
+		GL43.glDisable(GL43.GL_TEXTURE_2D);
+		GL43.glDisable(GL43.GL_TEXTURE_3D);
 		GL43.glDisable(GL43.GL_BLEND);
 		GL43.glDisable(GL43.GL_FRAMEBUFFER_SRGB);
 	}
@@ -169,12 +171,12 @@ public class Renderer {
 	
 	private void renderClouds(int renderMode) { 
     	GL43.glEnable(GL43.GL_CULL_FACE);
-    	GL43.glCullFace(GL43.GL_FRONT);
+    	GL43.glCullFace(GL43.GL_BACK);
 
 		if (getRenderMode() == 2) {
-			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_LINE);
+			GL43.glPolygonMode(GL43.GL_BACK, GL43.GL_LINE);
 		} else {
-			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_FILL);
+			GL43.glPolygonMode(GL43.GL_BACK, GL43.GL_FILL);
 		}
 
 		cloudRenderer.render(scene.getCamera(), transformation, scene, renderMode, cloudBuffer, clipPlane);

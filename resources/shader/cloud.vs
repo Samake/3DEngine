@@ -23,7 +23,7 @@ void main() {
     color = inColor;
     normal = (transformationMatrix * vec4(inNormal, 0.0)).xyz;
     uv = inUV;
-    modelPositions = normalize(position.xyz);
+    modelPositions = 0.5 * normalize(inPosition) + 0.5;
     
     clipSpace = projectionMatrix * viewMatrix * position;
 }

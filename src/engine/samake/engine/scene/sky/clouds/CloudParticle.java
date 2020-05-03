@@ -10,7 +10,8 @@ public class CloudParticle {
 	private Vector3f offset = new Vector3f();
 	
 	public CloudParticle(float cloudScale) {
-		setScale(Utils.getRandomValue(1000.0f, 6000.0f, 1000.0f));
+		setScale(1.0f);
+		//setScale(Utils.getRandomValue(1000.0f, 1000.0f, 1000.0f));
 		
 		offset.x = Utils.getRandomValue(-3000.0f, 3000.0f, 1000.0f) * scale * cloudScale;
 		offset.y = Utils.getRandomValue(-500.0f, 500.0f, 1000.0f) * scale * cloudScale;

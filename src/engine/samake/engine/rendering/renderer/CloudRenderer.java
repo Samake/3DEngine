@@ -54,6 +54,9 @@ public class CloudRenderer {
 	    	shader.setUniformMatrix4f("projectionMatrix", projectionMatrix);
 	    	shader.setUniformMatrix4f("viewMatrix", viewMatrix);
 	    	shader.setUniformVector3f("cameraPosition", camera.getPosition());
+	    	
+	    	shader.setUniformVector2f("windDirection", clouds.getWindDirection());
+	    	shader.setUniformFloat("animValue", clouds.getAnimValue());
 
 	    	for (Cloud cloud : clouds.getClouds()) {
 	    		for (CloudParticle particle : cloud.getParticles()) {

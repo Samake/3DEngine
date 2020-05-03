@@ -21,7 +21,9 @@ public class CloudShader extends Shader {
 		createUniform("clipPlane");
 		createUniform("cameraPosition");
 		createUniform("renderMode");
-
+		createUniform("windDirection");
+		createUniform("animValue");
+		
 		Console.print("CloudShader loaded!", LOGTYPE.OUTPUT, true);
 	}
 	

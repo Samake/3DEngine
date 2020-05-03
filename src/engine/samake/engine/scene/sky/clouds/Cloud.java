@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import samake.engine.entity.Entity;
 import samake.engine.utils.Utils;
@@ -19,7 +20,9 @@ public class Cloud extends Entity {
 	public Cloud() {
 		setAlive(true);
 		setMaxParticles(1);
-		setScale(Utils.getRandomValue(8000.0f, 20000.0f, 1000.0f));
+		setScale(1.0f);
+		setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		//setScale(Utils.getRandomValue(100000.0f, 100000.0f, 1000.0f));
 		
 		int randomValue = (int) Utils.getRandomValue(1, maxParticles, 1);
 		randomSpeed = Utils.getRandomValue(250.0f, 2500.0f, 1000.0f);

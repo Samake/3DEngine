@@ -175,16 +175,21 @@ public class ResourceLoader {
 						
 						GL43.glTexParameterf(GL43.GL_TEXTURE_3D, GL14.GL_TEXTURE_LOD_BIAS, 3.0f);
 						
+						GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MIN_FILTER, GL43.GL_LINEAR);
+						GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MAG_FILTER, GL43.GL_LINEAR);
+						GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_WRAP_S, GL43.GL_REPEAT);
+						GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_WRAP_T, GL43.GL_REPEAT);
+						GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_WRAP_R, GL43.GL_REPEAT);
+
 						if (channels > 3) {
-							GL43.glTexImage3D(GL43.GL_TEXTURE_3D, 0, GL43.GL_RGBA, width, height, 0, 0, GL43.GL_RGBA, GL43.GL_UNSIGNED_BYTE, decodedImage);
+							GL43.glTexImage3D(GL43.GL_TEXTURE_3D, 0, GL43.GL_RGBA, width, height, 1, 0, GL43.GL_RGBA, GL43.GL_UNSIGNED_BYTE, decodedImage);
 						} else {
-							GL43.glTexImage3D(GL43.GL_TEXTURE_3D, 0, GL43.GL_RGB, width, height, 0, 0, GL43.GL_RGB, GL43.GL_UNSIGNED_BYTE, decodedImage);
+							GL43.glTexImage3D(GL43.GL_TEXTURE_3D, 0, GL43.GL_RGB, width, height, 1, 0, GL43.GL_RGB, GL43.GL_UNSIGNED_BYTE, decodedImage);
 						}
 						
 						STBImage.stbi_image_free(decodedImage);
 						
 						Texture3D texture = new Texture3D(id, width, height, channels);
-						texture.noFilter();
 						
 						return texture;
 					} else {

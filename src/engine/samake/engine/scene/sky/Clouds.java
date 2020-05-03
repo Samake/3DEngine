@@ -18,14 +18,16 @@ public class Clouds {
 	private Vector2f windDirection;
 	private int maxClouds;
 	private float density;
+	private float animValue;
+	private float animCounter = 0;
 	
 	private List<Cloud> clouds = new ArrayList<Cloud>();
 	
 	public Clouds() {
-		setMaxClouds(3);
+		setMaxClouds(1);
 		setDensity(0.5f);
 		setWindDirection(new Vector2f());
-		setModel(ResourceLoader.load3DModel("box.fbx"));
+		setModel(ResourceLoader.load3DModel("clouds.fbx"));
 		setMaterial(new MaterialClouds());
 		
 		getMaterial().setNoise(ResourceLoader.loadTexture3D("clouds\\cloud.png"));
@@ -53,13 +55,16 @@ public class Clouds {
 				addCloud();
 			}
 		}
+		
+		animCounter = (animCounter + 0.001f)%360;
+		setAnimValue(animCounter);
 	}
 	
 	private void addCloud() {
 		Cloud cloud = new Cloud();
-		cloud.getPosition().x = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
-		cloud.getPosition().y = Utils.getRandomValue(300.0f, 500.0f, 1.0f);
-		cloud.getPosition().z = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
+		//cloud.getPosition().x = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
+		cloud.getPosition().y = Utils.getRandomValue(100.0f, 100.0f, 1.0f);
+		//cloud.getPosition().z = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
 		
 		clouds.add(cloud);
 	}
@@ -116,6 +121,14 @@ public class Clouds {
 
 	public void setWindDirection(Vector2f windDirection) {
 		this.windDirection = windDirection;
+	}
+	
+	public float getAnimValue() {
+		return animValue;
+	}
+
+	public void setAnimValue(float animValue) {
+		this.animValue = animValue;
 	}
 
 	public void destroy() {
