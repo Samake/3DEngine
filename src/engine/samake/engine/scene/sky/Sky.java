@@ -19,7 +19,7 @@ public class Sky {
 		setClouds(new Clouds());
 		setModel(ResourceLoader.load3DModel("sphere.fbx"));
 		setNightSky(new TextureCube("sky\\night"));
-		setScale(1536.0f);
+		setScale(4096.0f);
 	}
 	
 	public void update() {

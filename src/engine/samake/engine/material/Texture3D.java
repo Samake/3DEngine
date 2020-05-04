@@ -18,6 +18,23 @@ public class Texture3D extends Texture {
 		
 		bind();
 	}
+	
+	public void noFilter() {
+		GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MAG_FILTER, GL43.GL_NEAREST);
+		GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MIN_FILTER, GL43.GL_NEAREST);
+	}
+	
+	public void bilinearFilter() {
+		GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MAG_FILTER, GL43.GL_LINEAR);
+		GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MIN_FILTER, GL43.GL_LINEAR);
+	}
+	
+	public void trilinearFilter() {
+		GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MAG_FILTER, GL43.GL_LINEAR);
+		GL43.glGenerateMipmap(GL43.GL_TEXTURE_3D);
+	    GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MAG_FILTER, GL43.GL_LINEAR_MIPMAP_LINEAR);
+	    GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MIN_FILTER, GL43.GL_LINEAR_MIPMAP_LINEAR);
+	}
 
 	public void bind() {
 		GL43.glBindTexture(GL43.GL_TEXTURE_3D, id);

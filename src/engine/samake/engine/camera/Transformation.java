@@ -12,7 +12,7 @@ public class Transformation {
 	
 	private float fov;
     private float zNear = 0.1f;
-    private float zFar = 2000.0f;
+    private float zFar = 10000.0f;
 
     private Matrix4f projectionMatrix;
     private Matrix4f worldMatrix;

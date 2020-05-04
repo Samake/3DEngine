@@ -17,11 +17,11 @@ public class CloudBuffer {
     private int backBuffer;
     private int backTexture;
  
-    public CloudBuffer(int width, int height, int dividor) {
+    public CloudBuffer(int width, int height, double divisor) {
     	this.width = width;
     	this.height = height;
-    	this.bufferWith = (int) width / dividor;
-    	this.bufferHeight = (int) height / dividor;
+    	this.bufferWith = (int) ( width / divisor);
+    	this.bufferHeight = (int) (height / divisor);
         
         initFrontBuffer();
         initBackBuffer();

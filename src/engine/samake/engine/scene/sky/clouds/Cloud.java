@@ -20,7 +20,7 @@ public class Cloud extends Entity {
 	public Cloud() {
 		setAlive(true);
 		setMaxParticles(1);
-		setScale(1.0f);
+		setScale(8.0f);
 		setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
 		//setScale(Utils.getRandomValue(100000.0f, 100000.0f, 1000.0f));
 		

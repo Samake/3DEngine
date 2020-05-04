@@ -56,14 +56,14 @@ public class Clouds {
 			}
 		}
 		
-		animCounter = (animCounter + 0.001f)%360;
+		animCounter = (animCounter + 0.01f)%360;
 		setAnimValue(animCounter);
 	}
 	
 	private void addCloud() {
 		Cloud cloud = new Cloud();
 		//cloud.getPosition().x = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
-		cloud.getPosition().y = Utils.getRandomValue(100.0f, 100.0f, 1.0f);
+		cloud.getPosition().y = Utils.getRandomValue(1000.0f, 1000.0f, 1.0f);
 		//cloud.getPosition().z = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
 		
 		clouds.add(cloud);

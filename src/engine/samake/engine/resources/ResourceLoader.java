@@ -173,7 +173,7 @@ public class ResourceLoader {
 						id = GL43.glGenTextures();
 						GL43.glBindTexture(GL43.GL_TEXTURE_3D, id);
 						
-						GL43.glTexParameterf(GL43.GL_TEXTURE_3D, GL14.GL_TEXTURE_LOD_BIAS, 3.0f);
+						GL43.glTexParameterf(GL43.GL_TEXTURE_3D, GL14.GL_TEXTURE_LOD_BIAS, 0.0f);
 						
 						GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MIN_FILTER, GL43.GL_LINEAR);
 						GL43.glTexParameteri(GL43.GL_TEXTURE_3D, GL43.GL_TEXTURE_MAG_FILTER, GL43.GL_LINEAR);
@@ -190,6 +190,7 @@ public class ResourceLoader {
 						STBImage.stbi_image_free(decodedImage);
 						
 						Texture3D texture = new Texture3D(id, width, height, channels);
+						texture.trilinearFilter();
 						
 						return texture;
 					} else {
