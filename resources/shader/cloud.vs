@@ -6,9 +6,10 @@ layout (location = 2) in vec3 inNormal;
 layout (location = 3) in vec2 inUV;
 
 out vec3 color;
-out vec3 normal;
+out vec3 normalIn;
 out vec2 uv;
-out vec3 modelPositions;
+out vec3 modelPosition;
+out vec3 worldPosition;
 out vec4 clipSpace;
 
 uniform mat4 projectionMatrix;
@@ -21,9 +22,10 @@ void main() {
     gl_Position = projectionMatrix * viewMatrix * position;
 
     color = inColor;
-    normal = (transformationMatrix * vec4(inNormal, 0.0)).xyz;
+    normalIn = (transformationMatrix * vec4(inNormal, 0.0)).xyz;
     uv = inUV;
-    modelPositions = 0.5 * normalize(inPosition) + 0.5;
+    modelPosition = 0.5 * normalize(inPosition) + 0.5;
+    worldPosition = position.xyz;
     
     clipSpace = projectionMatrix * viewMatrix * position;
 }

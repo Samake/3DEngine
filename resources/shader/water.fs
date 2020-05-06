@@ -168,15 +168,6 @@ void main() {
 	refractionTexCoords = clamp(refractionTexCoords, 0.001f, 0.999f);
 	
 	vec4 refraction = texture(refractionSampler, vec2(refractionTexCoords.x, refractionTexCoords.y));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x + blurValue, refractionTexCoords.y));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x, refractionTexCoords.y + blurValue));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x + blurValue, refractionTexCoords.y + blurValue));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x - blurValue, refractionTexCoords.y));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x, refractionTexCoords.y - blurValue));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x - blurValue, refractionTexCoords.y - blurValue));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x + blurValue, refractionTexCoords.y - blurValue));
-	refraction += texture(refractionSampler, vec2(refractionTexCoords.x - blurValue, refractionTexCoords.y + blurValue));
-	refraction /= 9;
 	refraction.rgb *= waterDepthNeg;
 	
 	reflectionTexCoords += totalDistortion;
@@ -193,15 +184,7 @@ void main() {
 	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x + blurValue, reflectionTexCoords.y - blurValue));
 	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x - blurValue, reflectionTexCoords.y + blurValue));
 	
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x + blurValue * 2, reflectionTexCoords.y));
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x, reflectionTexCoords.y + blurValue * 2));
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x + blurValue * 2, reflectionTexCoords.y + blurValue * 2));
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x - blurValue * 2, reflectionTexCoords.y));
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x, reflectionTexCoords.y - blurValue * 2));
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x - blurValue * 2, reflectionTexCoords.y - blurValue * 2));
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x + blurValue * 2, reflectionTexCoords.y - blurValue * 2));
-	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x - blurValue * 2, reflectionTexCoords.y + blurValue * 2));
-	reflection /= 18;
+	reflection /= 9;
 	
 	vec4 normalMap = texture(normalSampler, totalDistortion);
 	vec3 texNormal = vec3(normalMap.r * 2.0f - 1.0f, normalMap.b * 5.0f, normalMap.g * 2.0f - 1.0f);

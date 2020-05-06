@@ -117,9 +117,9 @@ public class Renderer {
 		startFrame();
 		
     	renderSky();
+    	renderClouds(getRenderMode());
     	renderTerrain();
     	renderEntities();
-    	renderClouds(getRenderMode());
     }
     
     public void endFrame() {

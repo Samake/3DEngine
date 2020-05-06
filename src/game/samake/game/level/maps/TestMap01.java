@@ -20,7 +20,7 @@ public class TestMap01 extends Level {
 		getCamera().setPosition(0.0f, 6.0f, 0.0f);
 		
 		getEnvironment().setGameSpeed(1);
-		getEnvironment().setDayProgress(0.65f);
+		getEnvironment().setDayProgress(0.75f);
 		getEnvironment().setFrozen(false);
 		getEnvironment().getFog().setDensity(0.0025f);
 		

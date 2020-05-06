@@ -24,6 +24,10 @@ public class CloudShader extends Shader {
 		createUniform("windDirection");
 		createUniform("animValue");
 		
+		for (int i = 0; i < 16; i++) {
+			createLightUniform("light[" + i + "]");
+		}
+		
 		Console.print("CloudShader loaded!", LOGTYPE.OUTPUT, true);
 	}
 	

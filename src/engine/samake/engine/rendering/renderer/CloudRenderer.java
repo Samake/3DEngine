@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL43;
 
 import samake.engine.camera.Camera;
 import samake.engine.camera.Transformation;
+import samake.engine.entity.light.Light;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.models.Mesh;
@@ -57,6 +58,12 @@ public class CloudRenderer {
 	    	
 	    	shader.setUniformVector2f("windDirection", clouds.getWindDirection());
 	    	shader.setUniformFloat("animValue", clouds.getAnimValue());
+	    	
+	    	int lightID = 0;
+	    	for (Light light : scene.getLights()) {
+	    		shader.setUniformLight("light[" + lightID + "]", light);
+	    		lightID++;
+	    	}
 
 	    	for (Cloud cloud : clouds.getClouds()) {
 	    		for (CloudParticle particle : cloud.getParticles()) {

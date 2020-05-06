@@ -63,7 +63,7 @@ public class Clouds {
 	private void addCloud() {
 		Cloud cloud = new Cloud();
 		//cloud.getPosition().x = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
-		cloud.getPosition().y = Utils.getRandomValue(1000.0f, 1000.0f, 1.0f);
+		cloud.getPosition().y = Utils.getRandomValue(200.0f, 200.0f, 1.0f);
 		//cloud.getPosition().z = Utils.getRandomValue(-200.0f, 200.0f, 1.0f);
 		
 		clouds.add(cloud);
