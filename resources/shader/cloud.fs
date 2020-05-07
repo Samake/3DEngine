@@ -81,7 +81,7 @@ float noise(vec3 x) {
 		f.z);
 }
 
-float fbm(vec3 p) {
+float fbm(vec3 p, float randomness) {
 	float f = 0.0;
 	
 	f += 0.5000 * noise(p); p *= 2.00;
@@ -90,10 +90,10 @@ float fbm(vec3 p) {
 	f += 0.1625 * noise(p); p *= 1.97;
 	f /= 0.9375;
 	
-	return f;
+	return f * randomness;
 }
 
-float volume(vec3 p, out float rawDens, float density, float randomness) {
+float volume(vec3 p, out float rawDens, float randomness) {
 	vec3 position = p;
 	
 	float dens = -position.y - 1.0;
@@ -102,13 +102,13 @@ float volume(vec3 p, out float rawDens, float density, float randomness) {
 	position.y -= windDirection.x * animValue * windSpeed;
 	position.y += windDirection.y * animValue * windSpeed;
 	
-	rawDens = dens + (density * randomness * fbm(2.0 * position));
+	rawDens = dens + fbm(2.0 * position, randomness);
 	dens = clamp(rawDens, 0.0, 1.0);
 	
 	return dens;
 }
 
-vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float density, float randomness, int raySteps) {
+vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float randomness, int raySteps) {
 	vec4 sum = vec4(0);
 	
 	float ste = 0.055;
@@ -119,7 +119,7 @@ vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float density, float rando
 		if(sum.a > 0.99) continue;
 		
 		float dens, rawDens;
-		dens = volume(pos, rawDens, density, randomness);
+		dens = volume(pos, rawDens, randomness);
 		
 		vec4 col2 = vec4(mix(vec3(0.2), vec3(1.0), dens), dens);
 		col2.rgb *= col2.a;
@@ -173,71 +173,42 @@ mat3 camera(vec3 eye, vec3 lat) {
 	return mat3(uu, vv, ww);	
 }
 
-vec4 calcCloudsV3() {
+vec4 calcClouds() {
 	int raySteps = 64;
 	
 	vec3 layerPos = modelPosition;
 	layerPos.xy += windDirection * animValue / windSpeed;
-	
-	float density = fbm(64 * layerPos);
-	density -= fbm(8 * layerPos);
-	density *= fbm(32 * layerPos) * 16;
+
+	float density = fbm(64 * layerPos, 1);
+	density -= fbm(8 * layerPos, 1);
+	density *= fbm(32 * layerPos, 1) * 16;
 
 	density = clamp(density, 0.0f, 1.0f);
 	
-	float randomness = fbm(4 * layerPos);
-	randomness -= fbm(8 * layerPos);
-	randomness += fbm(16 * layerPos);
+	float randomness = fbm(2 * layerPos, 1);
+	randomness -= fbm(4 * layerPos, 1);
+	randomness += fbm(8 * layerPos, 1);
 	
 	randomness = clamp(randomness, 0.0f, 1.0f);
 	
-	vec3 ro = normalize(cameraPosition);
+	vec3 ro = normalize(vec3(0.0, 25.0, 0.0));
 	vec3 rd = normalize(cameraPosition - worldPosition);
 	
 	vec3 col = vec3(0, 0, 0);
 	
 	float i = march(ro, rd);
 
-	vec4 fog = volumetric(ro, rd, col, i, density, randomness, raySteps) * 1.5;
-	
-	fog.rgb = clamp(fog.rgb, 0.0f, 1.0f);
-	fog.a *= fog.r;
-
-	col = mix(fog.rgb, col, 1.0 - fog.a);
-	col = pow(col, vec3(.454545));
-	
-	vec4 albedoMap = vec4(col, fog.a * density);
-	//vec4 albedoMap = vec4(density, density, density, 1);
-	//vec4 albedoMap = vec4(randomness, randomness, randomness, 1);
-	//vec4 albedoMap = vec4(fog.rgb, 1);
-	//vec4 albedoMap = vec4(density, density, density, 1);
-	//vec3 normalMap = normal(albedoMap.rgb);
-	
-    return albedoMap;
-}
-
-vec4 calcClouds() {
-	int raySteps = 64;
-
-	float density = 1;
-	float randomness = 1;
-	
-	vec3 ro = normalize(vec3(0.0, 50.0, 0.0));
-	vec3 rd = normalize(cameraPosition - worldPosition);
-	
-	vec3 col = vec3(0, 0, 0);
-	
-	float i = march(ro, rd);
-
-	vec4 fog = volumetric(ro, rd, col, i, density, randomness, raySteps);
+	vec4 fog = volumetric(ro, rd, col, i, randomness, raySteps);
 	
 	//fog.rgb = clamp(fog.rgb, 0.0f, 1.0f);
 	//fog.a *= fog.r;
 
-	col = mix(fog.rgb, col, 1.0 - fog.a);
+	col = mix(fog.rgb * (1 - randomness), col, 1.0 - fog.a);
 	col = pow(col, vec3(.454545));
 	
 	vec4 albedoMap = vec4(col, fog.a);
+	//vec4 albedoMap = vec4(randomness, randomness, randomness, 1);
+	
     return albedoMap;
 }
 
