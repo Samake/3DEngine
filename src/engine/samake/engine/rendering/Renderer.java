@@ -8,7 +8,6 @@ import samake.engine.camera.Transformation;
 import samake.engine.config.PropertiesHandler;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
-import samake.engine.rendering.buffer.CloudBuffer;
 import samake.engine.rendering.buffer.WaterBuffer;
 import samake.engine.rendering.postprocess.PostProcess;
 import samake.engine.rendering.renderer.CloudRenderer;
@@ -31,8 +30,7 @@ public class Renderer {
 	private Transformation transformation;
 	
 	private WaterBuffer waterBuffer;
-	private CloudBuffer cloudBuffer;
-	
+
 	private SkyRenderer skyRenderer;
 	private TerrainRenderer terrainRenderer;
 	private EntityRenderer entityRenderer;
@@ -50,7 +48,6 @@ public class Renderer {
 		
 		setTransformation(new Transformation());
 		setWaterBuffer(new WaterBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
-		setCloudBuffer(new CloudBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
 		setSkyRenderer(new SkyRenderer());
 		setTerrainRenderer(new TerrainRenderer());
 		setEntityRenderer(new EntityRenderer());
@@ -117,7 +114,7 @@ public class Renderer {
 		startFrame();
 		
     	renderSky();
-    	renderClouds(getRenderMode());
+    	renderClouds();
     	renderTerrain();
     	renderEntities();
     }
@@ -169,7 +166,7 @@ public class Renderer {
 		GL43.glDisable(GL43.GL_CULL_FACE);
 	}
 	
-	private void renderClouds(int renderMode) { 
+	private void renderClouds() { 
     	GL43.glEnable(GL43.GL_CULL_FACE);
     	GL43.glCullFace(GL43.GL_BACK);
 
@@ -179,22 +176,7 @@ public class Renderer {
 			GL43.glPolygonMode(GL43.GL_BACK, GL43.GL_FILL);
 		}
 
-		cloudRenderer.render(scene.getCamera(), transformation, scene, renderMode, cloudBuffer, clipPlane);
-		
-		GL43.glDisable(GL43.GL_CULL_FACE);
-	}
-	
-	private void renderCloudBuffer(int cullMode, int renderMode) { 
-    	GL43.glEnable(GL43.GL_CULL_FACE);
-    	GL43.glCullFace(cullMode);
-    	
-		if (getRenderMode() == 2) {
-			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_LINE);
-		} else {
-			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_FILL);
-		}
-
-		cloudRenderer.render(scene.getCamera(), transformation, scene, renderMode, cloudBuffer, clipPlane);
+		cloudRenderer.render(scene.getCamera(), transformation, scene, renderMode, clipPlane);
 		
 		GL43.glDisable(GL43.GL_CULL_FACE);
 	}
@@ -232,14 +214,6 @@ public class Renderer {
     	waterBuffer.unbind();
 		
 		clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, 10000.0f);
-		
-		cloudBuffer.bindFrontBuffer();
-		renderCloudBuffer(GL43.GL_FRONT, 90);
-
-		cloudBuffer.bindBackBuffer();
-		renderCloudBuffer(GL43.GL_BACK, 100);
-		
-		cloudBuffer.unbind();
 	}
 	
 	public void guiRender() {
@@ -305,14 +279,6 @@ public class Renderer {
 
 	public void setWaterBuffer(WaterBuffer waterFrameBuffer) {
 		this.waterBuffer = waterFrameBuffer;
-	}
-
-	public CloudBuffer getCloudBuffer() {
-		return cloudBuffer;
-	}
-
-	public void setCloudBuffer(CloudBuffer cloudBuffer) {
-		this.cloudBuffer = cloudBuffer;
 	}
 
 	public Scene getScene() {

@@ -45,7 +45,7 @@ uniform float animValue;
 
 const float near = 0.2; 
 const float far = 10000.0;
-const float windSpeed = 12;
+const float windSpeed = 6;
 
 vec3 addDirectionalLight(vec3 normalIn, Light light, vec3 lightDirection) {
 	float diffuseFactor = max(dot(normalIn, normalize(lightDirection)), 0.0);
@@ -84,27 +84,31 @@ float noise(vec3 x) {
 float fbm(vec3 p) {
 	float f = 0.0;
 	
-	f += 0.5000 * noise(p); p *= 2.02;
-	f += 0.2500 * noise(p); p *= 2.04;
-	f += 0.1250 * noise(p); p *= 2.00;
-	f += 0.0625 * noise(p); p *= 1.97;
+	f += 0.5000 * noise(p); p *= 2.00;
+	f += 0.3500 * noise(p); p *= 2.04;
+	f += 0.2250 * noise(p); p *= 2.02;
+	f += 0.1625 * noise(p); p *= 1.97;
 	f /= 0.9375;
 	
 	return f;
 }
 
-float volume(vec3 p, out float rawDens, float density) {
-	p.xz += windDirection * animValue * windSpeed;
+float volume(vec3 p, out float rawDens, float density, float randomness) {
+	vec3 position = p;
 	
-	float dens = -p.y - 1.0;
+	float dens = -position.y - 1.0;
 	
-	rawDens = dens + 1.0 * fbm(2.0 * p);
+	position.xz += windDirection * animValue * windSpeed;
+	position.y -= windDirection.x * animValue * windSpeed;
+	position.y += windDirection.y * animValue * windSpeed;
+	
+	rawDens = dens + (density * randomness * fbm(2.0 * position));
 	dens = clamp(rawDens, 0.0, 1.0);
 	
-	return dens * density;
+	return dens;
 }
 
-vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float density, int raySteps) {
+vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float density, float randomness, int raySteps) {
 	vec4 sum = vec4(0);
 	
 	float ste = 0.055;
@@ -115,7 +119,7 @@ vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float density, int rayStep
 		if(sum.a > 0.99) continue;
 		
 		float dens, rawDens;
-		dens = volume(pos, rawDens, density);
+		dens = volume(pos, rawDens, density, randomness);
 		
 		vec4 col2 = vec4(mix(vec3(0.2), vec3(1.0), dens), dens);
 		col2.rgb *= col2.a;
@@ -169,144 +173,23 @@ mat3 camera(vec3 eye, vec3 lat) {
 	return mat3(uu, vv, ww);	
 }
 
-vec4 calcCloudsV1() {
-	vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0f + 0.5f;
-	vec2 projectionCoords = vec2(ndc.x, ndc.y);
-	
-	vec3 front = texture(frontSampler, projectionCoords).rgb;
-	vec3 back = texture(backSampler, projectionCoords).rgb;
-	vec3 dir = normalize(front - back);
-	
-    vec3 pos = modelPosition;
-	
-    vec4 dst = vec4(0, 0, 0, 0);
-    vec4 src = vec4(0, 0, 0, 0);
- 
-    float value = 0;
- 
-    vec3 Step = dir * 0.0005f;
- 
-    for(int i = 0; i < 64; i++) {
-    	int tiling = 1;
-    	vec3 layerPos1 = pos * tiling;
-    	vec3 layerPos2 = pos * tiling;
-    	vec3 layerPos3 = pos * tiling;
-    	vec3 layerPos4 = pos * tiling;
-    	layerPos1.xy += windDirection * animValue * 0.15;
-    	layerPos2.xy += windDirection * animValue * 0.25;
-    	layerPos3.xy += windDirection * animValue * 0.65;
-    	layerPos4.xy += windDirection * animValue * 0.75;
-    	
-        value = textureLod(noiseSampler, 0.25f * layerPos1, 3.0f).r * textureLod(noiseSampler, 4.0f * layerPos2, 3.0f).r;
-        value += sin(textureLod(noiseSampler, 0.5f * layerPos2, 3.0f).r * textureLod(noiseSampler, 2.0f * layerPos3, 3.0f).r);
-       	value += sin(textureLod(noiseSampler, 0.75f * layerPos3, 3.0f).r * textureLod(noiseSampler, 1.0f * layerPos4, 3.0f).r);
-       	value += sin(textureLod(noiseSampler, 1.0f * layerPos4, 3.0f).r * textureLod(noiseSampler, 0.5f * layerPos1, 3.0f).r);
-       	
-        src = vec4(value, value, value, value);
-        src.a *= sin(i / 64.0f) * 0.75f;
-            
-        src.rgb *= src.a;
-        dst = (1.0f - dst.a) * src + dst;     
-     
-        if (dst.a >= .95f) break; 
-
-        pos += Step;
-     
-        if (pos.x > 1.0f || pos.y > 1.0f || pos.z > 1.0f) break;
-    }
-    
-    vec4 albedoMap = vec4(dst.rgb, dst.r);
-    vec3 normalMap = normal(dst.rgb);
-    vec3 diffuseMap = vec3(0.0, 0.0, 0.0);
-    
-    for (int i = 0; i < MAX_LIGHTS; i++) {
-   		vec3 lightDirection = light[i].position - worldPosition;
-   		
-		if (light[i].type == 0) {
-			diffuseMap += addDirectionalLight(normalMap, light[i], lightDirection);
-		}
-	}
-    
-    albedoMap.rgb *= ambientColor * ambientStrength + diffuseMap;
-    
-
-    albedoMap = vec4(dst.rgb, dst.r);
-    //albedoMap = vec4(value, value, value, 1);
-    //albedoMap = vec4(diffuseMap, 1);
-	//albedoMap = vec4(normalMap, 1);
-	//albedoMap = textureLod(noiseSampler, modelPosition, 0.0);
-	
-	return albedoMap;
-}
-
-vec4 calcCloudsV2() {
-	int raySteps = 64;
-	vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0f + 0.5f;
-	vec2 projectionCoords = vec2(ndc.x, ndc.y);
-	
-	vec3 front = texture(frontSampler, projectionCoords).rgb;
-	vec3 back = texture(backSampler, projectionCoords).rgb;
-	vec3 dir = normalize(back - front);
-	
-    vec3 pos = modelPosition;
-	
-    vec4 dst = vec4(0, 0, 0, 0);
-    vec4 src = vec4(0, 0, 0, 0);
- 
-    float value = 0;
- 
-    vec3 Step = dir * (1.0f / raySteps) * 0.05f;
-
-    for(int i = 0; i < raySteps; i++) {
-    	vec3 layerPos = pos;
-    	layerPos.xy += windDirection * animValue;
-    	
-        value = fbm(layerPos * 16);
-
-        src = vec4(value, value, value, value);
-       	//src.a *= value;
-       	src.a *= sin(i / 64.0f) * 0.75f;
-       	
-        src.rgb *= src.a;
-        dst = (1.0f - dst.a) * src + dst;     
-     
-        if (dst.a >= .95f) break; 
-
-        pos += Step;
-     
-        if (pos.x > 1.0f || pos.y > 1.0f || pos.z > 1.0f) break;
-    }
-    
-    vec3 normalMap = normal(dst.rgb);
-	vec3 diffuseMap = vec3(0.0, 0.0, 0.0);
-    
-    for (int i = 0; i < MAX_LIGHTS; i++) {
-   		vec3 lightDirection = light[i].position - worldPosition;
-   		
-		if (light[i].type == 0) {
-			diffuseMap += addDirectionalLight(normalMap, light[i], lightDirection);
-		}
-	}
-	
-	vec4 albedoMap = vec4(dst.rgb, dst.r);
-	//vec4 albedoMap = vec4(dst.rgb, 1);
-	//vec4 albedoMap = vec4(normalMap, 1);
-	//vec4 albedoMap = vec4(diffuseMap, 1);
-	
-    return albedoMap;
-}
-
 vec4 calcCloudsV3() {
 	int raySteps = 64;
 	
 	vec3 layerPos = modelPosition;
 	layerPos.xy += windDirection * animValue / windSpeed;
 	
-	float density = fbm(16 * layerPos);
+	float density = fbm(64 * layerPos);
 	density -= fbm(8 * layerPos);
-	density *= fbm(4 * layerPos) * 32;
-	
+	density *= fbm(32 * layerPos) * 16;
+
 	density = clamp(density, 0.0f, 1.0f);
+	
+	float randomness = fbm(4 * layerPos);
+	randomness -= fbm(8 * layerPos);
+	randomness += fbm(16 * layerPos);
+	
+	randomness = clamp(randomness, 0.0f, 1.0f);
 	
 	vec3 ro = normalize(cameraPosition);
 	vec3 rd = normalize(cameraPosition - worldPosition);
@@ -314,35 +197,51 @@ vec4 calcCloudsV3() {
 	vec3 col = vec3(0, 0, 0);
 	
 	float i = march(ro, rd);
-	vec3 pos = ro + rd * i;
+
+	vec4 fog = volumetric(ro, rd, col, i, density, randomness, raySteps) * 1.5;
 	
-	vec4 fog = volumetric(ro, rd, col, i, density, raySteps);
-	fog.r *= density;
-	
-	fog *= 1.5;
-	
-	col = mix(fog.xyz, col, 1.0 - fog.w);
+	fog.rgb = clamp(fog.rgb, 0.0f, 1.0f);
+	fog.a *= fog.r;
+
+	col = mix(fog.rgb, col, 1.0 - fog.a);
 	col = pow(col, vec3(.454545));
 	
-	vec4 albedoMap = vec4(col, fog.r);
+	vec4 albedoMap = vec4(col, fog.a * density);
+	//vec4 albedoMap = vec4(density, density, density, 1);
+	//vec4 albedoMap = vec4(randomness, randomness, randomness, 1);
+	//vec4 albedoMap = vec4(fog.rgb, 1);
 	//vec4 albedoMap = vec4(density, density, density, 1);
 	//vec3 normalMap = normal(albedoMap.rgb);
 	
     return albedoMap;
 }
 
+vec4 calcClouds() {
+	int raySteps = 64;
+
+	float density = 1;
+	float randomness = 1;
+	
+	vec3 ro = normalize(vec3(0.0, 50.0, 0.0));
+	vec3 rd = normalize(cameraPosition - worldPosition);
+	
+	vec3 col = vec3(0, 0, 0);
+	
+	float i = march(ro, rd);
+
+	vec4 fog = volumetric(ro, rd, col, i, density, randomness, raySteps);
+	
+	//fog.rgb = clamp(fog.rgb, 0.0f, 1.0f);
+	//fog.a *= fog.r;
+
+	col = mix(fog.rgb, col, 1.0 - fog.a);
+	col = pow(col, vec3(.454545));
+	
+	vec4 albedoMap = vec4(col, fog.a);
+    return albedoMap;
+}
+
 void main() {
-	if (renderMode == 90) {
-		//float depth = linearizeDepth(gl_FragCoord.z) / far;
-		//fragColor = vec4(depth, depth, depth, 1);
-    	fragColor = vec4(modelPosition, 1);
-    } else if (renderMode == 100) {
-    	//float depth = linearizeDepth(gl_FragCoord.z) / far;
-		//fragColor = vec4(depth, depth, depth, 1);
-    	fragColor = vec4(modelPosition, 1);
-    } else {
-    	//fragColor = calcCloudsV1();
-    	//fragColor = calcCloudsV2();
-    	fragColor = calcCloudsV3();
-    }
+    fragColor = calcClouds();
+    //fragColor = vec4(1, 0, 0, 1);
 }

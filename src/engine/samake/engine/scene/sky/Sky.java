@@ -9,21 +9,21 @@ public class Sky {
 	private Sun sun;
 	private Moon moon;
 	private Model model;
-	private Clouds clouds;
+	private CloudLayer cloudLayer;
 	private float scale;
 	private TextureCube nightSky;
 	
 	public Sky() {
 		setSun(new Sun());
 		setMoon(new Moon());
-		setClouds(new Clouds());
+		setCloudLayer(new CloudLayer());
 		setModel(ResourceLoader.load3DModel("sphere.fbx"));
 		setNightSky(new TextureCube("sky\\night"));
 		setScale(4096.0f);
 	}
 	
 	public void update() {
-		clouds.update();
+		cloudLayer.update();
 	}
 	
 	public Sun getSun() {
@@ -42,12 +42,12 @@ public class Sky {
 		this.moon = moon;
 	}
 
-	public Clouds getClouds() {
-		return clouds;
+	public CloudLayer getCloudLayer() {
+		return cloudLayer;
 	}
 
-	public void setClouds(Clouds clouds) {
-		this.clouds = clouds;
+	public void setCloudLayer(CloudLayer cloudLayer) {
+		this.cloudLayer = cloudLayer;
 	}
 
 	public Model getModel() {
@@ -77,6 +77,6 @@ public class Sky {
 	public void destroy() {
 		model.destroy();
 		nightSky.destroy();
-		clouds.destroy();
+		cloudLayer.destroy();
 	}
 }

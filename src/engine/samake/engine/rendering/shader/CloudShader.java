@@ -13,14 +13,9 @@ public class CloudShader extends Shader {
 		
 		createUniform("projectionMatrix");
 		createUniform("viewMatrix");
-		createUniform("modelViewMatrix");
 		createUniform("transformationMatrix");
-		createUniform("noiseSampler");
-		createUniform("frontSampler");
-		createUniform("backSampler");
 		createUniform("clipPlane");
 		createUniform("cameraPosition");
-		createUniform("renderMode");
 		createUniform("windDirection");
 		createUniform("animValue");
 		

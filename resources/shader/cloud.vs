@@ -14,7 +14,6 @@ out vec4 clipSpace;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
-uniform mat4 modelViewMatrix;
 uniform mat4 transformationMatrix;
 
 void main() {
