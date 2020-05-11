@@ -16,7 +16,7 @@ public class CloudLayer extends Entity {
 	public CloudLayer() {
 		setPosition(new Vector3f(0.0f, 200.0f, 0.0f));
 		setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		setScale(4.0f);
+		setScale(12.0f);
 		setDensity(0.5f);
 		setWindDirection(new Vector2f());
 		setModel(ResourceLoader.load3DModel("clouds.fbx"));

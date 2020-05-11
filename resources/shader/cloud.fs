@@ -59,7 +59,7 @@ float linearizeDepth(float depth) {
 }
 
 float hash(float n) {
-	return fract(sin(n)*43758.5435);
+	return fract(sin(n) * 43758.5435);
 }
 
 float noise(vec3 x) {
@@ -67,7 +67,7 @@ float noise(vec3 x) {
 	vec3 f = fract(x);
 	
 	f = f * f * (3.0 - 2.0 * f);
-	float n = p.x + p.y*57.0 + p.z*113.0;
+	float n = p.x + p.y * 57.0 + p.z * 113.0;
 	
 	return mix(
 		mix(
@@ -102,31 +102,31 @@ float volume(vec3 p, out float rawDens, float randomness) {
 	position.y -= windDirection.x * animValue * windSpeed;
 	position.y += windDirection.y * animValue * windSpeed;
 	
-	rawDens = dens + fbm(2.0 * position, randomness);
+	rawDens = dens + fbm(2.0 * position, randomness) * 2;
 	dens = clamp(rawDens, 0.0, 1.0);
 	
 	return dens;
 }
 
-vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float randomness, int raySteps) {
+vec4 volumetric(vec3 ro, vec3 rd, vec3 col, float mt, float randomness, int raySteps, float rayLength) {
 	vec4 sum = vec4(0);
 	
-	float ste = 0.055;
+	float ste = rayLength;
 	float t = ste;
 	
 	for (int i = 0; i < raySteps; i++) {
 		vec3 pos = ro + rd * t;
-		if(sum.a > 0.99) continue;
+		if (sum.a > 0.99) continue;
 		
 		float dens, rawDens;
 		dens = volume(pos, rawDens, randomness);
 		
 		vec4 col2 = vec4(mix(vec3(0.2), vec3(1.0), dens), dens);
 		col2.rgb *= col2.a;
-		sum = sum + col2*(1.0 - sum.a);
+		sum = sum + col2 * (1.0 - sum.a);
 		
-		float sm = 1. + 2.5*(1.0 - clamp(rawDens+1.0, 0.0, 1.0));
-		t += ste*sm;
+		float sm = 1. + 2.5 * (1.0 - clamp(rawDens + 1.0, 0.0, 1.0));
+		t += ste * sm;
 	}
 	
 	return clamp(sum, 0.0, 1.0);
@@ -144,10 +144,11 @@ float map(vec3 p) {
 	return min(s,s2);
 }
 
-float march(vec3 ro, vec3 rd) {
+float march(vec3 ro, vec3 rd, int raySteps) {
 	float t = 0.0;
-	for(int i = 0; i < 64; i++) {
-		float h = map(ro + rd*t);
+	
+	for(int i = 0; i < raySteps; i++) {
+		float h = map(ro + rd * t);
 		t += h;
 	}
 	
@@ -175,39 +176,54 @@ mat3 camera(vec3 eye, vec3 lat) {
 
 vec4 calcClouds() {
 	int raySteps = 64;
+	float rayLength = 0.2f;
 	
 	vec3 layerPos = modelPosition;
-	layerPos.xy += windDirection * animValue / windSpeed;
+	layerPos.xy += windDirection * animValue * windSpeed * 0.05f;
 
-	float density = fbm(64 * layerPos, 1);
-	density -= fbm(8 * layerPos, 1);
-	density *= fbm(32 * layerPos, 1) * 16;
+	float density = fbm(4 * layerPos, 1);
+	density -= fbm(8 * layerPos, density);
+	density *= fbm(16 * layerPos, density);
 
-	density = clamp(density, 0.0f, 1.0f);
+	density = clamp(density * 16, 0.0f, 1.0f);
 	
-	float randomness = fbm(2 * layerPos, 1);
-	randomness -= fbm(4 * layerPos, 1);
-	randomness += fbm(8 * layerPos, 1);
+	float randomness = fbm(8 * layerPos, 1);
+	randomness -= fbm(16 * layerPos, randomness);
+	randomness += fbm(32 * layerPos, randomness);
 	
 	randomness = clamp(randomness, 0.0f, 1.0f);
 	
 	vec3 ro = normalize(vec3(0.0, 25.0, 0.0));
 	vec3 rd = normalize(cameraPosition - worldPosition);
 	
-	vec3 col = vec3(0, 0, 0);
-	
-	float i = march(ro, rd);
+	vec3 col = vec3(randomness, randomness, randomness);
 
-	vec4 fog = volumetric(ro, rd, col, i, randomness, raySteps);
-	
-	//fog.rgb = clamp(fog.rgb, 0.0f, 1.0f);
-	//fog.a *= fog.r;
+	float i = march(ro, rd, raySteps);
+
+	vec4 fog = volumetric(ro, rd, col, i, randomness, raySteps, rayLength) * 1.5;
+	fog.a *= density;
 
 	col = mix(fog.rgb * (1 - randomness), col, 1.0 - fog.a);
 	col = pow(col, vec3(.454545));
 	
 	vec4 albedoMap = vec4(col, fog.a);
-	//vec4 albedoMap = vec4(randomness, randomness, randomness, 1);
+	//vec3 diffuseMap = vec3(0.0, 0.0, 0.0);
+	//vec3 normalMap = 2 * (vec3(0, 1, 0) * (1 - albedoMap.rgb));
+	
+	//for (int i = 0; i < MAX_LIGHTS; i++) {
+   	//	vec3 lightDirection = light[i].position - worldPosition;//normalize(light[i].position) - worldPosition;//light[i].position - worldPosition
+   		
+	//	if (light[i].type == 0) {
+	//		diffuseMap += addDirectionalLight(normalMap, light[i], lightDirection) * albedoMap.a;
+	//	}
+	//}
+	
+	//albedoMap.rgb *= ambientColor * ambientStrength + diffuseMap * 3;
+	
+	//albedoMap = vec4(col, fog.a) * density;
+	//albedoMap = vec4(normalMap, 1);
+	//albedoMap = vec4(diffuseMap, 1);
+	//albedoMap = vec4(randomness, randomness, randomness, 1);
 	
     return albedoMap;
 }

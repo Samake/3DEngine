@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<style>
+	<fonts>
+		<default>
+			<font>toxigenesis.ttf</font>
+			<size>12</size>
+			<bold>false</bold>
+		</default>
+		<bold>
+			<font>toxigenesis.ttf</font>
+			<size>12</size>
+			<bold>true</bold>
+		</bold>
+		<title>
+			<font>toxigenesis.ttf</font>
+			<size>14</size>
+			<bold>true</bold>
+		</title>
+		<info>
+			<font>toxigenesis.ttf</font>
+			<size>10</size>
+			<bold>false</bold>
+		</info>
+	</fonts>
+	<colors>
+		<background>#000812</background>
+		<forGround>#2F8DDF</forGround>
+		<shadow>#000000</shadow>
+		<highlight1>#072B59</highlight1>
+		<highlight2>#0F5CBF</highlight2>
+		<highlight3>#BF9765</highlight3>
+	</colors>
+</style>

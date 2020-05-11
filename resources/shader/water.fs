@@ -6,7 +6,6 @@ in vec3 color;
 in vec3 normal;
 in vec2 uv;
 in vec3 worldPosition;
-in mat4 mViewMatrix;
 in vec4 clipSpace;
 in vec3 cameraVector;
 in float movingCoords;
@@ -158,11 +157,11 @@ void main() {
 	float waterDepthNeg = 1 - waterDepth;
 	
 	vec2 baseUV = uv * material.tiling;
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y)).rg * 0.35f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y)).rg * 0.45f;
 	distortedTexCoords = baseUV + vec2(distortedTexCoords.x, distortedTexCoords.y + movingCoords);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.025f;
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.015f;
 	
-	float blurValue = 0.0020f;
+	float blurValue = 0.0010f;
 	
 	refractionTexCoords += totalDistortion;
 	refractionTexCoords = clamp(refractionTexCoords, 0.001f, 0.999f);

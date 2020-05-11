@@ -65,11 +65,9 @@ public class WaterRenderer {
 		if (!scene.getWaters().isEmpty()) {
 	    	for (Water water : scene.getWaters()) {
 	    		Matrix4f transformationMatrix = transformation.getWorldMatrix(water.getPosition(), water.getRotation(), water.getScale());
-	    		Matrix4f modelViewMatrix = transformation.getModelViewMatrix(water, viewMatrix);
-	    		
+	
 	    		shader.setUniformMatrix4f("transformationMatrix", transformationMatrix);
-	    		shader.setUniformMatrix4f("modelViewMatrix", modelViewMatrix);
-	    		
+
 	    		shader.setUniformMaterialWater(water.getMaterial());
 	    		shader.setUniformFloat("animValue", water.getMaterial().getAnimValue());
 	    		

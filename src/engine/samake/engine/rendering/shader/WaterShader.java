@@ -13,7 +13,6 @@ public class WaterShader extends Shader {
 		
 		createUniform("projectionMatrix");
 		createUniform("viewMatrix");
-		createUniform("modelViewMatrix");
 		createUniform("transformationMatrix");
 		createUniform("heightSampler");
 		createUniform("dudvSampler");

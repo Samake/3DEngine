@@ -7,7 +7,6 @@ layout (location = 3) in vec2 inUV;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
-uniform mat4 modelViewMatrix;
 uniform mat4 transformationMatrix;
 uniform vec3 cameraPosition;
 uniform float animValue;
@@ -19,7 +18,6 @@ out vec3 color;
 out vec3 normal;
 out vec2 uv;
 out vec3 worldPosition;
-out mat4 mViewMatrix;
 out vec4 clipSpace;
 out vec3 cameraVector;
 out float movingCoords;
@@ -58,6 +56,5 @@ void main() {
     color = inColor;
     normal = (transformationMatrix * vec4(inNormal, 0.0)).xyz;
     worldPosition = position.xyz;
-    mViewMatrix = modelViewMatrix;
     cameraVector = cameraPosition - position.xyz;
 }

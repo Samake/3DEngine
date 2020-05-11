@@ -13,6 +13,7 @@ public class Input {
 	private Vector2d previousCursorPosition;
     private Vector2d currentCursorPosition;
     private Vector2f cursorMoveVector;
+    private Vector2f cursorPosition;
     private boolean cursorInWindow = false;
     private boolean leftMouseButtonPressed = false;
     private boolean rightMouseButtonPressed = false;
@@ -23,12 +24,15 @@ public class Input {
         previousCursorPosition = new Vector2d(-1, -1);
         currentCursorPosition = new Vector2d(0, 0);
         cursorMoveVector = new Vector2f();
+        cursorPosition = new Vector2f();
         
         long currentWindowHandle = Engine.instance.getDisplay().getHandle();
         
         GLFW.glfwSetCursorPosCallback(currentWindowHandle, (windowHandle, xpos, ypos) -> {
             currentCursorPosition.x = xpos;
             currentCursorPosition.y = ypos;
+            cursorPosition.x = (float) xpos;
+            cursorPosition.y = (float) ypos;
         });
         
         GLFW.glfwSetCursorEnterCallback(currentWindowHandle, (windowHandle, entered) -> {
@@ -86,6 +90,10 @@ public class Input {
 	public Vector2f getCursorMoveVector() {
         return cursorMoveVector;
     }
+
+	public Vector2f getCursorPosition() {
+		return cursorPosition;
+	}
 
 	public void destroy() {
 		Console.print("Input stopped!", LOGTYPE.OUTPUT, true);

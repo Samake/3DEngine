@@ -147,9 +147,7 @@ public class Shader {
     }
     
     public void createUniformMaterialWorld() throws Exception {
-    	createUniform("material.ambient");
     	createUniform("material.diffuse");
-    	createUniform("material.specular");
     	createUniform("material.shininess");
     	createUniform("material.reflectance");
     	createUniform("material.hasTexture");
@@ -167,9 +165,7 @@ public class Shader {
     
     public void setUniformMaterialWorld(MaterialWorld material) {
     	if (material != null) {
-        	setUniformVector3f("material.ambient", material.getAmbientColor());
         	setUniformVector3f("material.diffuse", material.getDiffuseColor());
-        	setUniformVector3f("material.specular", material.getSpecularColor());
         	setUniformFloat("material.shininess", material.getShininess());
         	setUniformFloat("material.reflectance", material.getReflectance());
         	setUniformInteger("material.hasTexture", material.hasTexture());
