@@ -6,6 +6,7 @@ import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.material.MaterialWorld;
 import samake.engine.models.Model;
+import samake.engine.physics.PhysicBody;
 
 public class Entity {
 
@@ -13,6 +14,7 @@ public class Entity {
 	private Vector3f position;
 	private Vector3f rotation;
 	private float scale;
+	private PhysicBody physicBody;
 	
 	private boolean updatedEntity;
 	private Vector3f updatePosition;
@@ -53,6 +55,10 @@ public class Entity {
 
 	public void setPosition(Vector3f position) {
 		this.position = position;
+		
+		if (physicBody != null) {
+			physicBody.setPosition(position);
+		}
 	}
 
 	public Vector3f getRotation() {
@@ -71,6 +77,14 @@ public class Entity {
 		this.scale = scale;
 	}
 	
+	public PhysicBody getPhysicBody() {
+		return physicBody;
+	}
+
+	public void setPhysicBody(PhysicBody physicBody) {
+		this.physicBody = physicBody;
+	}
+
 	public boolean isUpdatedEntity() {
 		return updatedEntity;
 	}

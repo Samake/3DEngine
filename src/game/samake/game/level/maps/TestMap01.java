@@ -1,9 +1,11 @@
 package samake.game.level.maps;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import samake.engine.entity.Entity;
 import samake.engine.entity.light.PointLight;
+import samake.engine.entity.objects.DynamicObject;
+import samake.engine.entity.objects.StaticObject;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.perlin.PerlinGenerator;
@@ -49,44 +51,69 @@ public class TestMap01 extends Level {
 		
 		addWater(water);
 		
-		Entity entity = new Entity();
-		entity.setModel(ResourceLoader.load3DModel("sphere.fbx"));
-		entity.getMaterial(0).setShininess(32.0f);
-		entity.getMaterial(0).setReflectance(1.0f);
-		entity.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
-		entity.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
-		entity.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-		entity.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		entity.setPosition(new Vector3f(4.0f, 6.0f, 0.0f));
-		entity.setScale(1.0f);
+		StaticObject object0 = new StaticObject();
+		object0.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		object0.getMaterial(0).setShininess(32.0f);
+		object0.getMaterial(0).setReflectance(1.0f);
+		object0.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
+		object0.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
+		object0.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
+		object0.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		object0.setPosition(new Vector3f(0.0f, 10.0f, -15.0f));
+		object0.setScale(2.0f);
 
-		addEntity(entity);
+		addEntity(object0);
 		
-		entity = new Entity();
-		entity.setModel(ResourceLoader.load3DModel("sphere.fbx"));
-		entity.getMaterial(0).setShininess(128.0f);
-		entity.getMaterial(0).setReflectance(2.0f);
-		entity.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
-		entity.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
-		entity.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-		entity.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		entity.setPosition(new Vector3f(0.0f, 6.0f, 0.0f));
-		entity.setScale(1.0f);
+		DynamicObject object1 = new DynamicObject();
+		object1.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		object1.getMaterial(0).setShininess(32.0f);
+		object1.getMaterial(0).setReflectance(1.0f);
+		object1.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
+		object1.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
+		object1.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
+		object1.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		object1.setPosition(new Vector3f(0.0f, 100.0f, 0.0f));
+		object1.setScale(1.0f);
+		object1.getPhysicBody().setMass(20.0f);
+		object1.getPhysicBody().setRestitution(0.4f);
+		object1.getPhysicBody().setFriction(0.4f);
+		object1.getPhysicBody().setDamping(new Vector2f(0.15f, 0.25f));
 
-		addEntity(entity);
+		addEntity(object1);
 		
-		entity = new Entity();
-		entity.setModel(ResourceLoader.load3DModel("sphere.fbx"));
-		entity.getMaterial(0).setShininess(256.0f);
-		entity.getMaterial(0).setReflectance(4.0f);
-		entity.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
-		entity.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
-		entity.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-		entity.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		entity.setPosition(new Vector3f(-4.0f, 6.0f, 0.0f));
-		entity.setScale(1.0f);
+		DynamicObject object2 = new DynamicObject();
+		object2.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		object2.getMaterial(0).setShininess(128.0f);
+		object2.getMaterial(0).setReflectance(2.0f);
+		object2.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
+		object2.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
+		object2.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
+		object2.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		object2.setPosition(new Vector3f(0.0f, 150.0f, 0.0f));
+		object2.setScale(1.0f);
+		object2.getPhysicBody().setMass(50.0f);
+		object2.getPhysicBody().setRestitution(0.8f);
+		object2.getPhysicBody().setFriction(1.0f);
+		object2.getPhysicBody().setDamping(new Vector2f(0.05f, 0.5f));
 
-		addEntity(entity);
+		addEntity(object2);
+		
+		DynamicObject object3 = new DynamicObject();
+		object3.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		object3.getMaterial(0).setShininess(256.0f);
+		object3.getMaterial(0).setReflectance(4.0f);
+		object3.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
+		object3.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
+		object3.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
+		object3.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		object3.setPosition(new Vector3f(0.0f, 125.0f, 0.0f));
+		object3.setScale(1.0f);
+		object3.getPhysicBody().setMass(1.0f);
+		object3.getPhysicBody().setRestitution(0.2f);
+		object3.getPhysicBody().setFriction(0.2f);
+		object3.getPhysicBody().setDamping(new Vector2f(0.1f, 0.1f));
+
+		addEntity(object3);
 		
 		PointLight light = new PointLight();
 		light.setPosition(new Vector3f(0.0f, 12.0f, 32.0f));

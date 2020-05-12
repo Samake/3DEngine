@@ -17,22 +17,20 @@ import com.bulletphysics.linearmath.Transform;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 
-public class PhysicsHandler {
+public class Physics {
 	
 	private DefaultCollisionConfiguration config;
 	private CollisionDispatcher dispatcher;
 	private SequentialImpulseConstraintSolver solver;
 	private DiscreteDynamicsWorld world;
 	
-	private RigidBody test;
 	private float startValue;
 	private Transform groundTransform;
 	
-	public PhysicsHandler() {
+	public Physics() {
 		createWorldPhysic();
 		createTestTerrain();
-		test = createTestObject();
-		
+
 		startValue = System.nanoTime();
 	      
 		Console.print("PhysicsHandler started!", LOGTYPE.OUTPUT, true);
@@ -48,8 +46,8 @@ public class PhysicsHandler {
 		solver = new SequentialImpulseConstraintSolver();
 		
 		world = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, config);
-		world.setGravity(new Vector3f(0,-10,0));
-		world.getDispatchInfo().allowedCcdPenetration = 0f;
+		world.setGravity(new Vector3f(0.0f, -9.81f, 0.0f));
+		world.getDispatchInfo().allowedCcdPenetration = 0.0f;
 		
 		world.stepSimulation(1000 / 1000000f);
 	}
@@ -70,38 +68,10 @@ public class PhysicsHandler {
 		addRigidBody(body);
 	}
 	
-	private RigidBody createTestObject() {
-		CollisionShape testShape = new BoxShape(new Vector3f(1.0f, 1.0f, 1.0f));
-		
-		Transform testTransform = new Transform();
-		testTransform.setIdentity();
-		testTransform.origin.set(0, 50, 0);
-	    
-	    float mass = 15.0f;
-		Vector3f localInertia = new Vector3f(0, 0, 0);
-		testShape.calculateLocalInertia(mass, localInertia);
-	   
-		DefaultMotionState ms = new DefaultMotionState(testTransform);
-	   
-		RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(mass, ms, testShape, localInertia);
-		RigidBody body = new RigidBody(rbInfo);
-	    body.setRestitution(0.2f);
-	    body.setFriction(0.80f);
-	    body.setDamping(0.2f, 0.2f);
-	    
-	    body.getCenterOfMassPosition(new Vector3f(0.5f, 0.5f, 0.5f));
-	    
-	    addRigidBody(body);
-	    
-	    return body;
-	}
-	
 	public void update() {
 		float animationTime = ((float) (System.nanoTime() - startValue)) / 10000000000.0f;
 
 		world.stepSimulation(animationTime);
-		
-		System.err.println(animationTime + " - " + test.getWorldTransform(groundTransform).origin);
 	}
 	
 	public void addRigidBody(RigidBody body) {

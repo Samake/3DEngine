@@ -1,8 +1,8 @@
 package samake.engine.entity.vegetation;
 
-import samake.engine.entity.Entity;
+import samake.engine.entity.objects.StaticObject;
 
-public class Plant extends Entity {
+public class Plant extends StaticObject {
 
 	public Plant() {
 		

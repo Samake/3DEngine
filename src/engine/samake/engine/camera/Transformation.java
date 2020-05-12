@@ -78,8 +78,7 @@ public class Transformation {
 	    Vector3f rotation = camera.getRotation();
 
 	    viewMatrix.identity();
-	    viewMatrix.rotate((float)Math.toRadians(rotation.x), forwardVector)
-	        .rotate((float)Math.toRadians(rotation.y), upVector);
+	    viewMatrix.rotate((float)Math.toRadians(rotation.x), forwardVector).rotate((float)Math.toRadians(rotation.y), upVector);
 	    viewMatrix.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
 	    
 	    return viewMatrix;
