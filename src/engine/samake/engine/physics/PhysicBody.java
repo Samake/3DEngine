@@ -1,5 +1,6 @@
 package samake.engine.physics;
 
+import javax.vecmath.Quat4f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
@@ -16,6 +17,7 @@ public class PhysicBody {
 	
 	private CollisionShape collissionShape;
 	private Transform transform;
+	private Quat4f rotation;
 	private RigidBody rigidBody;
 	private Vector3f inertia;
 	private Vector3f scale;
@@ -28,6 +30,7 @@ public class PhysicBody {
 	public PhysicBody() {
 		setCollissionShape(new SphereShape(1.0f));
 		setTransform(new Transform());
+		setRotation(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
 		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
 		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
 		setMass(5.0f);
@@ -37,6 +40,7 @@ public class PhysicBody {
 		
 		transform.setIdentity();
 		transform.origin.set(0.0f, 0.0f, 0.0f);
+		transform.setRotation(rotation);
 
 		collissionShape.calculateLocalInertia(mass, inertia);
 	   
@@ -53,7 +57,8 @@ public class PhysicBody {
 	}
 	
 	public void update() {
-
+		//Quat4f currentRotation = transform.getRotation(rotation);
+		//System.err.println(currentRotation);
 	}
 	
 	public CollisionShape getCollissionShape() {
@@ -70,6 +75,14 @@ public class PhysicBody {
 
 	public void setTransform(Transform transform) {
 		this.transform = transform;
+	}
+
+	public Quat4f getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(Quat4f rotation) {
+		this.rotation = rotation;
 	}
 
 	public RigidBody getRigidBody() {
