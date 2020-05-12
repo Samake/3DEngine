@@ -33,6 +33,7 @@
 	</dependencyManagement>
 	
 	<dependencies>
+		<dependency><groupId>cz.advel.jbullet</groupId><artifactId>jbullet</artifactId><version>20101010-1</version></dependency>
 		<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl</artifactId></dependency>
 		<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-assimp</artifactId></dependency>
 		<dependency><groupId>org.lwjgl</groupId><artifactId>lwjgl-bgfx</artifactId></dependency>

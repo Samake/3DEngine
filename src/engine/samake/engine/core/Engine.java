@@ -7,6 +7,7 @@ import samake.engine.display.Display;
 import samake.engine.input.Input;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
+import samake.engine.physics.PhysicsHandler;
 import samake.engine.rendering.Renderer;
 
 public class Engine {
@@ -15,6 +16,7 @@ public class Engine {
 	
 	private Display display;
 	private Input input;
+	private PhysicsHandler physics;
 	private Renderer renderer;
 	
     public Engine() throws Exception {
@@ -26,6 +28,7 @@ public class Engine {
     	
     	setDisplay(new Display());
     	setInput(new Input());
+    	setPhysics(new PhysicsHandler());
     	setRenderer(new Renderer());
     	
     	Console.print("##### Engine was started! #####", LOGTYPE.OUTPUT, true);
@@ -77,6 +80,7 @@ public class Engine {
     public void update() {
     	input.update();
     	display.update();
+    	physics.update();
     	renderer.update();
     }
     
@@ -104,6 +108,14 @@ public class Engine {
 		this.input = input;
 	}
 
+	public PhysicsHandler getPhysics() {
+		return physics;
+	}
+
+	public void setPhysics(PhysicsHandler physics) {
+		this.physics = physics;
+	}
+
 	public Renderer getRenderer() {
 		return renderer;
 	}
@@ -117,6 +129,7 @@ public class Engine {
 		
 		display.destroy();
 		input.destroy();
+		physics.destroy();
 		renderer.destroy();
 		
 		GL.destroy();
