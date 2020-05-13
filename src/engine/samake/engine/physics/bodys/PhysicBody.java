@@ -1,4 +1,4 @@
-package samake.engine.physics;
+package samake.engine.physics.bodys;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector2f;
@@ -34,11 +34,15 @@ public class PhysicBody {
 		setRotationQuaternion(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
 		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
 		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
-		setMass(5.0f);
+		setMass(1.0f);
 		setRestitution(0.5f);
 		setFriction(0.1f);
 		setDamping(new Vector2f(0.2f, 0.5f));
 		
+		init();
+	}
+
+	public void init() {
 		transform.setIdentity();
 		transform.origin.set(0.0f, 0.0f, 0.0f);
 		transform.setRotation(rotation);
@@ -46,7 +50,7 @@ public class PhysicBody {
 		collissionShape.calculateLocalInertia(mass, inertia);
 	   
 		setMotionState(new DefaultMotionState(transform));
-	   
+		
 		setRigidBody(new RigidBody(new RigidBodyConstructionInfo(mass, motionState, collissionShape, inertia)));
 		rigidBody.setRestitution(restitution);
 		rigidBody.setFriction(friction);

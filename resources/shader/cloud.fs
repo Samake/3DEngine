@@ -45,7 +45,7 @@ uniform float animValue;
 
 const float near = 0.2; 
 const float far = 10000.0;
-const float windSpeed = 6;
+const float windSpeed = 1;
 
 vec3 addDirectionalLight(vec3 normalIn, Light light, vec3 lightDirection) {
 	float diffuseFactor = max(dot(normalIn, normalize(lightDirection)), 0.0);
@@ -181,9 +181,9 @@ vec4 calcClouds() {
 	vec3 layerPos = modelPosition;
 	layerPos.xy += windDirection * animValue * windSpeed * 0.05f;
 
-	float density = fbm(4 * layerPos, 1);
-	density -= fbm(8 * layerPos, density);
-	density *= fbm(16 * layerPos, density);
+	float density = fbm(8 * layerPos, 1);
+	density -= fbm(16 * layerPos, density);
+	density *= fbm(32 * layerPos, density);
 
 	density = clamp(density * 16, 0.0f, 1.0f);
 	
@@ -196,11 +196,11 @@ vec4 calcClouds() {
 	vec3 ro = normalize(vec3(0.0, 25.0, 0.0));
 	vec3 rd = normalize(cameraPosition - worldPosition);
 	
-	vec3 col = vec3(randomness, randomness, randomness);
+	vec3 col = vec3(0, 0, 0);
 
 	float i = march(ro, rd, raySteps);
 
-	vec4 fog = volumetric(ro, rd, col, i, randomness, raySteps, rayLength) * 1.5;
+	vec4 fog = volumetric(ro, rd, col, i, randomness, raySteps, rayLength);
 	fog.a *= density;
 
 	col = mix(fog.rgb * (1 - randomness), col, 1.0 - fog.a);

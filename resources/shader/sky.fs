@@ -119,7 +119,7 @@ vec3 dayLight(vec3 r, vec3 r0, vec3 pSun, float iSun, float rPlanet, float rAtmo
     }
 
     // Calculate and return the final color.
-    return  sunColor * iSun * (pRlh * kRlh * totalRlh + pMie * kMie * totalMie) * 8.0f;
+    return  sunColor * iSun * (pRlh * kRlh * totalRlh + pMie * kMie * totalMie) * 4.0f;
 }
 
 void main() {

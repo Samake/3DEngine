@@ -17,7 +17,7 @@ import com.bulletphysics.linearmath.Transform;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 
-public class Physics {
+public class PhysicHandler {
 	
 	private DefaultCollisionConfiguration config;
 	private CollisionDispatcher dispatcher;
@@ -27,7 +27,7 @@ public class Physics {
 	private float startValue;
 	private Transform groundTransform;
 	
-	public Physics() {
+	public PhysicHandler() {
 		createWorldPhysic();
 		createTestTerrain();
 
@@ -69,7 +69,7 @@ public class Physics {
 	}
 	
 	public void update() {
-		float animationTime = ((float) (System.nanoTime() - startValue)) / 10000000000.0f;
+		float animationTime = ((float) (System.nanoTime() - startValue)) / 10000000.0f;
 
 		world.stepSimulation(animationTime);
 	}

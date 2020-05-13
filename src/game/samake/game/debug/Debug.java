@@ -44,12 +44,12 @@ public class Debug {
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
 		object.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		object.setPosition(new Vector3f(Utils.getRandomValue(-1, 1, 1), 50.0f, Utils.getRandomValue(-1, 1, 1)));
+		object.setPosition(new Vector3f(Utils.getRandomValue(-0.5f, 0.5f, 1), 50.0f, Utils.getRandomValue(-0.5f, 0.5f, 1)));
 		object.setScale(1.0f);
-		object.getPhysicBody().setMass(15.0f);
-		object.getPhysicBody().setRestitution(0.65f);
+		object.getPhysicBody().setMass(25.0f);
+		object.getPhysicBody().setRestitution(0.55f);
 		object.getPhysicBody().setFriction(0.85f);
-		object.getPhysicBody().setDamping(new Vector2f(0.10f, 0.35f));
+		object.getPhysicBody().setDamping(new Vector2f(0.10f, 0.45f));
 		
 		level.addEntity(object);
 	}

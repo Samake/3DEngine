@@ -6,7 +6,7 @@ import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.material.MaterialWorld;
 import samake.engine.models.Model;
-import samake.engine.physics.PhysicBody;
+import samake.engine.physics.bodys.PhysicBody;
 
 public class Entity {
 

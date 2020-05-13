@@ -40,8 +40,8 @@ public class TestMap01 extends Level {
 		
 		Terrain terrain = new Terrain();
 		terrain.generateModel(new Vector3f(-512.0f, 0.0f, -512.0f), 512, 1024.0f, true, true);
-		terrain.getMaterial().setShininess(8.0f);
-		terrain.getMaterial().setReflectance(0.4f);
+		terrain.getMaterial().setShininess(16.0f);
+		terrain.getMaterial().setReflectance(0.8f);
 		terrain.getMaterial().setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		terrain.getMaterial().setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		terrain.getMaterial().setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
@@ -55,36 +55,39 @@ public class TestMap01 extends Level {
 		addWater(water);
 		
 		StaticObject object0 = new StaticObject();
-		object0.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		object0.setModel(ResourceLoader.load3DModel("box.fbx"));
 		object0.getMaterial(0).setShininess(32.0f);
 		object0.getMaterial(0).setReflectance(1.0f);
 		object0.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object0.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object0.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
 		object0.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		object0.setPosition(new Vector3f(0.0f, 10.0f, -15.0f));
-		object0.setScale(2.0f);
+		object0.setPosition(new Vector3f(0.0f, 8.0f, 0.0f));
+		object0.setScale(1.0f);
 
 		addEntity(object0);
-		
+	
 		PointLight light = new PointLight();
-		light.setPosition(new Vector3f(0.0f, 12.0f, 32.0f));
+		light.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		light.setPosition(new Vector3f(0.0f, 12.0f, 24.0f));
 		light.setColor(new Vector3f(1.0f, 0.7f, 0.3f));
-		light.setIntensity(256.0f, true);
+		light.setIntensity(128.0f, true);
 		
 		addLight(light);
 		
 		light = new PointLight();
-		light.setPosition(new Vector3f(-32.0f, 12.0f, -32.0f));
+		light.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		light.setPosition(new Vector3f(-24.0f, 12.0f, 0.0f));
 		light.setColor(new Vector3f(0.3f, 1.0f, 0.7f));
-		light.setIntensity(256.0f, true);
+		light.setIntensity(128.0f, true);
 		
 		addLight(light);
 		
 		light = new PointLight();
-		light.setPosition(new Vector3f(32.0f, 12.0f, 0.0f));
+		light.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		light.setPosition(new Vector3f(24.0f, 12.0f, 0.0f));
 		light.setColor(new Vector3f(0.7f, 0.3f, 1.0f));
-		light.setIntensity(256.0f, true);
+		light.setIntensity(128.0f, true);
 		
 		addLight(light);
 	}

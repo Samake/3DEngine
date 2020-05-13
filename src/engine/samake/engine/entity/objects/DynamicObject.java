@@ -3,21 +3,21 @@ package samake.engine.entity.objects;
 import org.joml.Vector3f;
 
 import samake.engine.entity.Entity;
-import samake.engine.physics.PhysicBody;
+import samake.engine.physics.bodys.PhysicDynamicBody;
 
 public class DynamicObject extends Entity {
 
 	public DynamicObject() {
 		setUpdatedEntity(true);
-		setPhysicBody(new PhysicBody());
+		setPhysicBody(new PhysicDynamicBody());
 	}
 	
 	public void update() {
 		super.update();
 		
-		getPhysicBody().update();
-		
 		if (isUpdatedEntity()) {
+			getPhysicBody().update();
+			
 			Vector3f physicPosition = getPhysicBody().getPosition();
 			Vector3f physicRotation = getPhysicBody().getRotation();
 			
