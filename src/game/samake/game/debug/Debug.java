@@ -44,7 +44,7 @@ public class Debug {
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
 		object.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		object.setPosition(new Vector3f(Utils.getRandomValue(-0.5f, 0.5f, 1), 50.0f, Utils.getRandomValue(-0.5f, 0.5f, 1)));
+		object.setPosition(new Vector3f(Utils.getRandomValue(31.5f, 32.5f, 1), 50.0f, Utils.getRandomValue(-63.5f, -64.5f, 1)));
 		object.setScale(1.0f);
 		object.getPhysicBody().setMass(25.0f);
 		object.getPhysicBody().setRestitution(0.55f);

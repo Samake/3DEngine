@@ -9,8 +9,8 @@ import com.bulletphysics.linearmath.Transform;
 
 public class PhysicStaticBody extends PhysicBody {
 	
-	public PhysicStaticBody() {
-		setCollissionShape(new BoxShape(new Vector3f(1.0f, 1.0f, 1.0f)));
+	public PhysicStaticBody(org.joml.Vector3f size) {
+		setCollissionShape(new BoxShape(new Vector3f(size.x, size.y, size.z)));
 		setTransform(new Transform());
 		setRotationQuaternion(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
 		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
@@ -22,7 +22,7 @@ public class PhysicStaticBody extends PhysicBody {
 
 		init();
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();

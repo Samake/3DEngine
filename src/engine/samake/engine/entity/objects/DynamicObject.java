@@ -23,8 +23,7 @@ public class DynamicObject extends Entity {
 			
 			setPosition(physicPosition);
 			setRotation(physicRotation);
-		}
-			
+		}	
 	}
 	
 	public void destroy() {

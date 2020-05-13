@@ -6,6 +6,7 @@ import samake.engine.entity.Entity;
 import samake.engine.material.MaterialWater;
 import samake.engine.models.MeshBuilder;
 import samake.engine.models.Model;
+import samake.engine.physics.bodys.PhysicStaticBody;
 
 public class Water extends Entity {
 
@@ -14,6 +15,7 @@ public class Water extends Entity {
 	public Water() {
 		setMaterial(new MaterialWater());
 		setUpdatedEntity(true);
+		setPhysicBody(new PhysicStaticBody(new Vector3f(512.0f, 0.0f, 512.0f)));
 	}
 	
 	public void generateModel(Vector3f position, int rows, float size) {
@@ -41,5 +43,6 @@ public class Water extends Entity {
 	public void destroy() {
 		super.destroy();
 		material.destroy();
+		getPhysicBody().destroy();
 	}
 }

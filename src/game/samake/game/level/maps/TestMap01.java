@@ -3,7 +3,6 @@ package samake.game.level.maps;
 import org.joml.Vector3f;
 
 import samake.engine.entity.light.PointLight;
-import samake.engine.entity.objects.StaticObject;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.perlin.PerlinGenerator;
@@ -54,22 +53,22 @@ public class TestMap01 extends Level {
 		
 		addWater(water);
 		
-		StaticObject object0 = new StaticObject();
-		object0.setModel(ResourceLoader.load3DModel("box.fbx"));
-		object0.getMaterial(0).setShininess(32.0f);
-		object0.getMaterial(0).setReflectance(1.0f);
-		object0.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
-		object0.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
-		object0.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-		object0.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		object0.setPosition(new Vector3f(0.0f, 8.0f, 0.0f));
-		object0.setScale(1.0f);
-
-		addEntity(object0);
+//		StaticObject object0 = new StaticObject();
+//		object0.setModel(ResourceLoader.load3DModel("box.fbx"));
+//		object0.getMaterial(0).setShininess(32.0f);
+//		object0.getMaterial(0).setReflectance(1.0f);
+//		object0.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
+//		object0.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
+//		object0.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
+//		object0.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+//		object0.setPosition(new Vector3f(32.0f, 12.0f, -64.0f));
+//		object0.setScale(1.0f);
+//
+//		addEntity(object0);
 	
 		PointLight light = new PointLight();
 		light.setModel(ResourceLoader.load3DModel("sphere.fbx"));
-		light.setPosition(new Vector3f(0.0f, 12.0f, 24.0f));
+		light.setPosition(new Vector3f(48.0f, 15.0f, -80.0f));
 		light.setColor(new Vector3f(1.0f, 0.7f, 0.3f));
 		light.setIntensity(128.0f, true);
 		
@@ -77,7 +76,7 @@ public class TestMap01 extends Level {
 		
 		light = new PointLight();
 		light.setModel(ResourceLoader.load3DModel("sphere.fbx"));
-		light.setPosition(new Vector3f(-24.0f, 12.0f, 0.0f));
+		light.setPosition(new Vector3f(12.0f, 15.0f, -80.0f));
 		light.setColor(new Vector3f(0.3f, 1.0f, 0.7f));
 		light.setIntensity(128.0f, true);
 		
@@ -85,7 +84,7 @@ public class TestMap01 extends Level {
 		
 		light = new PointLight();
 		light.setModel(ResourceLoader.load3DModel("sphere.fbx"));
-		light.setPosition(new Vector3f(24.0f, 12.0f, 0.0f));
+		light.setPosition(new Vector3f(32.0f, 15.0f, -48.0f));
 		light.setColor(new Vector3f(0.7f, 0.3f, 1.0f));
 		light.setIntensity(128.0f, true);
 		
