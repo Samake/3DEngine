@@ -7,6 +7,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.List;
 
+import javax.vecmath.Quat4f;
+
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -113,5 +115,56 @@ public class Utils {
 		lerpVector.z = (a.z * (1.0f - progress)) + (b.z * progress);
 		
 	    return lerpVector;
+	}
+	
+	public static Vector3f quaternionToEuler(Quat4f quat) {
+	    Vector3f p = new Vector3f();
+
+	    double sqw = quat.w * quat.w;
+	    double sqx = quat.x * quat.x;
+	    double sqy = quat.y * quat.y;
+	    double sqz = quat.z * quat.z;
+
+	    double unit = sqx + sqy + sqz + sqw; 
+	    double test = quat.x * quat.y + quat.z * quat.w;
+	    
+	    if (test > 0.499 * unit) { // singularity at north pole
+	        p.y = (float) (2 * Math.atan2(quat.x, quat.w));
+	        p.z = (float) (Math.PI * 0.5f);
+	        p.x = 0;
+	    } else if (test < -0.499 * unit) { // singularity at south pole
+	        p.y = (float) (-2 * (Math.atan2(quat.x, quat.w)));
+	        p.z = (float) (-Math.PI * 0.5f);
+	        p.x = 0;
+	    } else {
+	        p.y = (float) Math.toDegrees((Math.atan2(2 * quat.y * quat.w - 2 * quat.x * quat.z, sqx - sqy - sqz + sqw)));
+	        p.z = (float) Math.toDegrees((Math.asin(2 * test / unit)));
+	        p.x = (float) Math.toDegrees((Math.atan2(2 * quat.x * quat.w - 2 * quat.y * quat.z, -sqx + sqy - sqz + sqw)));
+	    }
+
+	    return p;
+	}
+	
+	public static Quat4f eulerToQuaternion(Vector3f rotation) {
+	    Quat4f quat = new Quat4f();
+	    float pitch = (float) Math.toRadians(rotation.x);
+	    float yaw = (float) Math.toRadians(rotation.y);
+	    float roll = (float) Math.toRadians(rotation.z);
+
+	    final Vector3f coss = new Vector3f();
+	    coss.x = (float) Math.cos(pitch * 0.5f);
+	    coss.y = (float) Math.cos(yaw * 0.5f);
+	    coss.z = (float) Math.cos(roll * 0.5f);
+	    final Vector3f sins = new Vector3f();
+	    sins.x = (float) Math.sin(pitch * 0.5f);
+	    sins.y = (float) Math.sin(yaw * 0.5f);
+	    sins.z = (float) Math.sin(roll * 0.5f);
+
+	    quat.w = coss.x * coss.y * coss.z + sins.x * sins.y * sins.z;
+	    quat.x = sins.x * coss.y * coss.z + coss.x * sins.y * sins.z;
+	    quat.y = coss.x * sins.y * coss.z - sins.x * coss.y * sins.z;
+	    quat.z = coss.x * coss.y * sins.z - sins.x * sins.y * coss.z;
+	    
+	    return quat;
 	}
 }

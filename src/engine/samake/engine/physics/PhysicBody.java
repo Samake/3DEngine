@@ -12,6 +12,7 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
 import samake.engine.core.Engine;
+import samake.engine.utils.Utils;
 
 public class PhysicBody {
 	
@@ -30,7 +31,7 @@ public class PhysicBody {
 	public PhysicBody() {
 		setCollissionShape(new SphereShape(1.0f));
 		setTransform(new Transform());
-		setRotation(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
+		setRotationQuaternion(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
 		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
 		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
 		setMass(5.0f);
@@ -77,11 +78,11 @@ public class PhysicBody {
 		this.transform = transform;
 	}
 
-	public Quat4f getRotation() {
+	public Quat4f getRotationQuaternion() {
 		return rotation;
 	}
 
-	public void setRotation(Quat4f rotation) {
+	public void setRotationQuaternion(Quat4f rotation) {
 		this.rotation = rotation;
 	}
 
@@ -188,6 +189,10 @@ public class PhysicBody {
 		transform.origin.z = position.z;
 		
 		rigidBody.setWorldTransform(transform);
+	}
+	
+	public org.joml.Vector3f getRotation() {
+		return Utils.quaternionToEuler(transform.getRotation(rotation));
 	}
 
 	public void destroy() {

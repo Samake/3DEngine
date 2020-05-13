@@ -19,7 +19,10 @@ public class DynamicObject extends Entity {
 		
 		if (isUpdatedEntity()) {
 			Vector3f physicPosition = getPhysicBody().getPosition();
+			Vector3f physicRotation = getPhysicBody().getRotation();
+			
 			setPosition(physicPosition);
+			setRotation(physicRotation);
 		}
 			
 	}

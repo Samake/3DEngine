@@ -25,7 +25,7 @@ public class TestMap01 extends Level {
 		getCamera().setPosition(0.0f, 6.0f, 0.0f);
 		
 		getEnvironment().setGameSpeed(1);
-		getEnvironment().setDayProgress(0.85f);
+		getEnvironment().setDayProgress(0.8f);
 		getEnvironment().setFrozen(false);
 		getEnvironment().getFog().setDensity(0.0025f);
 		
@@ -70,6 +70,20 @@ public class TestMap01 extends Level {
 		PointLight light = new PointLight();
 		light.setPosition(new Vector3f(0.0f, 12.0f, 32.0f));
 		light.setColor(new Vector3f(1.0f, 0.7f, 0.3f));
+		light.setIntensity(256.0f, true);
+		
+		addLight(light);
+		
+		light = new PointLight();
+		light.setPosition(new Vector3f(-32.0f, 12.0f, -32.0f));
+		light.setColor(new Vector3f(0.3f, 1.0f, 0.7f));
+		light.setIntensity(256.0f, true);
+		
+		addLight(light);
+		
+		light = new PointLight();
+		light.setPosition(new Vector3f(32.0f, 12.0f, 0.0f));
+		light.setColor(new Vector3f(0.7f, 0.3f, 1.0f));
 		light.setIntensity(256.0f, true);
 		
 		addLight(light);

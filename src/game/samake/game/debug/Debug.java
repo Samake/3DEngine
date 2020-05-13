@@ -46,10 +46,10 @@ public class Debug {
 		object.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
 		object.setPosition(new Vector3f(Utils.getRandomValue(-1, 1, 1), 50.0f, Utils.getRandomValue(-1, 1, 1)));
 		object.setScale(1.0f);
-		object.getPhysicBody().setMass(Utils.getRandomValue(1000.0f, 50000.0f, 1000.0f));
-		object.getPhysicBody().setRestitution(Utils.getRandomValue(0.0f, 1000.0f, 1000.0f));
-		object.getPhysicBody().setFriction(Utils.getRandomValue(0.0f, 1000.0f, 1000.0f));
-		object.getPhysicBody().setDamping(new Vector2f(0.05f, Utils.getRandomValue(0.0f, 1000.0f, 1000.0f)));
+		object.getPhysicBody().setMass(15.0f);
+		object.getPhysicBody().setRestitution(0.65f);
+		object.getPhysicBody().setFriction(0.85f);
+		object.getPhysicBody().setDamping(new Vector2f(0.10f, 0.35f));
 		
 		level.addEntity(object);
 	}
