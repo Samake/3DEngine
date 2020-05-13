@@ -49,7 +49,7 @@ public class TestMap01 extends Level {
 		addTerrain(terrain);
 		
 		Water water = new Water();
-		water.generateModel(new Vector3f(-512.0f, 0.0f, -512.0f), 256, 1024.0f);
+		water.generateModel(new Vector3f(-512.0f, -0.25f, -512.0f), 256, 1024.0f);
 		
 		addWater(water);
 		

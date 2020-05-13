@@ -194,20 +194,25 @@ public class Renderer {
 	}
 	
 	private void renderBufferTextures() {
-		float waterHeight = 0.0f;
-		float distance = scene.getCamera().getPosition().y;
+		float waterHeight = -0.25f;
+		float distance = scene.getCamera().getPosition().y * 2.0f;
 
 		waterBuffer.bindReflectionBuffer();
 		scene.getCamera().getPosition().y -= distance;
 		transformation.invert();
-		clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight - distance * 0.5f);
+		clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 1.0f);
 		
 		renderScene();
 		
 		waterBuffer.bindRefractionBuffer();
 		scene.getCamera().getPosition().y += distance;
 		transformation.invert();
-		clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + distance * 0.5f);
+		
+		if (distance > waterHeight) {
+			clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + 1.0f);
+		} else {
+			clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 2.0f);
+		}
 		
 		renderScene();
 		

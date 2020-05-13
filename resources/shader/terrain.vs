@@ -16,12 +16,14 @@ uniform mat4 viewMatrix;
 uniform mat4 modelViewMatrix;
 uniform mat4 transformationMatrix;
 uniform vec4 clipPlane;
+uniform vec3 cameraPosition;
 
 void main() {
 	vec4 position = transformationMatrix * vec4(inPosition, 1.0);
     gl_Position = projectionMatrix * viewMatrix * position;
-	gl_ClipDistance[0] = dot(position, clipPlane);
-    
+
+    gl_ClipDistance[0] = dot(position, clipPlane);
+
     color = inColor;
     normal = (transformationMatrix * vec4(inNormal, 0.0)).xyz;
     uv = inUV;

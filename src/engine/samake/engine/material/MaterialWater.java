@@ -26,7 +26,7 @@ public class MaterialWater extends MaterialWorld {
 	}
 	
 	public void update() {
-		animCounter = (animCounter + 0.001f)%360;
+		animCounter = (animCounter + 0.002f)%360;
 		setAnimValue(animCounter);
 	}
 

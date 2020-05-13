@@ -142,7 +142,7 @@ void main() {
 	vec3 specularMap = vec3(0.0, 0.0, 0.0);
 	float specValue = 1.0f;
 	
-	vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
+	vec2 ndc = 0.5f * (clipSpace.xy / clipSpace.w) + 0.5f;
 	vec2 refractionTexCoords = vec2(ndc.x, ndc.y);
 	vec2 reflectionTexCoords = vec2(ndc.x, -ndc.y);
 	
@@ -157,17 +157,18 @@ void main() {
 	float waterDepthNeg = 1 - waterDepth;
 	
 	vec2 baseUV = uv * material.tiling;
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y)).rg * 0.45f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y)).rg * 0.1f;
 	distortedTexCoords = baseUV + vec2(distortedTexCoords.x, distortedTexCoords.y + movingCoords);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.015f;
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.0075f;
 	
-	float blurValue = 0.0010f;
+	float blurValue = 0.0020f;
 	
 	refractionTexCoords += totalDistortion;
 	refractionTexCoords = clamp(refractionTexCoords, 0.001f, 0.999f);
 	
-	vec4 refraction = texture(refractionSampler, vec2(refractionTexCoords.x, refractionTexCoords.y));
-	refraction.rgb *= waterDepthNeg;
+	vec4 refractionBase = texture(refractionSampler, vec2(refractionTexCoords.x, refractionTexCoords.y));
+	vec4 refraction = refractionBase;
+	refraction.rgb *= material.color * waterDepthNeg;
 	
 	reflectionTexCoords += totalDistortion;
 	reflectionTexCoords.x = clamp(reflectionTexCoords.x, 0.001f, 0.999f);
@@ -220,6 +221,11 @@ void main() {
 	foamColor *= ambientStrength * depthBorderNeg * diffuseMap;
 
 	vec3 waterOutput = clamp(mix(reflection.rgb, refraction.rgb, refractiveValue), 0.0f, 1.0f);
+	
+	if (cameraPosition.y < worldPosition.y) {
+		waterOutput = refractionBase.rgb * material.color;
+	}
+	
 	waterOutput *= diffuseMap;
 	waterOutput += specularMap;
 	waterOutput += foamColor;

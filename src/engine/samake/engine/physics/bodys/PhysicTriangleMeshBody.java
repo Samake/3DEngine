@@ -17,7 +17,14 @@ import samake.engine.models.Mesh;
 public class PhysicTriangleMeshBody extends PhysicBody {
 	
 	public PhysicTriangleMeshBody() {
-		
+		setTransform(new Transform());
+		setRotationQuaternion(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
+		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
+		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
+		setMass(0.0f);
+		setRestitution(0.15f);
+		setFriction(0.55f);
+		setDamping(new Vector2f(0.55f, 0.55f));
 	}
 	
 	public void calculateTriangleMesh(Mesh mesh) {
@@ -66,14 +73,6 @@ public class PhysicTriangleMeshBody extends PhysicBody {
 		vertArray.addIndexedMesh(indexedMesh);
 		
 		setCollissionShape(new BvhTriangleMeshShape(vertArray, true));
-		setTransform(new Transform());
-		setRotationQuaternion(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
-		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
-		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
-		setMass(0.0f);
-		setRestitution(0.15f);
-		setFriction(0.55f);
-		setDamping(new Vector2f(0.55f, 0.55f));
 		
 		init();
 	}
