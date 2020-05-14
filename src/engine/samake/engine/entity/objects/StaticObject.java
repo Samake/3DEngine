@@ -12,10 +12,12 @@ public class StaticObject extends Entity {
 		setPhysicBody(new PhysicStaticBody(new Vector3f(1.0f, 1.0f, 1.0f)));
 	}
 	
+	@Override
 	public void update() {
 		super.update();
 	}
 	
+	@Override
 	public void destroy() {
 		super.destroy();
 		

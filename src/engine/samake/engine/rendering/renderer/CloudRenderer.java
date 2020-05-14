@@ -3,6 +3,7 @@ package samake.engine.rendering.renderer;
 import java.util.List;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL43;
 
@@ -57,7 +58,12 @@ public class CloudRenderer {
 	    		lightID++;
 	    	}
 
-    		Matrix4f transformationMatrix = transformation.getWorldMatrix(cloudLayer.getPosition(), cloudLayer.getRotation(), cloudLayer.getScale());
+	    	Vector3f position = new Vector3f();
+	    	position.x = cloudLayer.getPosition().x + camera.getPosition().x;
+	    	position.y = cloudLayer.getPosition().y + camera.getPosition().y;
+	    	position.z = cloudLayer.getPosition().z + camera.getPosition().z;
+	    	
+    		Matrix4f transformationMatrix = transformation.getWorldMatrix(position, cloudLayer.getRotation(), cloudLayer.getScale());
     		
     		shader.setUniformMatrix4f("transformationMatrix", transformationMatrix);
     		

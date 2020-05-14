@@ -196,7 +196,17 @@ public class PhysicBody {
 	}
 	
 	public org.joml.Vector3f getRotation() {
-		return Utils.quaternionToEuler(transform.getRotation(rotation));
+		rotation = transform.getRotation(rotation);
+		
+		float pitch = Utils.getPitch(rotation);
+		float yaw = Utils.getYaw(rotation);
+		float roll = Utils.getRoll(rotation);
+		
+		pitch = (float) (Math.toDegrees(pitch) + 180)%360;
+		yaw = (float) (Math.toDegrees(yaw) + 180)%360;
+		roll = (float) (Math.toDegrees(roll) + 180)%360;
+		
+		return new org.joml.Vector3f(pitch, yaw, roll);
 	}
 
 	public void destroy() {

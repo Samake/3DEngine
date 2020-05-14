@@ -12,6 +12,7 @@ public class DynamicObject extends Entity {
 		setPhysicBody(new PhysicDynamicBody());
 	}
 	
+	@Override
 	public void update() {
 		super.update();
 		
@@ -26,6 +27,7 @@ public class DynamicObject extends Entity {
 		}	
 	}
 	
+	@Override
 	public void destroy() {
 		super.destroy();
 		

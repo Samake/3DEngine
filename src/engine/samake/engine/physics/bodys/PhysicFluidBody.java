@@ -16,9 +16,9 @@ public class PhysicFluidBody extends PhysicBody {
 		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
 		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
 		setMass(0.0f);
-		setRestitution(0.5f);
-		setFriction(0.5f);
-		setDamping(new Vector2f(0.25f, 0.25f));
+		setRestitution(0.55f);
+		setFriction(0.75f);
+		setDamping(new Vector2f(0.95f, 0.25f));
 
 		init();
 		

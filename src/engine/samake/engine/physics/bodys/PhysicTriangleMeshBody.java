@@ -22,9 +22,9 @@ public class PhysicTriangleMeshBody extends PhysicBody {
 		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
 		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
 		setMass(0.0f);
-		setRestitution(0.15f);
-		setFriction(0.55f);
-		setDamping(new Vector2f(0.55f, 0.55f));
+		setRestitution(0.55f);
+		setFriction(0.85f);
+		setDamping(new Vector2f(0.25f, 0.75f));
 	}
 	
 	public void calculateTriangleMesh(Mesh mesh) {
