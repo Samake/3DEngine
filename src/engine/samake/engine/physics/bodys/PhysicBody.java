@@ -5,7 +5,6 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
@@ -15,39 +14,28 @@ import samake.engine.core.Engine;
 import samake.engine.utils.Utils;
 
 public class PhysicBody {
+
+	private Transform transform = new Transform();
+	private Quat4f rotation = new Quat4f(0.0f, 0.0f, 0.0f, 1.0f);
+	private Vector3f inertia = new Vector3f(0.0f, 0.0f, 0.0f);
+	private Vector3f scale = new Vector3f(1.0f, 1.0f, 1.0f);
+	private float mass = 1.0f;
+	private float restitution = 0.5f;
+	private float friction = 0.5f;
+	private Vector2f damping = new Vector2f(0.1f, 0.1f);
 	
-	private CollisionShape collissionShape;
-	private Transform transform;
-	private Quat4f rotation;
-	private RigidBody rigidBody;
-	private Vector3f inertia;
-	private Vector3f scale;
 	private DefaultMotionState motionState;
-	private float mass;
-	private float restitution;
-	private float friction;
-	private Vector2f damping;
+	private CollisionShape collissionShape;
+	private RigidBody rigidBody;
 	
 	public PhysicBody() {
-		setCollissionShape(new SphereShape(1.0f));
-		setTransform(new Transform());
-		setRotationQuaternion(new Quat4f(0.0f, 0.0f, 0.0f, 1.0f));
-		setInertia(new Vector3f(0.0f, 0.0f, 0.0f));
-		setScale(new Vector3f(1.0f, 1.0f, 1.0f));
-		setMass(1.0f);
-		setRestitution(0.5f);
-		setFriction(0.1f);
-		setDamping(new Vector2f(0.2f, 0.5f));
-		
-		init();
-	}
-
-	public void init() {
 		transform.setIdentity();
 		transform.origin.set(0.0f, 0.0f, 0.0f);
 		transform.setRotation(rotation);
+	}
 
-		collissionShape.calculateLocalInertia(mass, inertia);
+	public void init() {
+//		collissionShape.calculateLocalInertia(mass, inertia);
 	   
 		setMotionState(new DefaultMotionState(transform));
 		
@@ -56,8 +44,6 @@ public class PhysicBody {
 		rigidBody.setFriction(friction);
 		rigidBody.setDamping(damping.x, damping.y);
 	    
-		rigidBody.getCenterOfMassPosition(new Vector3f(scale.x * 0.5f, scale.y * 0.5f, scale.z * 0.5f));
-		
 		Engine.instance.getPhysics().addRigidBody(rigidBody);
 	}
 	

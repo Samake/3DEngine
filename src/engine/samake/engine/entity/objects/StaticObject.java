@@ -1,15 +1,22 @@
 package samake.engine.entity.objects;
 
-import org.joml.Vector3f;
+import javax.vecmath.Vector2f;
 
 import samake.engine.entity.Entity;
-import samake.engine.physics.bodys.PhysicStaticBody;
+import samake.engine.models.Model;
+import samake.engine.physics.bodys.PhysicHullMeshBody;
 
 public class StaticObject extends Entity {
 
 	public StaticObject() {
 		setUpdatedEntity(false);
-		setPhysicBody(new PhysicStaticBody(new Vector3f(1.0f, 1.0f, 1.0f)));
+	}
+	
+	@Override
+	public void setModel(Model model) {
+		super.setModel(model);
+		
+		setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 0.0f, 0.55f, 0.55f, new Vector2f(0.45f, 0.45f)));
 	}
 	
 	@Override
@@ -21,6 +28,8 @@ public class StaticObject extends Entity {
 	public void destroy() {
 		super.destroy();
 		
-		getPhysicBody().destroy();
+		if (getPhysicBody() != null) {
+			getPhysicBody().destroy();
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package samake.game.debug;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -15,6 +14,7 @@ public class Debug {
 	
 	private Level level;
 	private boolean keyStateKeyM = false;
+	private boolean keyStateKeyN = false;
 	
 	public Debug(Level level) {
 		this.level = level;
@@ -34,22 +34,42 @@ public class Debug {
 		    		keyStateKeyM = !keyStateKeyM;
 		    	}
 		    }
+		    
+		    if (input.isKeyPressed(GLFW.GLFW_KEY_N)) {
+		    	if (!keyStateKeyN) {
+		    		spawnBox();
+		    		keyStateKeyN = !keyStateKeyN;
+		    	}
+		    } else {
+		    	if (keyStateKeyN) {
+		    		keyStateKeyN = !keyStateKeyN;
+		    	}
+		    }
 		}
 	}
 	
 	public void spawnSphere() {
 		DynamicObject object = new DynamicObject();
-		object.setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		object.setModel(ResourceLoader.load3DModel("sphere.fbx", true));
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
 		object.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
-		object.setPosition(new Vector3f(Utils.getRandomValue(31.5f, 32.5f, 1), 50.0f, Utils.getRandomValue(-63.5f, -64.5f, 1)));
+		object.setPosition(new Vector3f(Utils.getRandomValue(44.0f, 50.0f, 1), 85.0f, Utils.getRandomValue(-132.0f, -138.0f, 1)));
 		object.setScale(1.0f);
-		object.getPhysicBody().setMass(25.0f);
-		object.getPhysicBody().setRestitution(0.55f);
-		object.getPhysicBody().setFriction(0.85f);
-		object.getPhysicBody().setDamping(new Vector2f(0.10f, 0.45f));
+		
+		level.addEntity(object);
+	}
+	
+	public void spawnBox() {
+		DynamicObject object = new DynamicObject();
+		object.setModel(ResourceLoader.load3DModel("box.fbx", true));
+		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
+		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
+		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
+		object.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		object.setPosition(new Vector3f(Utils.getRandomValue(44.0f, 50.0f, 1), 85.0f, Utils.getRandomValue(-132.0f, -138.0f, 1)));
+		object.setScale(1.0f);
 		
 		level.addEntity(object);
 	}

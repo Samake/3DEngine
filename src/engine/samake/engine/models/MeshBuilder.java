@@ -10,7 +10,7 @@ import samake.engine.rendering.screenshot.TexturePrint;
 
 public class MeshBuilder {
 	
-	public static Mesh generatePlane(float xOffset, float yOffset, float zOffset, int rows, float size, boolean useHeightGenerator, boolean colorGenerator) {
+	public static Mesh generatePlane(float xOffset, float yOffset, float zOffset, int rows, float size, boolean useHeightGenerator, boolean colorGenerator, boolean calculateCollisionMesh) {
 		int vertexesPerLine = (rows + 1);
 		float[][] heights = new float[vertexesPerLine][vertexesPerLine];
 		float[][] rawHeights = new float[vertexesPerLine][vertexesPerLine];
@@ -31,13 +31,13 @@ public class MeshBuilder {
 				float yValue = 0;
 				
 				if (useHeightGenerator) {
-					vertexHeight -= PerlinGenerator.getHeightModifier() / 6;
+					vertexHeight -= PerlinGenerator.getHeightModifier() / 5;
 					//yValue = (	PerlinGenerator.getRidgeNoise(xValue, yValue, zValue, 1.0f));
 					//yValue = (	PerlinGenerator.getFBMNoise(xValue, yValue, zValue, 1.0f));
-					yValue = (	PerlinGenerator.getTurbolenceNoise(xValue, yValue, zValue, 0.25f) +
-								PerlinGenerator.getRidgeNoise(xValue, yValue, zValue, 0.75f) -
-								PerlinGenerator.getFBMNoise(xValue, yValue, zValue, 0.5f) + 
-								PerlinGenerator.getPerlinNoise(xValue, yValue, zValue, 1.0f)
+					yValue = (	1.5f * PerlinGenerator.getTurbolenceNoise(xValue, yValue, zValue, 0.55f) +
+								1.5f * PerlinGenerator.getRidgeNoise(xValue, yValue, zValue, 0.75f) -
+								0.55f * PerlinGenerator.getFBMNoise(xValue, yValue, zValue, 0.15f) + 
+								0.75f * PerlinGenerator.getPerlinNoise(xValue, yValue, zValue, 1.2f)
 							);
 					
 					yValue *= 0.5f;
@@ -103,7 +103,7 @@ public class MeshBuilder {
 			}
 		}
 
-		return new Mesh(vertices, textureCoords, normals, colors, indices);
+		return new Mesh(vertices, textureCoords, normals, colors, indices, calculateCollisionMesh);
 	}
 	
 	private static void calculateColor(Vector3f color, float value) {

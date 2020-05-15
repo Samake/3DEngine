@@ -19,7 +19,7 @@ public class CloudLayer extends Entity {
 		setScale(12.0f);
 		setDensity(0.5f);
 		setWindDirection(new Vector2f());
-		setModel(ResourceLoader.load3DModel("clouds.fbx"));
+		setModel(ResourceLoader.load3DModel("clouds.fbx", false));
 
 		windDirection.x = 0.01f;
 		windDirection.y = -0.025f;

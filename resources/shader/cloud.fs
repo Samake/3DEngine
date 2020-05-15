@@ -45,7 +45,7 @@ uniform float animValue;
 
 const float near = 0.2; 
 const float far = 10000.0;
-const float windSpeed = 1;
+const float windSpeed = 2;
 
 vec3 addDirectionalLight(vec3 normalIn, Light light, vec3 lightDirection) {
 	float diffuseFactor = max(dot(normalIn, normalize(lightDirection)), 0.0);
@@ -176,7 +176,7 @@ mat3 camera(vec3 eye, vec3 lat) {
 
 vec4 calcClouds() {
 	int raySteps = 64;
-	float rayLength = 0.2f;
+	float rayLength = 0.3f;
 	
 	vec3 layerPos = modelPosition;
 	layerPos.xy += windDirection * animValue * windSpeed * 0.05f;

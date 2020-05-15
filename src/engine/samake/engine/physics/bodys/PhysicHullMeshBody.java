@@ -2,14 +2,14 @@ package samake.engine.physics.bodys;
 
 import javax.vecmath.Vector2f;
 
-import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
+import com.bulletphysics.collision.shapes.ConvexHullShape;
 
 import samake.engine.models.Mesh;
 
-public class PhysicTriangleMeshBody extends PhysicBody {
+public class PhysicHullMeshBody extends PhysicBody {
 	
-	public PhysicTriangleMeshBody(Mesh mesh, float mass, float restitution, float friction, Vector2f damping) {
-		setCollissionShape(new BvhTriangleMeshShape(mesh.getCollissionMesh(), true, true));
+	public PhysicHullMeshBody(Mesh mesh, float mass, float restitution, float friction, Vector2f damping) {
+		setCollissionShape(new ConvexHullShape(mesh.getHullArrayList()));
 		setMass(mass);
 		setRestitution(mass);
 		setFriction(mass);

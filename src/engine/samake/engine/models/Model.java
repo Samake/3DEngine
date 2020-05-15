@@ -26,6 +26,14 @@ public class Model {
 	public void setMeshes(List<Mesh> meshes) {
 		this.meshes = meshes;
 	}
+	
+	public Mesh getMesh() {
+		return getMesh(0);
+	}
+	
+	public Mesh getMesh(int slot) {
+		return meshes.get(slot);
+	}
 
 	public void destroy() {
 		for (Mesh mesh : meshes) {

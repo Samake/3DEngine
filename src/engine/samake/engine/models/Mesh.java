@@ -1,5 +1,7 @@
 package samake.engine.models;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
@@ -7,6 +9,10 @@ import java.util.List;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.system.MemoryUtil;
+
+import com.bulletphysics.collision.shapes.IndexedMesh;
+import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
+import com.bulletphysics.util.ObjectArrayList;
 
 import samake.engine.material.MaterialWorld;
 import samake.engine.utils.Utils;
@@ -26,8 +32,10 @@ public class Mesh {
 	private int position;
 	
 	private MaterialWorld material;
+	private TriangleIndexVertexArray collissionMesh;
+	private ObjectArrayList<javax.vecmath.Vector3f> hullArrayList;
 	
-	public Mesh(List<Float> vertices, List<Float> textureCoords, List<Float> normals, List<Float> colors, List<Integer> indices) {
+	public Mesh(List<Float> vertices, List<Float> textureCoords, List<Float> normals, List<Float> colors, List<Integer> indices, boolean calculateCollisionMesh) {
 		this.vertices = Utils.convertFloatListToArray(vertices);
 		this.colors = Utils.convertFloatListToArray(colors);
 		this.textureCoords = Utils.convertFloatListToArray(textureCoords);
@@ -35,6 +43,10 @@ public class Mesh {
 		this.indices = Utils.convertIntegerListToArray(indices);
 		
 		generateMesh();
+		
+		if (calculateCollisionMesh) {
+			generateIndexedMesh();
+		}
 	}
 	
 	public void changeScale(Vector3f scale) {
@@ -77,6 +89,62 @@ public class Mesh {
 		int uv = addStaticAttribute(3, this.textureCoords, 2);
 		
 		vbos = new int[] { position, color, uv, normal };
+	}
+	
+	private void generateIndexedMesh() {
+		int totalVerts = getNumVertices();
+		ByteBuffer gVertices = ByteBuffer.allocateDirect(totalVerts * 3 * 4).order(ByteOrder.nativeOrder());
+		ByteBuffer gIndices = ByteBuffer.allocateDirect(totalVerts * 4).order(ByteOrder.nativeOrder());
+		setHullArrayList(new ObjectArrayList<javax.vecmath.Vector3f>());
+
+		float[] vertices = getVertices();
+		
+		int counter = 0;
+		for (float value : vertices) {
+			counter++;
+
+			javax.vecmath.Vector3f vertex = new javax.vecmath.Vector3f();
+			
+			if (counter == 1) {
+				gVertices.putFloat(value);
+				vertex.x = value;
+			}
+			
+			if (counter == 2) {
+				gVertices.putFloat(value);
+				vertex.y = value;
+			}
+			
+			if (counter == 3) {
+				gVertices.putFloat(value);
+				vertex.z = value;
+				counter = 0;
+			}
+			
+			hullArrayList.add(vertex);
+		}
+		
+		int[] indices = getIndices();
+		
+		for (int value : indices) {
+			 gIndices.putInt(value);
+		}
+		
+		gVertices.flip();
+		gIndices.flip();
+
+		IndexedMesh indexedMesh = new IndexedMesh();
+		indexedMesh.numVertices = totalVerts;
+		indexedMesh.vertexBase = gVertices;
+		indexedMesh.vertexStride = 3 * 4;
+		indexedMesh.numTriangles = totalVerts / 3;
+		indexedMesh.triangleIndexBase = gIndices;
+		indexedMesh.triangleIndexStride = 3 * 4;
+
+		TriangleIndexVertexArray vertArray = new TriangleIndexVertexArray();
+		vertArray.addIndexedMesh(indexedMesh);
+		
+		setCollissionMesh(vertArray);
 	}
 	
 	public float[] getVertices() {
@@ -160,7 +228,23 @@ public class Mesh {
 	public void setMaterial(MaterialWorld material) {
 		this.material = material;
 	}
-	
+
+	public TriangleIndexVertexArray getCollissionMesh() {
+		return collissionMesh;
+	}
+
+	public void setCollissionMesh(TriangleIndexVertexArray collissionMesh) {
+		this.collissionMesh = collissionMesh;
+	}
+
+	public ObjectArrayList<javax.vecmath.Vector3f> getHullArrayList() {
+		return hullArrayList;
+	}
+
+	public void setHullArrayList(ObjectArrayList<javax.vecmath.Vector3f> hullArrayList) {
+		this.hullArrayList = hullArrayList;
+	}
+
 	public void destroy() {
 		GL43.glBindBuffer(GL43.GL_ARRAY_BUFFER, 0);
 		GL43.glDeleteVertexArrays(vao);

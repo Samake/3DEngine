@@ -1,12 +1,15 @@
 package samake.engine.scene.water;
 
+import javax.vecmath.Vector2f;
+
 import org.joml.Vector3f;
 
 import samake.engine.entity.Entity;
 import samake.engine.material.MaterialWater;
+import samake.engine.models.Mesh;
 import samake.engine.models.MeshBuilder;
 import samake.engine.models.Model;
-import samake.engine.physics.bodys.PhysicFluidBody;
+import samake.engine.physics.bodys.PhysicTriangleMeshBody;
 
 public class Water extends Entity {
 
@@ -15,19 +18,27 @@ public class Water extends Entity {
 	public Water() {
 		setMaterial(new MaterialWater());
 		setUpdatedEntity(true);
-		setPhysicBody(new PhysicFluidBody(new Vector3f(512.0f, 0.0f, 512.0f)));
 	}
 	
 	public void generateModel(Vector3f position, int rows, float size) {
 		Model model = new Model();
-		model.addMesh(MeshBuilder.generatePlane(position.x, position.y, position.z, rows, size, false, false));
+		
+		Mesh mesh = MeshBuilder.generatePlane(position.x, position.y, position.z, rows, size, false, false, true);
+		model.addMesh(mesh);
 		
 		setModel(model);
+		
+		setPhysicBody(new PhysicTriangleMeshBody(mesh, 0.0f, 0.95f, 0.95f, new Vector2f(0.35f, 0.35f)));
 	}
 	
 	@Override
 	public void update() {
+		super.update();
 		material.update();
+		
+		if (getPhysicBody() != null) {
+			getPhysicBody().update();
+		}
 	}
 
 	@Override
@@ -43,6 +54,9 @@ public class Water extends Entity {
 	public void destroy() {
 		super.destroy();
 		material.destroy();
-		getPhysicBody().destroy();
+		
+		if (getPhysicBody() != null) {
+			getPhysicBody().destroy();
+		}
 	}
 }

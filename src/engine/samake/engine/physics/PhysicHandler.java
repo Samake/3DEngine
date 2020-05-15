@@ -34,8 +34,8 @@ public class PhysicHandler {
 	private void createWorldPhysic() {
 		setConfig(new DefaultCollisionConfiguration());
 		setDispatcher(new CollisionDispatcher(config));
-		setWorldAabbMin(new Vector3f(-10000.0f, -10000.0f, -10000.0f));
-		setWorldAabbMax(new Vector3f(10000.0f, 10000.0f, 10000.0f));
+		setWorldAabbMin(new Vector3f(-1000.0f, -1000.0f, -1000.0f));
+		setWorldAabbMax(new Vector3f(1000.0f, 1000.0f, 1000.0f));
 		
 		AxisSweep3 overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
 		solver = new SequentialImpulseConstraintSolver();
@@ -47,7 +47,7 @@ public class PhysicHandler {
 	}
 	
 	public void update() {
-		float animationTime = ((float) (System.nanoTime() - startValue)) / 10000000.0f;
+		float animationTime = ((float) (System.nanoTime() - startValue)) / 1000000000.0f;
 
 		world.stepSimulation(animationTime);
 	}

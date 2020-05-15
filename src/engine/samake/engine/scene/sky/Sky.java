@@ -17,7 +17,7 @@ public class Sky {
 		setSun(new Sun());
 		setMoon(new Moon());
 		setCloudLayer(new CloudLayer());
-		setModel(ResourceLoader.load3DModel("sphere.fbx"));
+		setModel(ResourceLoader.load3DModel("sphere.fbx", false));
 		setNightSky(new TextureCube("sky\\night"));
 		setScale(4096.0f);
 	}

@@ -207,7 +207,7 @@ public class ResourceLoader {
 		return null;
 	}
 	
-	public static Model load3DModel(String fileName) {
+	public static Model load3DModel(String fileName, boolean calculateCollisionMesh) {
 		if (!fileName.isEmpty()) {	
 			String filePath = new String(System.getProperty("user.dir") + "\\" + Configuration.MODELS + fileName).replace("/", "\\");
 	
@@ -233,7 +233,7 @@ public class ResourceLoader {
 			
 			for (int i = 0; i < numMeshes; i++) {
 			    AIMesh aiMesh = AIMesh.create(aiMeshes.get(i));
-			    Mesh mesh = processMesh(fileName + "_" + i, aiMesh, materials);
+			    Mesh mesh = processMesh(fileName + "_" + i, aiMesh, materials, calculateCollisionMesh);
 			    meshes[i] = mesh;
 			}
 			
@@ -253,7 +253,7 @@ public class ResourceLoader {
 		return null;
 	}
 	
-	private static Mesh processMesh(String fileName, AIMesh aiMesh, List<MaterialWorld> materials) {
+	private static Mesh processMesh(String fileName, AIMesh aiMesh, List<MaterialWorld> materials, boolean calculateCollisionMesh) {
 		List<Float> vertices = new ArrayList<Float>();
         List<Float> textureCoords = new ArrayList<Float>();
         List<Float> normals = new ArrayList<Float>();
@@ -274,7 +274,7 @@ public class ResourceLoader {
         processTextCoords(aiMesh, textureCoords);
         processIndices(aiMesh, indices);
         
-        Mesh mesh = new Mesh(vertices, textureCoords, normals, colors, indices);
+        Mesh mesh = new Mesh(vertices, textureCoords, normals, colors, indices, calculateCollisionMesh);
         mesh.setMaterial(material);
 
         return mesh;
