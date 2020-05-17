@@ -8,5 +8,4 @@ uniform sampler2D colorTexture;
 
 void main(void) {
 	out_Colour = texture(colorTexture, textureCoords);
-	out_Colour.rgb *= vec3(1.0, 0.2, 0.2);
 }

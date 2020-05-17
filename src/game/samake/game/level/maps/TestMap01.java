@@ -70,7 +70,7 @@ public class TestMap01 extends Level {
 		light.setModel(ResourceLoader.load3DModel("sphere.fbx", false));
 		light.setPosition(new Vector3f(48.0f, 95.0f, -136.0f));
 		light.setColor(new Vector3f(1.0f, 0.25f, 0.25f));
-		light.setIntensity(128.0f, true);
+		light.setIntensity(256.0f, true);
 		
 		addLight(light);
 	}

@@ -98,11 +98,11 @@ public class Renderer {
         	multiSampledRenderTarget.drawBuffer(GL43.GL_COLOR_ATTACHMENT0, sceneRenderTarget);
         	multiSampledRenderTarget.drawBuffer(GL43.GL_COLOR_ATTACHMENT1, brightnessRenderTarget);
         	
-        	postProcess.render(sceneRenderTarget.getMainTexture(), brightnessRenderTarget.getMainTexture());
-        	
         	if (getRenderMode() == 1) {
             	colorRenderer.render(scene.getCamera(), transformation, scene);
         	}
+        	
+        	postProcess.render(sceneRenderTarget.getMainTexture(), brightnessRenderTarget.getMainTexture(), getRenderMode());
         	
         	endFrame();
 		}

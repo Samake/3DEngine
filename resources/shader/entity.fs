@@ -8,7 +8,8 @@ in vec2 uv;
 in vec3 worldPosition;
 in mat4 mViewMatrix;
 
-out vec4 fragColor;
+layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 brightColor;
 
 struct Attenuation {
     float constant;
@@ -179,36 +180,38 @@ void main() {
     float fogFactor = 1.0 / exp((fogDistance * fogDensity) * (fogDistance * fogDensity));
     fogFactor = clamp(fogFactor, 0.0, 1.0);
     
+    brightColor = vec4(specularMap, 1);
+    
     // DEFAULT, DEBUG, WIREFRAME, DIFFUSE, NORMALS, ALBEDO, DEPTH, COLOR
     if (renderMode == 0) {
     	albedoMap.rgb *= ambientColor * ambientStrength + diffuseMap;
-    	fragColor = vec4(albedoMap.rgb, 1);
-    	fragColor.rgb += specularMap;
+    	outColor = vec4(albedoMap.rgb, 1);
+    	outColor.rgb += specularMap;
     	
-    	fragColor.rgb = mix(ambientColor * ambientStrength, fragColor.rgb, fogFactor);
+    	outColor.rgb = mix(ambientColor * ambientStrength, outColor.rgb, fogFactor);
     	
-    	//fragColor = vec4(specularMap, 1);
+    	//outColor = vec4(specularMap, 1);
     } else if (renderMode == 1) {
     	albedoMap.rgb *= ambientColor * ambientStrength + diffuseMap;
-    	fragColor = vec4(albedoMap.rgb, 1);
-    	fragColor.rgb += specularMap;
+    	outColor = vec4(albedoMap.rgb, 1);
+    	outColor.rgb += specularMap;
     	
-    	fragColor.rgb = mix(ambientColor * ambientStrength, fragColor.rgb, fogFactor);
+    	outColor.rgb = mix(ambientColor * ambientStrength, outColor.rgb, fogFactor);
     } else if (renderMode == 2) {
-    	fragColor = vec4(1.0, 0.25, 0.25, 1.0);
+    	outColor = vec4(1.0, 0.25, 0.25, 1.0);
     } else if (renderMode == 3) {
-    	fragColor = vec4(diffuseMap + specularMap, 1);
+    	outColor = vec4(diffuseMap + specularMap, 1);
     } else if (renderMode == 4) {
-    	fragColor = vec4(normalMap.rgb, 1);
+    	outColor = vec4(normalMap.rgb, 1);
     } else if (renderMode == 5) {
-    	fragColor = vec4(albedoMap.rgb, 1);
+    	outColor = vec4(albedoMap.rgb, 1);
     } else if (renderMode == 6) {
         float depth = linearizeDepth(gl_FragCoord.z) / far;
-   	 	fragColor = vec4(vec3(depth), 1.0);
+   	 	outColor = vec4(vec3(depth), 1.0);
     } else if (renderMode == 7) {
-    	fragColor = vec4(worldPosition, 1);
+    	outColor = vec4(worldPosition, 1);
     } else if (renderMode == 8) {
     	// TODO COLORS
-    	fragColor = vec4(1.0, 0.25, 0.25, 1.0);
+    	outColor = vec4(1.0, 0.25, 0.25, 1.0);
     }
 }

@@ -1,10 +1,12 @@
 #version 330
 
-out vec4 fragColor;
+layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 brightColor;
 
 uniform vec3 color;
 uniform float amount;
 
 void main() {
-    fragColor = vec4(color * amount * 1.2, 0.65);
+    outColor = vec4(color * amount * 1.2, 0.65);
+    brightColor = vec4(color * amount * 1.2, 1.0);
 }

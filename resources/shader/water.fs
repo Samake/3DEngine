@@ -10,7 +10,8 @@ in vec4 clipSpace;
 in vec3 cameraVector;
 in float movingCoords;
 
-out vec4 fragColor;
+layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 brightColor;
 
 struct Attenuation {
     float constant;
@@ -234,26 +235,28 @@ void main() {
     float fogFactor = 1.0 / exp((fogDistance * fogDensity) * (fogDistance * fogDensity));
     fogFactor = clamp(fogFactor, 0.0, 1.0);
     
+    brightColor = vec4(specularMap, 1);
+    
     // DEFAULT, DEBUG, WIREFRAME, DIFFUSE, NORMALS, ALBEDO, DEPTH, COLOR
     if (renderMode == 0) {
-    	fragColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
-    	//fragColor = vec4(specularMap, 1);
+    	outColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
+    	//outColor = vec4(specularMap, 1);
     } else if (renderMode == 1) {
-    	fragColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
+    	outColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
     } else if (renderMode == 2) {
-    	fragColor = vec4(0.25, 0.25, 1.0, 1.0);
+    	outColor = vec4(0.25, 0.25, 1.0, 1.0);
     } else if (renderMode == 3) {
-    	fragColor = vec4(diffuseMap + specularMap, 1);
+    	outColor = vec4(diffuseMap + specularMap, 1);
     } else if (renderMode == 4) {
-    	fragColor = vec4(texNormal.rgb, 1);
+    	outColor = vec4(texNormal.rgb, 1);
     } else if (renderMode == 5) {
-    	fragColor = vec4(material.color, 1);
+    	outColor = vec4(material.color, 1);
     } else if (renderMode == 6) {
         float depth = linearizeDepth(gl_FragCoord.z) / far;
-   	 	fragColor = vec4(vec3(depth), 1.0);
+   	 	outColor = vec4(vec3(depth), 1.0);
     } else if (renderMode == 7) {
-    	fragColor = vec4(worldPosition, 1);
+    	outColor = vec4(worldPosition, 1);
     } else if (renderMode == 8) {
-    	fragColor = vec4(0.25, 0.25, 1.0, 1.0);
+    	outColor = vec4(0.25, 0.25, 1.0, 1.0);
     }
 }

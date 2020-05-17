@@ -16,7 +16,8 @@ uniform float sunIntensity;
 uniform vec3 ambientColor;
 uniform float ambientStrength;
 
-out vec4 finalColor;
+layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 brightColor;
 
 vec2 rsi(vec3 r0, vec3 rd, float sr) {
     // ray-sphere intersection that assumes
@@ -144,7 +145,10 @@ void main() {
 	night = 1.5 * (1.0 - exp(-1.0 * night)) * (uv.y + 0.1);
 	
 	float skyPosition = clamp(normalize(worldPosition.xyz - vec3(0, cameraPosition.y, 0)).y * 128, 0.0f, 1.0f);
-    finalColor = vec4(mix(ambientColor * ambientStrength, (day + night), skyPosition), 1);
-    //finalColor = vec4((day + night), 1);
-    //finalColor = vec4(skyPosition, skyPosition, skyPosition, 1);
+	
+    outColor = vec4(mix(ambientColor * ambientStrength, (day + night), skyPosition), 1);
+    brightColor = vec4(0, 0, 0, 1);
+    
+    //outColor = vec4((day + night), 1);
+    //outColor = vec4(skyPosition, skyPosition, skyPosition, 1);
 }
