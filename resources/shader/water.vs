@@ -24,22 +24,22 @@ out float movingCoords;
 
 const float waveStrength = 0.9f;
 
-vec3 getWavePositions(vec2 uv, float moveBase) {
-	vec3 pos = vec3(0, -waveStrength, 0);
-	float moveFactor = moveBase / 3;
+vec3 getWavePositions(vec3 positions, vec2 uv, float moveBase) {
+	vec3 pos = positions;
+	float moveFactor = moveBase / 6;
 	vec2 baseUV = inUV * 32;
 	
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + moveFactor, baseUV.y)).rg * 0.1f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + moveFactor, baseUV.y)).rg * 0.15f;
 	distortedTexCoords = baseUV + vec2(distortedTexCoords.x, distortedTexCoords.y + moveFactor);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.0075f;
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.075f;
 
 	float height = texture(heightSampler, totalDistortion).r;
-	height -= texture(heightSampler, distortedTexCoords / 4).g;
-	height += texture(heightSampler, distortedTexCoords / 2).b;
+	height -= texture(heightSampler, totalDistortion / 4).g;
+	height += texture(heightSampler, totalDistortion / 2).b;
 	height *= waveStrength;
 	
     pos.x += sin(height); 
-    pos.y += height;
+    pos.y *= height * 2;
     pos.z += cos(height); 
     
     return pos;
@@ -49,7 +49,7 @@ void main() {
  	movingCoords = animValue * gameSpeed;
  	uv = inUV;
 
-	vec4 position = transformationMatrix * vec4(inPosition + getWavePositions(uv, movingCoords), 1.0);
+	vec4 position = transformationMatrix * vec4(getWavePositions(inPosition, uv, movingCoords), 1.0);
     gl_Position = projectionMatrix * viewMatrix * position;
 
 	clipSpace = projectionMatrix * viewMatrix * position;

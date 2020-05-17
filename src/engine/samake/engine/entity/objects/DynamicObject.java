@@ -18,7 +18,7 @@ public class DynamicObject extends Entity {
 	public void setModel(Model model) {
 		super.setModel(model);
 		
-		setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 1.0f, 0.35f, 0.45f, new Vector2f(0.05f, 0.55f)));
+		setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 1.5f, 0.1f, 0.85f, new Vector2f(0.15f, 0.55f)));
 	}
 	
 	@Override

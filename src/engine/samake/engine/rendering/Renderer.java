@@ -8,7 +8,8 @@ import samake.engine.camera.Transformation;
 import samake.engine.config.PropertiesHandler;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
-import samake.engine.rendering.buffer.WaterBuffer;
+import samake.engine.rendering.buffer.ReflectionBuffer;
+import samake.engine.rendering.buffer.RenderTarget;
 import samake.engine.rendering.postprocess.PostProcess;
 import samake.engine.rendering.renderer.CloudRenderer;
 import samake.engine.rendering.renderer.ColorRenderer;
@@ -29,8 +30,8 @@ public class Renderer {
 	private Scene scene;
 	private Transformation transformation;
 	
-	private WaterBuffer waterBuffer;
-
+	private ReflectionBuffer reflectionBuffer;
+	
 	private SkyRenderer skyRenderer;
 	private TerrainRenderer terrainRenderer;
 	private EntityRenderer entityRenderer;
@@ -40,6 +41,9 @@ public class Renderer {
 	private ShadowMap shadowMap;
 	
 	private PostProcess postProcess;
+	private RenderTarget multiSampledRenderTarget;
+	private RenderTarget sceneRenderTarget;
+	private RenderTarget brightnessRenderTarget;
 	
 	private int renderMode = 0;
 
@@ -47,7 +51,13 @@ public class Renderer {
 		Console.print("Initialize Renderer...", LOGTYPE.OUTPUT, true);
 		
 		setTransformation(new Transformation());
-		setWaterBuffer(new WaterBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
+		
+		setReflectionBuffer(new ReflectionBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
+		
+		setMultiSampledRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight()));
+		setSceneRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), RenderTarget.DEPTH_TEXTURE));
+		setBrightnessRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), RenderTarget.DEPTH_TEXTURE));
+		
 		setSkyRenderer(new SkyRenderer());
 		setTerrainRenderer(new TerrainRenderer());
 		setEntityRenderer(new EntityRenderer());
@@ -78,22 +88,57 @@ public class Renderer {
     	if (scene != null) {
     		renderShadowMap();
         	renderBufferTextures();
+        	
+        	multiSampledRenderTarget.bindBuffer();
+        	
         	renderScene();
         	renderWater();
+        	
+        	multiSampledRenderTarget.unbindBuffer();
+        	multiSampledRenderTarget.drawBuffer(GL43.GL_COLOR_ATTACHMENT0, sceneRenderTarget);
+        	multiSampledRenderTarget.drawBuffer(GL43.GL_COLOR_ATTACHMENT1, brightnessRenderTarget);
+        	
+        	postProcess.render(sceneRenderTarget.getMainTexture(), brightnessRenderTarget.getMainTexture());
         	
         	if (getRenderMode() == 1) {
             	colorRenderer.render(scene.getCamera(), transformation, scene);
         	}
         	
         	endFrame();
-        	
-        	postProcess.render();
 		}
 	}
     
     private void renderShadowMap() {
     	shadowMap.render();
     }
+    
+    private void renderBufferTextures() {
+		float waterHeight = 0.0f;
+		float distance = scene.getCamera().getPosition().y * 2.0f;
+
+		reflectionBuffer.bindReflectionBuffer();
+		scene.getCamera().getPosition().y -= distance;
+		transformation.invert();
+		clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.25f);
+		
+		renderScene();
+		
+		reflectionBuffer.bindRefractionBuffer();
+		scene.getCamera().getPosition().y += distance;
+		transformation.invert();
+		
+		if (distance > waterHeight) {
+			clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + 0.25f);
+		} else {
+			clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.5f);
+		}
+		
+		renderScene();
+		
+    	reflectionBuffer.unbind();
+		
+		clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, 10000.0f);
+	}
     
     public void startFrame() {
     	Vector3f fogColor = scene.getEnvironment().getAmbientColor();
@@ -118,16 +163,6 @@ public class Renderer {
     	renderTerrain();
     	renderEntities();
     }
-    
-    public void endFrame() {
-		GL43.glDisable(GL43.GL_CULL_FACE);
-		GL43.glDisable(GL43.GL_DEPTH_TEST);	
-		GL43.glDisable(GL43.GL_STENCIL_TEST); 
-		GL43.glDisable(GL43.GL_TEXTURE_2D);
-		GL43.glDisable(GL43.GL_TEXTURE_3D);
-		GL43.glDisable(GL43.GL_BLEND);
-		GL43.glDisable(GL43.GL_FRAMEBUFFER_SRGB);
-	}
 
 	private void renderSky() {
 		GL43.glDisable(GL43.GL_CULL_FACE);
@@ -190,37 +225,19 @@ public class Renderer {
 			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_FILL);
 		}
 		
-		waterRenderer.render(waterBuffer, scene.getCamera(), transformation, scene, getRenderMode());
+		waterRenderer.render(reflectionBuffer, scene.getCamera(), transformation, scene, getRenderMode());
 	}
 	
-	private void renderBufferTextures() {
-		float waterHeight = -0.25f;
-		float distance = scene.getCamera().getPosition().y * 2.0f;
+    public void endFrame() {
+		GL43.glDisable(GL43.GL_CULL_FACE);
+		GL43.glDisable(GL43.GL_DEPTH_TEST);	
+		GL43.glDisable(GL43.GL_STENCIL_TEST); 
+		GL43.glDisable(GL43.GL_TEXTURE_2D);
+		GL43.glDisable(GL43.GL_TEXTURE_3D);
+		GL43.glDisable(GL43.GL_BLEND);
+		GL43.glDisable(GL43.GL_FRAMEBUFFER_SRGB);
+	}
 
-		waterBuffer.bindReflectionBuffer();
-		scene.getCamera().getPosition().y -= distance;
-		transformation.invert();
-		clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 1.0f);
-		
-		renderScene();
-		
-		waterBuffer.bindRefractionBuffer();
-		scene.getCamera().getPosition().y += distance;
-		transformation.invert();
-		
-		if (distance > waterHeight) {
-			clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + 1.0f);
-		} else {
-			clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 2.0f);
-		}
-		
-		renderScene();
-		
-    	waterBuffer.unbind();
-		
-		clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, 10000.0f);
-	}
-	
 	public void guiRender() {
 		
 	}
@@ -278,12 +295,12 @@ public class Renderer {
 		this.transformation = transformation;
 	}
 	
-	public WaterBuffer getWaterBuffer() {
-		return waterBuffer;
+	public ReflectionBuffer getReflectionBuffer() {
+		return reflectionBuffer;
 	}
 
-	public void setWaterBuffer(WaterBuffer waterFrameBuffer) {
-		this.waterBuffer = waterFrameBuffer;
+	public void setReflectionBuffer(ReflectionBuffer waterFrameBuffer) {
+		this.reflectionBuffer = waterFrameBuffer;
 	}
 
 	public Scene getScene() {
@@ -358,6 +375,30 @@ public class Renderer {
 		this.postProcess = postProcess;
 	}
 
+	public RenderTarget getMultiSampledRenderTarget() {
+		return multiSampledRenderTarget;
+	}
+
+	public void setMultiSampledRenderTarget(RenderTarget multiSampledRenderTarget) {
+		this.multiSampledRenderTarget = multiSampledRenderTarget;
+	}
+
+	public RenderTarget getSceneRenderTarget() {
+		return sceneRenderTarget;
+	}
+
+	public void setSceneRenderTarget(RenderTarget sceneRenderTarget) {
+		this.sceneRenderTarget = sceneRenderTarget;
+	}
+
+	public RenderTarget getBrightnessRenderTarget() {
+		return brightnessRenderTarget;
+	}
+
+	public void setBrightnessRenderTarget(RenderTarget brightnessRenderTarget) {
+		this.brightnessRenderTarget = brightnessRenderTarget;
+	}
+
 	public int getRenderMode() {
 		return renderMode;
 	}
@@ -367,7 +408,7 @@ public class Renderer {
 	}
 
 	public void destroy() {
-		waterBuffer.destroy();
+		reflectionBuffer.destroy();
 		skyRenderer.destroy();
 		terrainRenderer.destroy();
 		entityRenderer.destroy();
@@ -376,6 +417,9 @@ public class Renderer {
 		colorRenderer.destroy();
 		shadowMap.destroy();
 		postProcess.destroy();
+		multiSampledRenderTarget.destroy();
+		sceneRenderTarget.destroy();
+		brightnessRenderTarget.destroy();
 		
 		Console.print("Renderer stopped!", LOGTYPE.OUTPUT, true);
 	}

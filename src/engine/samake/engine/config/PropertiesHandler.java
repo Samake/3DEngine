@@ -18,6 +18,7 @@ public class PropertiesHandler {
 	private static int fpsLimit;
 	private static int fov;
 	private static int anisotropicFiltering;
+	private static int antialiasing;
 	
 	public static void initialize() throws Exception {
 		
@@ -34,6 +35,7 @@ public class PropertiesHandler {
 		setFpsLimit(Integer.valueOf(properties.getProperty("FPS_LIMIT")));
 		setFOV(Integer.valueOf(properties.getProperty("FOV")));
 		setAnisotropicFiltering(Integer.valueOf(properties.getProperty("ANISOTROPIC_FILTERING")));
+		setAntialiasing(Integer.valueOf(properties.getProperty("ANTIALIASING")));
 	}
 
 	public static int getWindowWidth() {
@@ -106,5 +108,13 @@ public class PropertiesHandler {
 
 	public static void setAnisotropicFiltering(int anisotropicFiltering) {
 		PropertiesHandler.anisotropicFiltering = anisotropicFiltering;
+	}
+
+	public static int getAntialiasing() {
+		return antialiasing;
+	}
+
+	public static void setAntialiasing(int antialiasing) {
+		PropertiesHandler.antialiasing = antialiasing;
 	}
 }

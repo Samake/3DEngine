@@ -186,6 +186,8 @@ void main() {
     	fragColor.rgb += specularMap;
     	
     	fragColor.rgb = mix(ambientColor * ambientStrength, fragColor.rgb, fogFactor);
+    	
+    	//fragColor = vec4(specularMap, 1);
     } else if (renderMode == 1) {
     	albedoMap.rgb *= ambientColor * ambientStrength + diffuseMap;
     	fragColor = vec4(albedoMap.rgb, 1);

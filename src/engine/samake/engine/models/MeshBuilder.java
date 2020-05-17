@@ -1,9 +1,13 @@
 package samake.engine.models;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL43;
 
 import samake.engine.perlin.PerlinGenerator;
 import samake.engine.rendering.screenshot.TexturePrint;
@@ -143,5 +147,43 @@ public class MeshBuilder {
 		normal.normalize(normal);
 		
 		return normal;
+	}
+
+	public static BasicMesh loadToVAO(float[] positions, int dimensions) {
+		int vao = createVAO();
+		int vbo = storeDataInAttributeList(0, dimensions, positions);
+		unbindVAO();
+		
+		return new BasicMesh(vao, vbo, positions.length / dimensions);
+	}
+	
+	private static int createVAO(){
+		int vao = GL43.glGenVertexArrays();
+		GL43.glBindVertexArray(vao);
+		return vao;
+	}
+	
+	private static int storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
+		int vbo = GL43.glGenBuffers();
+		
+		GL15.glBindBuffer(GL43.GL_ARRAY_BUFFER, vbo);
+		FloatBuffer buffer = storeDataInFloatBuffer(data);
+		GL43.glBufferData(GL43.GL_ARRAY_BUFFER, buffer, GL43.GL_STATIC_DRAW);
+		GL43.glVertexAttribPointer(attributeNumber, coordinateSize, GL43.GL_FLOAT, false, 0, 0);
+		GL43.glBindBuffer(GL43.GL_ARRAY_BUFFER, 0);
+		
+		return vbo;
+	}
+	
+	private static FloatBuffer storeDataInFloatBuffer(float[] data){
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
+		buffer.put(data);
+		buffer.flip();
+		
+		return buffer;
+	}
+	
+	private static void unbindVAO(){
+		GL43.glBindVertexArray(0);
 	}
 }

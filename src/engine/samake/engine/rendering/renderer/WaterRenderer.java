@@ -11,7 +11,7 @@ import samake.engine.entity.light.Light;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.models.Mesh;
-import samake.engine.rendering.buffer.WaterBuffer;
+import samake.engine.rendering.buffer.ReflectionBuffer;
 import samake.engine.rendering.shader.WaterShader;
 import samake.engine.scene.Scene;
 import samake.engine.scene.water.Water;
@@ -30,7 +30,7 @@ public class WaterRenderer {
 		
 	}
 	
-	public void render(WaterBuffer waterFrameBuffer, Camera camera, Transformation transformation, Scene scene, int renderMode) {
+	public void render(ReflectionBuffer waterFrameBuffer, Camera camera, Transformation transformation, Scene scene, int renderMode) {
 		GL43.glEnable(GL43.GL_DEPTH_TEST);
     	GL43.glEnable(GL43.GL_BLEND);
     	GL43.glBlendFunc(GL43.GL_SRC_ALPHA, GL43.GL_ONE_MINUS_SRC_ALPHA);

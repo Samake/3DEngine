@@ -176,7 +176,7 @@ mat3 camera(vec3 eye, vec3 lat) {
 
 vec4 calcClouds() {
 	int raySteps = 64;
-	float rayLength = 0.3f;
+	float rayLength = 0.2f;
 	
 	vec3 layerPos = modelPosition;
 	layerPos.xy += windDirection * animValue * windSpeed * 0.05f;

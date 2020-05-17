@@ -28,7 +28,7 @@ public class Water extends Entity {
 		
 		setModel(model);
 		
-		setPhysicBody(new PhysicTriangleMeshBody(mesh, 0.0f, 0.95f, 0.95f, new Vector2f(0.35f, 0.35f)));
+		setPhysicBody(new PhysicTriangleMeshBody(mesh, 0.0f, 0.0f, 0.95f, new Vector2f(0.25f, 0.25f)));
 	}
 	
 	@Override

@@ -27,7 +27,7 @@ public class Terrain extends Entity {
 		
 		setModel(model);
 
-		setPhysicBody(new PhysicTriangleMeshBody(mesh, 0.0f, 0.55f, 0.75f, new Vector2f(0.15f, 0.15f)));
+		setPhysicBody(new PhysicTriangleMeshBody(mesh, 0.0f, 0.2f, 0.55f, new Vector2f(0.65f, 0.25f)));
 	}
 	
 	@Override

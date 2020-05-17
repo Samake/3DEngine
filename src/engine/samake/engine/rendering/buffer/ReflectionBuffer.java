@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.opengl.GL43;
  
-public class WaterBuffer {
+public class ReflectionBuffer {
  
 	private int width;
     private int height;
@@ -20,7 +20,7 @@ public class WaterBuffer {
     private int depthBuffer;
     private int depthTexture;
  
-    public WaterBuffer(int width, int height, int dividor) {
+    public ReflectionBuffer(int width, int height, int dividor) {
     	this.width = width;
     	this.height = height;
     	this.bufferWith = (int) width / dividor;

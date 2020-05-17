@@ -102,7 +102,7 @@ vec3 calcSpecularMap(Light light, vec3 lightDirection, vec3 normalIn, float spec
 	    }
 	}
     
-    return specularLight / 3;
+    return specularLight * normalIn.g * normalIn.g;
 }
 
 vec3 addDirectionalLight(vec3 normalIn, Light light, vec3 lightDirection) {
@@ -157,11 +157,11 @@ void main() {
 	float waterDepthNeg = 1 - waterDepth;
 	
 	vec2 baseUV = uv * material.tiling;
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y)).rg * 0.1f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y)).rg * 0.015f;
 	distortedTexCoords = baseUV + vec2(distortedTexCoords.x, distortedTexCoords.y + movingCoords);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.0075f;
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.05f;
 	
-	float blurValue = 0.0020f;
+	float blurValue = 0.0025f;
 	
 	refractionTexCoords += totalDistortion;
 	refractionTexCoords = clamp(refractionTexCoords, 0.001f, 0.999f);
@@ -187,7 +187,7 @@ void main() {
 	reflection /= 9;
 	
 	vec4 normalMap = texture(normalSampler, totalDistortion);
-	vec3 texNormal = vec3(normalMap.r * 2.0f - 1.0f, normalMap.b * 5.0f, normalMap.g * 2.0f - 1.0f);
+	vec3 texNormal = vec3(normalMap.r * 2.0f - 1.0f, normalMap.b * 3.0f, normalMap.g * 2.0f - 1.0f);
 	texNormal = normalize(texNormal);
 	
 	vec3 viewVector = normalize(cameraVector);
@@ -237,6 +237,7 @@ void main() {
     // DEFAULT, DEBUG, WIREFRAME, DIFFUSE, NORMALS, ALBEDO, DEPTH, COLOR
     if (renderMode == 0) {
     	fragColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
+    	//fragColor = vec4(specularMap, 1);
     } else if (renderMode == 1) {
     	fragColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
     } else if (renderMode == 2) {
