@@ -63,6 +63,8 @@ public class Debug {
 	public void spawnSphere() {
 		DynamicObject object = new DynamicObject();
 		object.setModel(ResourceLoader.load3DModel("sphere.fbx", true));
+		object.getMaterial(0).setShininess(256.0f);
+		object.getMaterial(0).setReflectance(2.0f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
@@ -76,6 +78,8 @@ public class Debug {
 	public void spawnBox() {
 		DynamicObject object = new DynamicObject();
 		object.setModel(ResourceLoader.load3DModel("box.fbx", true));
+		object.getMaterial(0).setShininess(32.0f);
+		object.getMaterial(0).setReflectance(1.0f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
@@ -89,6 +93,8 @@ public class Debug {
 	public void spawnCone() {
 		DynamicObject object = new DynamicObject();
 		object.setModel(ResourceLoader.load3DModel("player.fbx", true));
+		object.getMaterial(0).setShininess(128.0f);
+		object.getMaterial(0).setReflectance(3.0f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));

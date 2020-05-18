@@ -13,6 +13,7 @@ public class BloomShader extends Shader {
 		
 		createUniform("mainTexture");
 		createUniform("brightTexture");
+		createUniform("bloomLevel");
 		
 		Console.print("BloomShader bloom!", LOGTYPE.OUTPUT, true);
 	}

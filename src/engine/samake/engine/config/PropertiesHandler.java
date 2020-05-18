@@ -20,6 +20,11 @@ public class PropertiesHandler {
 	private static int anisotropicFiltering;
 	private static int antialiasing;
 	
+	private static float bloomLevel;
+	private static float saturation;
+	private static float contrast;
+	private static float brightness;
+	
 	public static void initialize() throws Exception {
 		
 		properties = new Properties();
@@ -36,6 +41,10 @@ public class PropertiesHandler {
 		setFOV(Integer.valueOf(properties.getProperty("FOV")));
 		setAnisotropicFiltering(Integer.valueOf(properties.getProperty("ANISOTROPIC_FILTERING")));
 		setAntialiasing(Integer.valueOf(properties.getProperty("ANTIALIASING")));
+		setBloomLevel(Float.valueOf(properties.getProperty("BLOOMLEVEL")));
+		setSaturation(Float.valueOf(properties.getProperty("SATURATION")));
+		setContrast(Float.valueOf(properties.getProperty("CONTRAST")));
+		setBrightness(Float.valueOf(properties.getProperty("BRIGHTNESS")));
 	}
 
 	public static int getWindowWidth() {
@@ -116,5 +125,37 @@ public class PropertiesHandler {
 
 	public static void setAntialiasing(int antialiasing) {
 		PropertiesHandler.antialiasing = antialiasing;
+	}
+
+	public static float getBloomLevel() {
+		return bloomLevel;
+	}
+
+	public static void setBloomLevel(float bloomLevel) {
+		PropertiesHandler.bloomLevel = bloomLevel;
+	}
+
+	public static float getSaturation() {
+		return saturation;
+	}
+
+	public static void setSaturation(float saturation) {
+		PropertiesHandler.saturation = saturation;
+	}
+
+	public static float getContrast() {
+		return contrast;
+	}
+
+	public static void setContrast(float contrast) {
+		PropertiesHandler.contrast = contrast;
+	}
+
+	public static float getBrightness() {
+		return brightness;
+	}
+
+	public static void setBrightness(float brightness) {
+		PropertiesHandler.brightness = brightness;
 	}
 }

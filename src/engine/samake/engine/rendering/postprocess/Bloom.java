@@ -25,6 +25,7 @@ public class Bloom {
 		shader.bind();
 		shader.setUniformInteger("mainTexture", 0);
     	shader.setUniformInteger("brightTexture", 1);
+    	shader.setUniformFloat("bloomLevel", PropertiesHandler.getBloomLevel());
     	
 		GL43.glActiveTexture(GL43.GL_TEXTURE0);
 		GL43.glBindTexture(GL43.GL_TEXTURE_2D, mainScene);

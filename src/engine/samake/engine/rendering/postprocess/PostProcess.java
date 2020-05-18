@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL43;
 
+import samake.engine.config.PropertiesHandler;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.models.BasicMesh;
@@ -33,18 +34,20 @@ public class PostProcess {
 		bloom.update();
 	}
 	
-	public void render(int mainScene, int brightnessScene, int renderMode) {
-		// brightnessScene is base for bloom
-		int texture = mainScene;
+	public void render(int mainTexture, int brightnessTexture, int depthTexture, int renderMode) {
+		int texture = mainTexture;
 		
 		startFrame();
 		
 		if (renderMode == 0) {
-			bloom.render(mainScene, brightnessScene);
+			bloom.render(texture, brightnessTexture);
 			texture = bloom.getResult();
 		}
 		
 		shader.bind();
+		shader.setUniformFloat("saturation", PropertiesHandler.getSaturation());
+		shader.setUniformFloat("contrast", PropertiesHandler.getContrast());
+		shader.setUniformFloat("brightness", PropertiesHandler.getBrightness());
 		
 		GL43.glActiveTexture(GL43.GL_TEXTURE0);
 		GL43.glBindTexture(GL43.GL_TEXTURE_2D, texture);

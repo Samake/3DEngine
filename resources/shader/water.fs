@@ -67,8 +67,8 @@ vec3 calcSpecularMap(Light light, vec3 lightDirection, vec3 normalIn, float spec
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	
 	float spec = pow(max(dot(normalIn, halfwayDir), 0.0), material.shininess);
-	spec += pow(max(dot(normalIn, halfwayDir), 0.0), material.shininess / 8);
-	spec += pow(max(dot(normalIn, halfwayDir), 0.0), material.shininess / 16);
+	spec += pow(max(dot(normalIn, halfwayDir), 0.0), material.shininess / 8) * 0.75f;
+	spec += pow(max(dot(normalIn, halfwayDir), 0.0), material.shininess / 16) * 0.5;
 	
 	vec3 specularLight = light.color * spec;
 
@@ -158,20 +158,20 @@ void main() {
 	float waterDepthNeg = 1 - waterDepth;
 	
 	vec2 baseUV = uv * material.tiling;
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y)).rg * 0.015f;
-	distortedTexCoords = baseUV + vec2(distortedTexCoords.x, distortedTexCoords.y + movingCoords);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords).rg * 2.0f - 1.0f) * 0.05f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y) * 2).rg * 0.25f;
+	distortedTexCoords = baseUV + vec2(distortedTexCoords.x - movingCoords, distortedTexCoords.y + movingCoords);
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords / 2).rg * 2.0f - 1.0f) * 0.025f;
 	
-	float blurValue = 0.0025f;
+	float blurValue = 0.0015f;
 	
-	refractionTexCoords += totalDistortion;
+	refractionTexCoords += totalDistortion * 0.25f;
 	refractionTexCoords = clamp(refractionTexCoords, 0.001f, 0.999f);
 	
 	vec4 refractionBase = texture(refractionSampler, vec2(refractionTexCoords.x, refractionTexCoords.y));
 	vec4 refraction = refractionBase;
-	refraction.rgb *= material.color * waterDepthNeg;
+	refraction.rgb *= material.color * waterDepthNeg * 1.5f;
 	
-	reflectionTexCoords += totalDistortion;
+	reflectionTexCoords += totalDistortion * 0.25f;
 	reflectionTexCoords.x = clamp(reflectionTexCoords.x, 0.001f, 0.999f);
 	reflectionTexCoords.y = clamp(reflectionTexCoords.y, -0.999f, -0.001f);
 	
@@ -187,8 +187,8 @@ void main() {
 	
 	reflection /= 9;
 	
-	vec4 normalMap = texture(normalSampler, totalDistortion);
-	vec3 texNormal = vec3(normalMap.r * 2.0f - 1.0f, normalMap.b * 3.0f, normalMap.g * 2.0f - 1.0f);
+	vec4 normalMap = texture(normalSampler, totalDistortion * 2);
+	vec3 texNormal = vec3(normalMap.r * 2.0f - 1.0f, normalMap.b * 5.0f, normalMap.g * 2.0f - 1.0f);
 	texNormal = normalize(texNormal);
 	
 	vec3 viewVector = normalize(cameraVector);

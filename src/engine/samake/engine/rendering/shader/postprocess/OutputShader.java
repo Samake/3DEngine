@@ -11,6 +11,10 @@ public class OutputShader extends Shader {
 		createFragmentShader("postprocess//output");
 		link();
 		
+		createUniform("saturation");
+		createUniform("contrast");
+		createUniform("brightness");
+
 		Console.print("OutputShader loaded!", LOGTYPE.OUTPUT, true);
 	}
 	
