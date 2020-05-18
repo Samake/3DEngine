@@ -9,13 +9,17 @@ import samake.engine.models.Mesh;
 public class PhysicHullMeshBody extends PhysicBody {
 	
 	public PhysicHullMeshBody(Mesh mesh, float mass, float restitution, float friction, Vector2f damping) {
-		setCollissionShape(new ConvexHullShape(mesh.getHullArrayList()));
-		setMass(mass);
-		setRestitution(mass);
-		setFriction(mass);
-		setDamping(damping);
-		
-		init();
+		if (mesh.getHullArrayList() != null) {
+			if (!mesh.getHullArrayList().isEmpty()) {
+				setCollissionShape(new ConvexHullShape(mesh.getHullArrayList()));
+				setMass(mass);
+				setRestitution(mass);
+				setFriction(mass);
+				setDamping(damping);
+				
+				init();
+			}
+		}
 	}
 	
 	@Override

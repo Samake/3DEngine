@@ -28,17 +28,17 @@ public class RenderTarget {
 	
 	private boolean multiSampleAndMultiTarget;
 
-	public RenderTarget(int width, int height, int depthBufferType) {
-		this.width = width;
-		this.height = height;
+	public RenderTarget(int width, int height, int downSampleRate, int depthBufferType) {
+		this.width = (int) (width / downSampleRate);
+		this.height = (int) (height / downSampleRate);
 		initBuffer(depthBufferType);
 		
 		this.multiSampleAndMultiTarget = false;
 	}
 	
-	public RenderTarget(int width, int height) {
-		this.width = width;
-		this.height = height;
+	public RenderTarget(int width, int height, int downSampleRate) {
+		this.width = (int) (width / downSampleRate);
+		this.height = (int) (height / downSampleRate);
 		this.multiSampleAndMultiTarget = true;
 		
 		initBuffer(DEPTH_RENDER_BUFFER);

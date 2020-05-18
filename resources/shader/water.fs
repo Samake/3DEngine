@@ -138,6 +138,16 @@ vec3 addSpotLight(vec3 normalIn, Light light, vec3 lightDirection) {
 	return lightValue;
 }
 
+vec4 calculateLuminance(vec4 color) {
+    float lum = (color.r + color.g + color.b) / 3;
+    float adj = lum - 0.1;
+    adj = adj / (1.01 - 0.3);
+    color = color * adj;
+    color += 0.17;
+	
+	return color;
+}
+
 void main() {
 	vec3 diffuseMap = material.color;
 	vec3 specularMap = vec3(0.0, 0.0, 0.0);
@@ -158,20 +168,20 @@ void main() {
 	float waterDepthNeg = 1 - waterDepth;
 	
 	vec2 baseUV = uv * material.tiling;
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y) * 2).rg * 0.25f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y) * 2).rg * 0.3f;
 	distortedTexCoords = baseUV + vec2(distortedTexCoords.x - movingCoords, distortedTexCoords.y + movingCoords);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords / 2).rg * 2.0f - 1.0f) * 0.025f;
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords / 2).rg * 2.0f - 1.0f) * 0.02f;
 	
 	float blurValue = 0.0015f;
 	
-	refractionTexCoords += totalDistortion * 0.25f;
+	refractionTexCoords += totalDistortion * 0.5f;
 	refractionTexCoords = clamp(refractionTexCoords, 0.001f, 0.999f);
 	
 	vec4 refractionBase = texture(refractionSampler, vec2(refractionTexCoords.x, refractionTexCoords.y));
 	vec4 refraction = refractionBase;
-	refraction.rgb *= material.color * waterDepthNeg * 1.5f;
+	refraction.rgb *= waterDepthNeg;
 	
-	reflectionTexCoords += totalDistortion * 0.25f;
+	reflectionTexCoords += totalDistortion * 0.5f;
 	reflectionTexCoords.x = clamp(reflectionTexCoords.x, 0.001f, 0.999f);
 	reflectionTexCoords.y = clamp(reflectionTexCoords.y, -0.999f, -0.001f);
 	
@@ -186,6 +196,8 @@ void main() {
 	reflection += texture(reflectionSampler, vec2(reflectionTexCoords.x - blurValue, reflectionTexCoords.y + blurValue));
 	
 	reflection /= 9;
+	
+	reflection = calculateLuminance(reflection);
 	
 	vec4 normalMap = texture(normalSampler, totalDistortion * 2);
 	vec3 texNormal = vec3(normalMap.r * 2.0f - 1.0f, normalMap.b * 5.0f, normalMap.g * 2.0f - 1.0f);
@@ -224,7 +236,7 @@ void main() {
 	vec3 waterOutput = clamp(mix(reflection.rgb, refraction.rgb, refractiveValue), 0.0f, 1.0f);
 	
 	if (cameraPosition.y < worldPosition.y) {
-		waterOutput = refractionBase.rgb * material.color;
+		waterOutput = refractionBase.rgb;
 	}
 	
 	waterOutput *= diffuseMap;

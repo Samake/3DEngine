@@ -8,7 +8,7 @@ uniform sampler2D mainTexture;
 uniform sampler2D brightTexture;
 uniform float bloomLevel;
 
-const float blurValue = 0.003f;
+const float blurValue = 0.0035f;
 
 void main(void) {
 	float modifier1 = 1.25f;

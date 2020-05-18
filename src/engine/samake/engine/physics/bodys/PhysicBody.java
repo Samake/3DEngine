@@ -43,7 +43,7 @@ public class PhysicBody {
 		rigidBody.setRestitution(restitution);
 		rigidBody.setFriction(friction);
 		rigidBody.setDamping(damping.x, damping.y);
-	    
+
 		Engine.instance.getPhysics().addRigidBody(rigidBody);
 	}
 	
@@ -196,6 +196,8 @@ public class PhysicBody {
 	}
 
 	public void destroy() {
-		Engine.instance.getPhysics().removeRigidBody(rigidBody);
+		if (rigidBody != null) {
+			Engine.instance.getPhysics().removeRigidBody(rigidBody);
+		}
 	}
 }

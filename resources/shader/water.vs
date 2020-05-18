@@ -46,7 +46,7 @@ vec3 getWavePositions(vec3 positions, vec2 uv, float moveBase) {
 }
 
 void main() {
- 	movingCoords = animValue * 0.5f * gameSpeed;
+ 	movingCoords = animValue * gameSpeed;
  	uv = inUV;
 
 	vec4 position = transformationMatrix * vec4(getWavePositions(inPosition, uv, movingCoords), 1.0);

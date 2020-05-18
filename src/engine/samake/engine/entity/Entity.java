@@ -11,6 +11,7 @@ import samake.engine.physics.bodys.PhysicBody;
 public class Entity {
 
 	private Model model;
+	private Model collissionModel;
 	private Vector3f position;
 	private Vector3f rotation;
 	private float scale;
@@ -47,6 +48,18 @@ public class Entity {
 
 	public void setModel(Model model) {
 		this.model = model;
+		
+		if (getCollissionModel() == null) {
+			setCollissionModel(model);
+		}
+	}
+
+	public Model getCollissionModel() {
+		return collissionModel;
+	}
+
+	public void setCollissionModel(Model collissionModel) {
+		this.collissionModel = collissionModel;
 	}
 
 	public Vector3f getPosition() {

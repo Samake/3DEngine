@@ -15,10 +15,15 @@ public class DynamicObject extends Entity {
 	}
 	
 	@Override
-	public void setModel(Model model) {
-		super.setModel(model);
+	public void setCollissionModel(Model model) {
+		super.setCollissionModel(model);
 		
-		setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 1.5f, 0.1f, 0.85f, new Vector2f(0.15f, 0.55f)));
+		if (getPhysicBody() == null) {
+			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 1.5f, 0.1f, 0.85f, new Vector2f(0.15f, 0.55f)));
+		} else {
+			getPhysicBody().destroy();
+			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 1.5f, 0.1f, 0.85f, new Vector2f(0.15f, 0.55f)));
+		}
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ import java.util.List;
 public class Model {
 	
 	private List<Mesh> meshes = new ArrayList<Mesh>();
-	
+
 	public Model() {
 
 	}

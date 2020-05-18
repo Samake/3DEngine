@@ -9,13 +9,15 @@ import samake.engine.models.Mesh;
 public class PhysicTriangleMeshBody extends PhysicBody {
 	
 	public PhysicTriangleMeshBody(Mesh mesh, float mass, float restitution, float friction, Vector2f damping) {
-		setCollissionShape(new BvhTriangleMeshShape(mesh.getCollissionMesh(), true, true));
-		setMass(mass);
-		setRestitution(mass);
-		setFriction(mass);
-		setDamping(damping);
-		
-		init();
+		if (mesh.getCollissionMesh() != null) {
+			setCollissionShape(new BvhTriangleMeshShape(mesh.getCollissionMesh(), true, true));
+			setMass(mass);
+			setRestitution(mass);
+			setFriction(mass);
+			setDamping(damping);
+			
+			init();
+		}
 	}
 	
 	@Override

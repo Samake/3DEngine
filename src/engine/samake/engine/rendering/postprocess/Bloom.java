@@ -12,7 +12,7 @@ public class Bloom {
 	private BloomShader shader;
 	
 	public Bloom() throws Exception {
-		setRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), RenderTarget.NONE));
+		setRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1, RenderTarget.NONE));
 		setShader(new BloomShader());
 	}
 	

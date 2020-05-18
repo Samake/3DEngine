@@ -62,13 +62,14 @@ public class Debug {
 	
 	public void spawnSphere() {
 		DynamicObject object = new DynamicObject();
-		object.setModel(ResourceLoader.load3DModel("sphere.fbx", true));
+		object.setModel(ResourceLoader.load3DModel("sphere.fbx", false));
+		object.setCollissionModel(ResourceLoader.load3DModel("sphereHull.fbx", true));
 		object.getMaterial(0).setShininess(256.0f);
 		object.getMaterial(0).setReflectance(2.0f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-		object.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		object.setRotation(new Vector3f(0.0f, 0.0f, 0.0f));
 		object.setPosition(new Vector3f(Utils.getRandomValue(44.0f, 50.0f, 1), 85.0f, Utils.getRandomValue(-132.0f, -138.0f, 1)));
 		object.setScale(1.0f);
 		
@@ -77,13 +78,14 @@ public class Debug {
 	
 	public void spawnBox() {
 		DynamicObject object = new DynamicObject();
-		object.setModel(ResourceLoader.load3DModel("box.fbx", true));
+		object.setModel(ResourceLoader.load3DModel("box.fbx", false));
+		object.setCollissionModel(ResourceLoader.load3DModel("boxHull.fbx", true));
 		object.getMaterial(0).setShininess(32.0f);
 		object.getMaterial(0).setReflectance(1.0f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-		object.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
+		object.setRotation(new Vector3f(0.0f, 0.0f, 0.0f));
 		object.setPosition(new Vector3f(Utils.getRandomValue(44.0f, 50.0f, 1), 85.0f, Utils.getRandomValue(-132.0f, -138.0f, 1)));
 		object.setScale(1.0f);
 		
@@ -92,7 +94,8 @@ public class Debug {
 	
 	public void spawnCone() {
 		DynamicObject object = new DynamicObject();
-		object.setModel(ResourceLoader.load3DModel("player.fbx", true));
+		object.setModel(ResourceLoader.load3DModel("player.fbx", false));
+		object.setCollissionModel(ResourceLoader.load3DModel("playerHull.fbx", true));
 		object.getMaterial(0).setShininess(128.0f);
 		object.getMaterial(0).setReflectance(3.0f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));

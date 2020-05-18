@@ -52,11 +52,11 @@ public class Renderer {
 		
 		setTransformation(new Transformation());
 		
-		setReflectionBuffer(new ReflectionBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
+		setReflectionBuffer(new ReflectionBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 2));
 		
-		setMultiSampledRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight()));
-		setSceneRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), RenderTarget.DEPTH_TEXTURE));
-		setBrightnessRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), RenderTarget.DEPTH_TEXTURE));
+		setMultiSampledRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
+		setSceneRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1, RenderTarget.DEPTH_TEXTURE));
+		setBrightnessRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 4, RenderTarget.DEPTH_TEXTURE));
 		
 		setSkyRenderer(new SkyRenderer());
 		setTerrainRenderer(new TerrainRenderer());

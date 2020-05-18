@@ -208,9 +208,9 @@ public class ResourceLoader {
 	}
 	
 	public static Model load3DModel(String fileName, boolean calculateCollisionMesh) {
-		if (!fileName.isEmpty()) {	
+		if (!fileName.isEmpty()) {
 			String filePath = new String(System.getProperty("user.dir") + "\\" + Configuration.MODELS + fileName).replace("/", "\\");
-	
+
 			AIScene aiScene = Assimp.aiImportFile(filePath, Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_Triangulate | Assimp.aiProcess_FixInfacingNormals);
 			
 			if (aiScene == null) {

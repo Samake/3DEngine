@@ -16,7 +16,24 @@ public class StaticObject extends Entity {
 	public void setModel(Model model) {
 		super.setModel(model);
 		
-		setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 0.0f, 0.55f, 0.55f, new Vector2f(0.45f, 0.45f)));
+		if (getPhysicBody() == null) {
+			setPhysicBody(new PhysicHullMeshBody(getCollissionModel().getMesh(), 0.0f, 0.5f, 0.5f, new Vector2f(0.15f, 0.15f)));
+		} else {
+			getPhysicBody().destroy();
+			setPhysicBody(new PhysicHullMeshBody(getCollissionModel().getMesh(), 0.0f, 0.5f, 0.5f, new Vector2f(0.15f, 0.15f)));
+		}
+	}
+	
+	@Override
+	public void setCollissionModel(Model model) {
+		super.setCollissionModel(model);
+		
+		if (getPhysicBody() == null) {
+			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 0.0f, 0.5f, 0.5f, new Vector2f(0.15f, 0.15f)));
+		} else {
+			getPhysicBody().destroy();
+			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 0.0f, 0.5f, 0.5f, new Vector2f(0.15f, 0.15f)));
+		}
 	}
 	
 	@Override
