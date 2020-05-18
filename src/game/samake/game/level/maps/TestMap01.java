@@ -32,15 +32,15 @@ public class TestMap01 extends Level {
 		addLight(getEnvironment().getSky().getMoon());
 		
 		PerlinGenerator.setTurbolence(512.0f);
-		PerlinGenerator.setGain(0.45f);
-		PerlinGenerator.setLacunarity(7.5f);
-		PerlinGenerator.setOctaves(8);
+		PerlinGenerator.setGain(0.5f);
+		PerlinGenerator.setLacunarity(5.5f);
+		PerlinGenerator.setOctaves(4);
 		PerlinGenerator.setHeightModifier(128);
 		
 		Terrain terrain = new Terrain();
 		terrain.generateModel(new Vector3f(-512.0f, 0.0f, -512.0f), 256, 1024.0f, true, true);
-		terrain.getMaterial().setShininess(16.0f);
-		terrain.getMaterial().setReflectance(0.8f);
+		terrain.getMaterial().setShininess(8.0f);
+		terrain.getMaterial().setReflectance(0.35f);
 		terrain.getMaterial().setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		terrain.getMaterial().setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		terrain.getMaterial().setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
