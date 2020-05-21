@@ -1,0 +1,34 @@
+{
+	"mapname":"testmap",
+	"description":"Testmap for development!",
+	"version":"1.0",
+	"author":"ToxicFr0g",
+	"settings":{
+		"gamespeed":1,
+		"dayprogress":0.35,
+		"freezetime":false
+	},
+	"environment":{
+		"addenvironmentlights":true
+	},
+	"terrain":{
+		"generateterrain":true
+	},
+	"water":{
+		"generatewater":true
+	},
+	"entities":{
+		"objects":{
+
+		},
+		"plants":{
+
+		},
+		"npc":{
+
+		},
+		"lights":{
+
+		}
+	}
+}

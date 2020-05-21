@@ -48,8 +48,7 @@ public class PhysicBody {
 	}
 	
 	public void update() {
-		//Quat4f currentRotation = transform.getRotation(rotation);
-		//System.err.println(currentRotation);
+
 	}
 	
 	public CollisionShape getCollissionShape() {

@@ -8,7 +8,7 @@ import samake.engine.camera.Camera;
 import samake.engine.core.Engine;
 import samake.engine.input.Input;
 import samake.engine.rendering.Renderer.RENDERMODE;
-import samake.game.level.Level;
+import samake.game.map.Map;
 
 public class Controls {
 	
@@ -23,7 +23,7 @@ public class Controls {
 		
 	}
 
-	public void update(Level map) {
+	public void update(Map map) {
 		Input input = Engine.instance.getInput();
 		
 		if (input != null) {

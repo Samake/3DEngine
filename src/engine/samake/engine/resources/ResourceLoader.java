@@ -3,6 +3,7 @@ package samake.engine.resources;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -46,6 +47,24 @@ public class ResourceLoader {
         String content = new String(Files.readAllBytes(Paths.get(filename)));
         return new JSONObject(content);
     }
+	
+	public static void saveJSONFile(String filename, JSONObject jsonObject) {
+		FileWriter file = null;
+
+		try {
+				file = new FileWriter(filename);
+				file.write(jsonObject.toString());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                file.flush();
+	                file.close();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	}
 	
 	public static String loadShader(String filename) {
         StringBuilder shaderSource = new StringBuilder();

@@ -4,6 +4,7 @@ import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
@@ -50,6 +51,16 @@ public class PhysicHandler {
 		float animationTime = ((float) (System.nanoTime() - startValue)) / 1000000000.0f;
 
 		world.stepSimulation(animationTime);
+	}
+	
+	public ClosestRayResultCallback getCollissionRayResult(org.joml.Vector3f from, org.joml.Vector3f to) {
+		Vector3f rayFromWorld = new Vector3f(from.x, from.y, from.z);
+		Vector3f rayToWorld = new Vector3f(to.x, to.y, to.z);
+		ClosestRayResultCallback resultCallback = new ClosestRayResultCallback(rayFromWorld, rayToWorld);
+		
+		world.rayTest(rayFromWorld, rayToWorld, resultCallback);
+	
+		return resultCallback;
 	}
 	
 	public void addRigidBody(RigidBody body) {

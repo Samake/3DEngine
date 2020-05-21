@@ -10,9 +10,9 @@ import samake.engine.resources.ResourceLoader;
 import samake.engine.scene.terrain.Terrain;
 import samake.engine.scene.water.Water;
 import samake.game.debug.Debug;
-import samake.game.level.Level;
+import samake.game.map.Map;
 
-public class TestMap01 extends Level {
+public class TestMap01 extends Map {
 	
 	private Debug debug;
 	

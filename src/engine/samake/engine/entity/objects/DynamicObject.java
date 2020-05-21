@@ -4,6 +4,9 @@ import javax.vecmath.Vector2f;
 
 import org.joml.Vector3f;
 
+import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
+
+import samake.engine.core.Engine;
 import samake.engine.entity.Entity;
 import samake.engine.models.Model;
 import samake.engine.physics.bodys.PhysicHullMeshBody;
@@ -38,6 +41,12 @@ public class DynamicObject extends Entity {
 			
 			setPosition(physicPosition);
 			setRotation(physicRotation);
+			
+			ClosestRayResultCallback rayTest = Engine.instance.getPhysics().getCollissionRayResult(physicPosition, new Vector3f(physicPosition.x, physicPosition.y - 5000, physicPosition.z));
+		
+			if (rayTest.hasHit()) {
+				//System.err.println(rayTest.hitPointWorld);
+			}
 		}	
 	}
 	

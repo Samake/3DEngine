@@ -1,15 +1,18 @@
-package samake.game.level;
+package samake.game.map;
 
 import samake.engine.core.Engine;
 import samake.engine.scene.Scene;
 import samake.game.controls.Controls;
 
-public class Level extends Scene {
+public class Map extends Scene {
 	
+	private MapData data;
 	private Controls controls;
 	
-	public Level() {
+	public Map() {
 		setControls(new Controls());
+		setData(new MapData());
+		
 		Engine.instance.getRenderer().setScene(this);
 	}
 	
@@ -25,6 +28,14 @@ public class Level extends Scene {
 
 	public void setControls(Controls controls) {
 		this.controls = controls;
+	}
+
+	public MapData getData() {
+		return data;
+	}
+
+	public void setData(MapData data) {
+		this.data = data;
 	}
 
 	@Override

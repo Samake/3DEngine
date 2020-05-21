@@ -86,11 +86,6 @@ public class Shader {
     
     public void createUniform(String uniformName) throws Exception {
         int uniformLocation = GL43.glGetUniformLocation(id, uniformName);
-        
-        if (uniformLocation < 0) {
-            Console.print("Could not find uniform:" + uniformName, LOGTYPE.ERROR, true);
-        }
-        
         uniforms.put(uniformName, uniformLocation);
     }
     

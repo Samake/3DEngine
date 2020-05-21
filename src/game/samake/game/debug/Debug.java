@@ -8,16 +8,16 @@ import samake.engine.entity.objects.DynamicObject;
 import samake.engine.input.Input;
 import samake.engine.resources.ResourceLoader;
 import samake.engine.utils.Utils;
-import samake.game.level.Level;
+import samake.game.map.Map;
 
 public class Debug {
 	
-	private Level level;
+	private Map level;
 	private boolean keyStateKeyM = false;
 	private boolean keyStateKeyN = false;
 	private boolean keyStateKeyB = false;
 	
-	public Debug(Level level) {
+	public Debug(Map level) {
 		this.level = level;
 	}
 	

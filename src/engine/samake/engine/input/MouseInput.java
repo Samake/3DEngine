@@ -1,6 +1,5 @@
 package samake.engine.input;
 
-import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
@@ -8,23 +7,23 @@ import samake.engine.core.Engine;
 
 public class MouseInput {
 	
-	private Vector2d previousPos;
-    private Vector2d currentPos;
+	private Vector2f previousPos;
+    private Vector2f currentPos;
     private Vector2f displVec;
     private boolean inWindow = false;
     private boolean leftButtonPressed = false;
     private boolean rightButtonPressed = false;
     
 	public MouseInput() {
-        previousPos = new Vector2d(-1, -1);
-        currentPos = new Vector2d(0, 0);
+        previousPos = new Vector2f(-1, -1);
+        currentPos = new Vector2f(0, 0);
         displVec = new Vector2f();
         
         long currentWindowHandle = Engine.instance.getDisplay().getHandle();
         
         GLFW.glfwSetCursorPosCallback(currentWindowHandle, (windowHandle, xpos, ypos) -> {
-            currentPos.x = xpos;
-            currentPos.y = ypos;
+            currentPos.x = (float) xpos;
+            currentPos.y = (float) ypos;
         });
         
         GLFW.glfwSetCursorEnterCallback(currentWindowHandle, (windowHandle, entered) -> {
@@ -59,6 +58,10 @@ public class MouseInput {
         
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
+    }
+    
+    public Vector2f getMousePos() {
+        return currentPos;
     }
     
 	public Vector2f getMoveVector() {
