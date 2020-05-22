@@ -65,7 +65,7 @@ public class Debug {
 		object.setModel(ResourceLoader.load3DModel("sphere.fbx", false));
 		object.setCollissionModel(ResourceLoader.load3DModel("sphereHull.fbx", true));
 		object.getMaterial(0).setShininess(128.0f);
-		object.getMaterial(0).setReflectance(1.5f);
+		object.getMaterial(0).setReflectance(0.5f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
@@ -81,7 +81,7 @@ public class Debug {
 		object.setModel(ResourceLoader.load3DModel("box.fbx", false));
 		object.setCollissionModel(ResourceLoader.load3DModel("boxHull.fbx", true));
 		object.getMaterial(0).setShininess(16.0f);
-		object.getMaterial(0).setReflectance(0.4f);
+		object.getMaterial(0).setReflectance(0.2f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
@@ -97,7 +97,7 @@ public class Debug {
 		object.setModel(ResourceLoader.load3DModel("player.fbx", false));
 		object.setCollissionModel(ResourceLoader.load3DModel("playerHull.fbx", true));
 		object.getMaterial(0).setShininess(32.0f);
-		object.getMaterial(0).setReflectance(1.0f);
+		object.getMaterial(0).setReflectance(0.75f);
 		object.getMaterial(0).setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		object.getMaterial(0).setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		object.getMaterial(0).setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));

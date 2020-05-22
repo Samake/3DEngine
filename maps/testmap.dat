@@ -5,17 +5,29 @@
 	"author":"ToxicFr0g",
 	"settings":{
 		"gamespeed":1,
-		"dayprogress":0.35,
+		"dayprogress":0.75,
 		"freezetime":false
 	},
 	"environment":{
-		"addenvironmentlights":true
+		"addenvironmentlights":true,
+		"fogdensity":0.0015
 	},
 	"terrain":{
-		"generateterrain":true
+		"generateterrain":true,
+		"terrainturbulence":512.0,
+		"terraingain":0.2,
+		"terrainlacunarity":6.5,
+		"terrainoctaves":6,
+		"terrainheight":256.0,
+		"terrainsize":2048,
+		"terrainsplits":256,
+		"terraintiling":2048
 	},
 	"water":{
-		"generatewater":true
+		"generatewater":true,
+		"watersize":2048,
+		"watersplits":256,
+		"waveheight":0.65
 	},
 	"entities":{
 		"objects":{

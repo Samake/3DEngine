@@ -11,6 +11,7 @@ uniform mat4 transformationMatrix;
 uniform vec3 cameraPosition;
 uniform float animValue;
 uniform float gameSpeed;
+uniform float waveStrength;
 
 out vec3 color;
 out vec3 normal;
@@ -20,18 +21,21 @@ out vec4 clipSpace;
 out vec3 cameraVector;
 out float movingCoords;
 
-const float waveStrength = 0.5f;
-
 vec3 getWavePositions(vec3 positions, float moveBase) {
 	vec3 pos = vec3(0.0f, -waveStrength, 0.0f) + positions;
 
-    pos.y *= waveStrength * (sin((pos.x / 8 + moveBase * 8)) - cos(pos.z / 8 + moveBase * 8));
+	float waveValue = sin((pos.x / 32 + moveBase * 8)) - cos(pos.z / 32 + moveBase * 4);
+	waveValue *= sin((pos.x / 64 + moveBase * 4)) - cos(pos.z / 64 + moveBase * 8);
+	waveValue *= sin((pos.x / 128 + moveBase * 4)) - cos(pos.z / 128 + moveBase * 4);
+	waveValue *= sin((pos.x / 256 + moveBase * 8)) - cos(pos.z / 256 + moveBase * 8);
+	
+    pos.y *= waveStrength * waveValue;
 
     return pos;
 }
 
 void main() {
- 	movingCoords = animValue * 0.5f * gameSpeed;
+ 	movingCoords = animValue * 0.75f * gameSpeed;
  	uv = inUV;
 
 	vec4 position = transformationMatrix * vec4(getWavePositions(inPosition, movingCoords), 1.0);

@@ -13,6 +13,7 @@ public class MaterialWater extends MaterialWorld {
 	private Vector3f color;
 	private float animValue;
 	private float animCounter = 0;
+	private float waveheight = 0;
 	
 	public MaterialWater() {
 		setHeightTexture(ResourceLoader.loadTexture("water\\height.png", true));
@@ -76,6 +77,14 @@ public class MaterialWater extends MaterialWorld {
 
 	public void setAnimValue(float animValue) {
 		this.animValue = animValue;
+	}
+
+	public float getWaveheight() {
+		return waveheight;
+	}
+
+	public void setWaveheight(float waveheight) {
+		this.waveheight = waveheight;
 	}
 
 	public void destroy() {

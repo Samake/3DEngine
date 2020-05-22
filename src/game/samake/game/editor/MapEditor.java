@@ -33,7 +33,7 @@ public class MapEditor {
 			map.getEnvironment().setDayProgress(mapData.getDayProgess());
 			map.getEnvironment().setFrozen(mapData.isTimeFrozen());
 			
-			map.getEnvironment().getFog().setDensity(0.0025f);
+			map.getEnvironment().getFog().setDensity(mapData.getFogDensity());
 			
 			if (mapData.isAddEnvironmentLights()) {
 				map.addLight(map.getEnvironment().getSky().getSun());
@@ -41,27 +41,26 @@ public class MapEditor {
 			}
 			
 			if (mapData.isGenerateTerrain()) {
-				PerlinGenerator.setTurbolence(512.0f);
-				PerlinGenerator.setGain(0.5f);
-				PerlinGenerator.setLacunarity(5.5f);
-				PerlinGenerator.setOctaves(4);
-				PerlinGenerator.setHeightModifier(128);
+				PerlinGenerator.setTurbolence(mapData.getTerrainTurbulence());
+				PerlinGenerator.setGain(mapData.getTerrainGain());
+				PerlinGenerator.setLacunarity(mapData.getTerrainLacunarity());
+				PerlinGenerator.setOctaves(mapData.getTerrainOctaves());
+				PerlinGenerator.setHeightModifier((int) mapData.getTerrainHeight());
 				
 				Terrain terrain = new Terrain();
-				terrain.generateModel(new Vector3f(-512.0f, 0.0f, -512.0f), 128, 1024.0f, true, true);
-				terrain.getMaterial().setShininess(8.0f);
-				terrain.getMaterial().setReflectance(0.35f);
+				terrain.generateModel(new Vector3f(-mapData.getTerrainSize() / 2, 0.0f, -mapData.getTerrainSize() / 2), mapData.getTerrainSplits(), mapData.getTerrainSize(), true, true);
 				terrain.getMaterial().setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 				terrain.getMaterial().setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 				terrain.getMaterial().setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-				terrain.getMaterial().setTiling(1024);
+				terrain.getMaterial().setTiling(mapData.getTerrainTiling());
 				
 				map.addTerrain(terrain);
 			}
 
 			if (mapData.isGenerateWater()) {
 				Water water = new Water();
-				water.generateModel(new Vector3f(-512.0f, 0.0f, -512.0f), 32, 1024.0f);
+				water.generateModel(new Vector3f(-mapData.getWaterSize() / 2, 0.0f, -mapData.getWaterSize() / 2), mapData.getWaterSplits(), mapData.getWaterSize());
+				water.getMaterial().setWaveheight(mapData.getWaveHeight());
 				
 				map.addWater(water);
 			}

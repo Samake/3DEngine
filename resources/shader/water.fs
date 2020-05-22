@@ -61,6 +61,29 @@ float linearizeDepth(float depth) {
     return (2.0 * near * far) / (far + near - z * (far - near));	
 }
 
+float hash(float n) {
+	return fract(sin(n) * 43758.5435);
+}
+
+float noise(vec3 x) {
+	vec3 p = floor(x);
+	vec3 f = fract(x);
+	
+	f = f * f * (3.0 - 2.0 * f);
+	float n = p.x + p.y * 57.0 + p.z * 113.0;
+	
+	return mix(
+		mix(
+			mix(hash(n + 000.0), hash(n + 001.0), f.x),
+			mix(hash(n + 057.0), hash(n + 058.0), f.x),
+			f.y),
+		mix(
+			mix(hash(n + 113.0), hash(n + 114.0), f.x),
+			mix(hash(n + 170.0), hash(n + 171.0), f.x),
+			f.y),
+		f.z);
+}
+
 vec3 calcSpecularMap(Light light, vec3 lightDirection, vec3 normalIn, float specValue, int lightType) {
 	vec3 lightDir   = normalize(lightDirection);
 	vec3 viewDir    = normalize(cameraPosition - worldPosition);
@@ -70,7 +93,7 @@ vec3 calcSpecularMap(Light light, vec3 lightDirection, vec3 normalIn, float spec
 	spec += pow(max(dot(normalIn, halfwayDir), 0.0), material.shininess / 8) * 0.75f;
 	spec += pow(max(dot(normalIn, halfwayDir), 0.0), material.shininess / 16) * 0.5;
 	
-	vec3 specularLight = light.color * spec;
+	vec3 specularLight = light.color * spec / 3;
 
     if (lightType == 0) {
     	float diffuseFactor = max(dot(normalIn, normalize(lightDirection)), 0.0);
@@ -168,9 +191,9 @@ void main() {
 	float waterDepthNeg = 1 - waterDepth;
 	
 	vec2 baseUV = uv * material.tiling;
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y) * 2).rg * 0.3f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y) * 2).rg * 0.2f;
 	distortedTexCoords = baseUV + vec2(distortedTexCoords.x - movingCoords, distortedTexCoords.y + movingCoords);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords / 2).rg * 2.0f - 1.0f) * 0.02f;
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords / 2).rg * 2.0f - 1.0f) * 0.025f;
 	
 	float blurValue = 0.0015f;
 	
@@ -228,20 +251,39 @@ void main() {
 	}
 	
 	vec2 foamUV = uv * (material.tiling * 8);
-	vec3 foamColor = texture(foamSampler, vec2(foamUV.x + movingCoords * 2, foamUV.y)).rgb;
-	foamColor += texture(foamSampler, vec2(foamUV.x, foamUV.y + movingCoords * 3) / 2).rgb;
-	foamColor += texture(foamSampler, vec2(foamUV.x + movingCoords * 4, foamUV.y + movingCoords * 2) * 2).rgb;
-	foamColor *= ambientStrength * depthBorderNeg * diffuseMap;
+	vec3 foamColor = texture(foamSampler, vec2(foamUV.x + movingCoords * 2, foamUV.y) * 1.25).rgb;
+	foamColor += texture(foamSampler, vec2(foamUV.x, foamUV.y + movingCoords * 3) * 1.5).rgb;
+	foamColor += texture(foamSampler, vec2(foamUV.x + movingCoords * 4, foamUV.y + movingCoords * 2) * 1.75).rgb;
+	vec3 foamColor1 = clamp(foamColor * ambientStrength * depthBorderNeg, 0.0f, 1.0f);
 
+	vec3 basePosition = worldPosition;
+	basePosition.x += movingCoords * 50;
+	basePosition.z += movingCoords * 20;
+	
+	float noiseValue = noise(basePosition * 0.1f);
+	
+	basePosition.x -= movingCoords * 75;
+	basePosition.z -= movingCoords * 80;
+	
+	noiseValue *= noise(basePosition * 0.05f);
+	
+	basePosition.x += movingCoords * 135;
+	basePosition.z -= movingCoords * 115;
+	
+	noiseValue *= noise(basePosition * 0.025f);
+	noiseValue *= (1 - refractiveValue);
+	
+	vec3 foamColor2 = clamp(foamColor * ambientStrength * worldPosition.y * 0.5f * noiseValue, 0.0f, 1.0f);
 	vec3 waterOutput = clamp(mix(reflection.rgb, refraction.rgb, refractiveValue), 0.0f, 1.0f);
 	
 	if (cameraPosition.y < worldPosition.y) {
 		waterOutput = refractionBase.rgb;
 	}
 	
+	waterOutput += foamColor1;
+	waterOutput += foamColor2;
 	waterOutput *= diffuseMap;
 	waterOutput += specularMap;
-	waterOutput += foamColor;
 
 	float fogDistance = length(cameraPosition - worldPosition);
     float fogFactor = 1.0 / exp((fogDistance * fogDensity) * (fogDistance * fogDensity));

@@ -30,12 +30,24 @@ public class MapHandler {
 	
 				JSONObject mapEnvironment = mapRoot.getJSONObject("environment");
 				map.getData().setAddEnvironmentLights(mapEnvironment.getBoolean("addenvironmentlights"));
+				map.getData().setFogDensity(mapEnvironment.getFloat("fogdensity"));
 				
 				JSONObject mapTerrain = mapRoot.getJSONObject("terrain");
 				map.getData().setGenerateTerrain(mapTerrain.getBoolean("generateterrain"));
+				map.getData().setTerrainTurbulence(mapTerrain.getFloat("terrainturbulence"));
+				map.getData().setTerrainGain(mapTerrain.getFloat("terraingain"));
+				map.getData().setTerrainLacunarity(mapTerrain.getFloat("terrainlacunarity"));
+				map.getData().setTerrainOctaves(mapTerrain.getInt("terrainoctaves"));
+				map.getData().setTerrainHeight(mapTerrain.getFloat("terrainheight"));
+				map.getData().setTerrainSize(mapTerrain.getInt("terrainsize"));
+				map.getData().setTerrainSplits(mapTerrain.getInt("terrainsplits"));
+				map.getData().setTerrainTiling(mapTerrain.getInt("terraintiling"));
 				
 				JSONObject mapWater = mapRoot.getJSONObject("water");
 				map.getData().setGenerateWater(mapWater.getBoolean("generatewater"));
+				map.getData().setWaterSize(mapWater.getInt("watersize"));
+				map.getData().setWaterSplits(mapWater.getInt("watersplits"));
+				map.getData().setWaveHeight(mapWater.getFloat("waveheight"));
 				
 				JSONObject mapEntities = mapRoot.getJSONObject("entities");
 				
@@ -77,17 +89,29 @@ public class MapHandler {
 		
 		JSONObject mapEnvironment = new JSONObject();
 		mapEnvironment.put("addenvironmentlights", mapData.isAddEnvironmentLights());
-		
+		mapEnvironment.put("fogdensity", mapData.getFogDensity());
+
 		mapRoot.put("environment", mapEnvironment);
 		
 		JSONObject mapTerrain = new JSONObject();
 		mapTerrain.put("generateterrain", mapData.isGenerateTerrain());
-		
+		mapTerrain.put("terrainturbulence", mapData.getTerrainTurbulence());
+		mapTerrain.put("terraingain", mapData.getTerrainGain());
+		mapTerrain.put("terrainlacunarity", mapData.getTerrainLacunarity());
+		mapTerrain.put("terrainoctaves", mapData.getTerrainOctaves());
+		mapTerrain.put("terrainheight", mapData.getTerrainHeight());
+		mapTerrain.put("terrainsize", mapData.getTerrainSize());
+		mapTerrain.put("terrainsplits", mapData.getTerrainSplits());
+		mapTerrain.put("terraintiling", mapData.getTerrainTiling());
+
 		mapRoot.put("terrain", mapTerrain);
 		
 		JSONObject mapWater = new JSONObject();
 		mapWater.put("generatewater", mapData.isGenerateWater());
-		
+		mapWater.put("watersize", mapData.getWaterSize());
+		mapWater.put("watersplits", mapData.getWaterSplits());
+		mapWater.put("waveheight", mapData.getWaveHeight());
+
 		mapRoot.put("water", mapWater);
 		
 		JSONObject mapEntities = new JSONObject();

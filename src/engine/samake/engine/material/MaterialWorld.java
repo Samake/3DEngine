@@ -23,7 +23,7 @@ public class MaterialWorld {
     	setDiffuseColor(DEFAULT_DIFFUSE);
     	setSpecularColor(DEFAULT_SPECULAR);
     	setShininess(16.0f);
-    	setReflectance(1.0f);
+    	setReflectance(0.3f);
         setTiling(1);
     }
 

@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL43;
 
 import samake.engine.perlin.PerlinGenerator;
 import samake.engine.rendering.screenshot.TexturePrint;
+import samake.engine.utils.Utils;
 
 public class MeshBuilder {
 	
@@ -35,24 +36,10 @@ public class MeshBuilder {
 				float yValue = 0;
 				
 				if (useHeightGenerator) {
-					vertexHeight -= PerlinGenerator.getHeightModifier() / 5;
-					//yValue = (	PerlinGenerator.getRidgeNoise(xValue, yValue, zValue, 1.0f));
-					//yValue = (	PerlinGenerator.getFBMNoise(xValue, yValue, zValue, 1.0f));
-					yValue = (	1.5f * PerlinGenerator.getTurbolenceNoise(xValue, yValue, zValue, 0.55f) +
-								1.5f * PerlinGenerator.getRidgeNoise(xValue, yValue, zValue, 0.75f) -
-								0.55f * PerlinGenerator.getFBMNoise(xValue, yValue, zValue, 0.15f) + 
-								0.75f * PerlinGenerator.getPerlinNoise(xValue, yValue, zValue, 1.2f)
-							);
-					
-					yValue *= 0.5f;
-					
-					if (yValue < 0) {
-						yValue = 0;
-					}
-					
-					if (yValue > 1) {
-						yValue = 1;
-					}
+					yValue += PerlinGenerator.getTurbolenceNoise(xValue, yValue, zValue, 0.8f); // base
+					yValue += PerlinGenerator.getFBMNoise(xValue, yValue, zValue, 0.5f); // rocks
+					yValue += PerlinGenerator.getRidgeNoise(xValue, yValue, zValue, 0.5f); // hills
+					yValue *= PerlinGenerator.getPerlinNoise(xValue, yValue, zValue, 2.0f); // flatten
 				}
 				
 				heights[j][i] = vertexHeight + yValue * PerlinGenerator.getHeightModifier();
@@ -65,7 +52,7 @@ public class MeshBuilder {
 				Vector3f color = new Vector3f(0.5f, 0.5f, 0.5f);
 				
 				if (colorGenerator) {
-					calculateColor(color, yValue);
+					calculateColor(color, yValue + Utils.getRandomValue(-500.0f, 500.0f, 10000.0f));
 				}
 				
 				colors.add(color.x);
@@ -111,9 +98,9 @@ public class MeshBuilder {
 	}
 	
 	private static void calculateColor(Vector3f color, float value) {
-		if (value > 0.05f && value < 0.25f) {
+		if (value > -0.1f && value < 0.1f) {
 			MeshColors.getSandColors(color);
-		} else if (value > 0.25f && value < 0.65f) {
+		} else if (value > 0.1f && value < 0.5f) {
 			MeshColors.getGrassColors(color);
 		} else {
 			MeshColors.getStoneColors(color);

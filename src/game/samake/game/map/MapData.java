@@ -12,10 +12,22 @@ public class MapData {
 	private boolean freezeTime;
 	
 	private boolean addEnvironmentLights;
+	private float fogDensity;
 	
 	private boolean generateTerrain;
+	private float terrainTurbulence;
+	private float terrainGain;
+	private float terrainLacunarity;
+	private int terrainOctaves;
+	private float terrainHeight;
+	private int terrainSize;
+	private int terrainSplits;
+	private int terrainTiling;
 	
 	private boolean generateWater;
+	private int waterSize;
+	private int waterSplits;
+	private float waveHeight;
 	
 	public MapData() {
 		setDefaults();
@@ -85,6 +97,14 @@ public class MapData {
 		this.addEnvironmentLights = addEnvironmentLights;
 	}
 
+	public float getFogDensity() {
+		return fogDensity;
+	}
+
+	public void setFogDensity(float fogDensity) {
+		this.fogDensity = fogDensity;
+	}
+
 	public boolean isGenerateTerrain() {
 		return generateTerrain;
 	}
@@ -93,12 +113,100 @@ public class MapData {
 		this.generateTerrain = generateTerrain;
 	}
 
+	public float getTerrainTurbulence() {
+		return terrainTurbulence;
+	}
+
+	public void setTerrainTurbulence(float terrainTurbulence) {
+		this.terrainTurbulence = terrainTurbulence;
+	}
+
+	public float getTerrainGain() {
+		return terrainGain;
+	}
+
+	public void setTerrainGain(float terrainGain) {
+		this.terrainGain = terrainGain;
+	}
+
+	public float getTerrainLacunarity() {
+		return terrainLacunarity;
+	}
+
+	public void setTerrainLacunarity(float terrainLacunarity) {
+		this.terrainLacunarity = terrainLacunarity;
+	}
+
+	public int getTerrainOctaves() {
+		return terrainOctaves;
+	}
+
+	public void setTerrainOctaves(int terrainOctaves) {
+		this.terrainOctaves = terrainOctaves;
+	}
+
+	public float getTerrainHeight() {
+		return terrainHeight;
+	}
+
+	public void setTerrainHeight(float terrainHeight) {
+		this.terrainHeight = terrainHeight;
+	}
+
+	public int getTerrainSize() {
+		return terrainSize;
+	}
+
+	public void setTerrainSize(int terrainSize) {
+		this.terrainSize = terrainSize;
+	}
+
+	public int getTerrainSplits() {
+		return terrainSplits;
+	}
+
+	public void setTerrainSplits(int terrainSplits) {
+		this.terrainSplits = terrainSplits;
+	}
+
+	public int getTerrainTiling() {
+		return terrainTiling;
+	}
+
+	public void setTerrainTiling(int terrainTiling) {
+		this.terrainTiling = terrainTiling;
+	}
+
 	public boolean isGenerateWater() {
 		return generateWater;
 	}
 
 	public void setGenerateWater(boolean generateWater) {
 		this.generateWater = generateWater;
+	}
+
+	public int getWaterSize() {
+		return waterSize;
+	}
+
+	public void setWaterSize(int waterSize) {
+		this.waterSize = waterSize;
+	}
+
+	public int getWaterSplits() {
+		return waterSplits;
+	}
+
+	public void setWaterSplits(int waterSplits) {
+		this.waterSplits = waterSplits;
+	}
+
+	public float getWaveHeight() {
+		return waveHeight;
+	}
+
+	public void setWaveHeight(float waveHeight) {
+		this.waveHeight = waveHeight;
 	}
 
 	public void setDefaults() {
@@ -112,9 +220,21 @@ public class MapData {
 		setFreezeTime(false);
 		
 		setAddEnvironmentLights(true);
+		setFogDensity(0.0025f);
 		
 		setGenerateTerrain(true);
+		setTerrainTurbulence(512.0f);
+		setTerrainGain(0.5f);
+		setTerrainLacunarity(5.5f);
+		setTerrainOctaves(4);
+		setTerrainHeight(128.0f);
+		setTerrainSize(2048);
+		setTerrainSplits(256);
+		setTerrainTiling(2048);
 		
 		setGenerateWater(true);
+		setWaterSize(2048);
+		setWaterSplits(256);
+		setWaveHeight(0.5f);
 	}
 }

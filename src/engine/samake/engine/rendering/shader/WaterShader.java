@@ -28,6 +28,7 @@ public class WaterShader extends Shader {
 		createUniform("ambientColor");
 		createUniform("ambientStrength");
 		createUniform("fogDensity");
+		createUniform("waveStrength");
 		
 		for (int i = 0; i < 16; i++) {
 			createLightUniform("light[" + i + "]");

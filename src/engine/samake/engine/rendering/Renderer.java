@@ -52,7 +52,7 @@ public class Renderer {
 		
 		setTransformation(new Transformation());
 		
-		setReflectionBuffer(new ReflectionBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 2));
+		setReflectionBuffer(new ReflectionBuffer(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
 		
 		setMultiSampledRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1));
 		setSceneRenderTarget(new RenderTarget(PropertiesHandler.getWindowWidth(), PropertiesHandler.getWindowHeight(), 1, RenderTarget.DEPTH_TEXTURE));
@@ -119,7 +119,7 @@ public class Renderer {
 		reflectionBuffer.bindReflectionBuffer();
 		scene.getCamera().getPosition().y -= distance;
 		transformation.invert();
-		clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.25f);
+		clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.5f);
 		
 		renderScene();
 		
@@ -128,9 +128,9 @@ public class Renderer {
 		transformation.invert();
 		
 		if (distance > waterHeight) {
-			clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + 0.25f);
+			clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + 0.5f);
 		} else {
-			clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.5f);
+			clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.75f);
 		}
 		
 		renderScene();

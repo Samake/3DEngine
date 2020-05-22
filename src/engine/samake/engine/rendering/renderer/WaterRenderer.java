@@ -70,7 +70,8 @@ public class WaterRenderer {
 
 	    		shader.setUniformMaterialWater(water.getMaterial());
 	    		shader.setUniformFloat("animValue", water.getMaterial().getAnimValue());
-	    		
+	    		shader.setUniformFloat("waveStrength", water.getMaterial().getWaveheight());
+
 	        	if (water.getModel() != null) {
 	    	    	List<Mesh> meshes = water.getModel().getMeshes();
 	    	    	
