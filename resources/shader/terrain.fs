@@ -50,8 +50,8 @@ uniform float ambientStrength;
 uniform float fogDensity;
 uniform int renderMode;
 
-const float near = 0.2; 
-const float far = 2000.0;
+const float near = 0.5; 
+const float far = 4096;
 
 float linearizeDepth(float depth) {
     float z = depth * 2.0 - 1.0;

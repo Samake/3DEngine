@@ -1,4 +1,4 @@
-package samake.engine.scene.water;
+package samake.engine.scene.environment.water;
 
 import javax.vecmath.Vector2f;
 

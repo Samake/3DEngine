@@ -11,8 +11,8 @@ import samake.engine.logging.Console.LOGTYPE;
 public class Transformation {
 	
 	private float fov;
-    private float zNear = 0.1f;
-    private float zFar = 10000.0f;
+    private float zNear = 0.5f;
+    private float zFar = 4096.0f;
 
     private Matrix4f projectionMatrix;
     private Matrix4f worldMatrix;

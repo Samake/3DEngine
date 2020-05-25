@@ -1,5 +1,7 @@
 package samake.game.map;
 
+import org.json.JSONArray;
+
 public class MapData {
 	
 	private String mapName;
@@ -28,6 +30,8 @@ public class MapData {
 	private int waterSize;
 	private int waterSplits;
 	private float waveHeight;
+	
+	private JSONArray entities;
 	
 	public MapData() {
 		setDefaults();
@@ -209,6 +213,14 @@ public class MapData {
 		this.waveHeight = waveHeight;
 	}
 
+	public JSONArray getEntities() {
+		return entities;
+	}
+
+	public void setEntities(JSONArray entities) {
+		this.entities = entities;
+	}
+
 	public void setDefaults() {
 		setMapName("EMPTY");
 		setDescription("Empty map!");
@@ -236,5 +248,7 @@ public class MapData {
 		setWaterSize(2048);
 		setWaterSplits(256);
 		setWaveHeight(0.5f);
+		
+		setEntities(new JSONArray());
 	}
 }

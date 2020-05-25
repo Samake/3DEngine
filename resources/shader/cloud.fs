@@ -44,8 +44,8 @@ uniform int renderMode;
 uniform vec2 windDirection;
 uniform float animValue;
 
-const float near = 0.2; 
-const float far = 10000.0;
+const float near = 0.5; 
+const float far = 4096;
 const float windSpeed = 2;
 
 vec3 addDirectionalLight(vec3 normalIn, Light light, vec3 lightDirection) {

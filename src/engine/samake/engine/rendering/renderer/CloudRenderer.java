@@ -15,7 +15,7 @@ import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.models.Mesh;
 import samake.engine.rendering.shader.CloudShader;
 import samake.engine.scene.Scene;
-import samake.engine.scene.sky.CloudLayer;
+import samake.engine.scene.environment.sky.CloudLayer;
 
 public class CloudRenderer {
 	

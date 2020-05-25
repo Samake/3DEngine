@@ -1,4 +1,4 @@
-package samake.engine.scene.sky;
+package samake.engine.scene.environment.sky;
 
 import samake.engine.material.TextureCube;
 import samake.engine.models.Model;

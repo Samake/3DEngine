@@ -84,6 +84,6 @@ public class ColorRenderer {
 	public void destroy() {
 		shader.destroy();
 		
-		Console.print("EntityRenderer stopped!", LOGTYPE.OUTPUT, true);
+		Console.print("ColorRenderer stopped!", LOGTYPE.OUTPUT, true);
 	}
 }

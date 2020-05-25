@@ -179,4 +179,26 @@ public class Utils {
 	    
 	    return quat;
 	}
+	
+	public static Vector3f getRotation(Vector3f position, Vector3f destination) {
+		Vector3f rotation = new Vector3f();
+		
+		if (position != null && destination != null) {
+			double thetaX = Math.atan2(position.y - destination.y, calculateDistanceBetweenPoints(position, destination));
+			rotation.x = (float) Math.toDegrees(thetaX);
+			
+			double thetaY = -Math.atan2(position.x - destination.x, position.z - destination.z);
+			rotation.y = (float) Math.toDegrees(thetaY);
+			
+			if (rotation.y < 0) { rotation.y += 360;}
+
+			rotation.z = 0;
+		}
+
+		return rotation;
+	}
+	
+	public static double calculateDistanceBetweenPoints(Vector3f vector1, Vector3f vector2){       
+		return Math.sqrt((vector2.z - vector1.z) * (vector2.z - vector1.z) + (vector2.x - vector1.x) * (vector2.x - vector1.x));
+	}
 }

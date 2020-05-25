@@ -14,7 +14,7 @@ import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.models.Mesh;
 import samake.engine.rendering.shader.SkyShader;
 import samake.engine.scene.Scene;
-import samake.engine.scene.sky.Sky;
+import samake.engine.scene.environment.sky.Sky;
 
 public class SkyRenderer {
 	

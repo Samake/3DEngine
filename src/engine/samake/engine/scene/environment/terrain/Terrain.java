@@ -1,4 +1,4 @@
-package samake.engine.scene.terrain;
+package samake.engine.scene.environment.terrain;
 
 import javax.vecmath.Vector2f;
 

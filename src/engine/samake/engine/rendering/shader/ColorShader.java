@@ -17,12 +17,12 @@ public class ColorShader extends Shader {
 		createUniform("color");
 		createUniform("amount");
 		
-		Console.print("EntityShader loaded!", LOGTYPE.OUTPUT, true);
+		Console.print("ColorShader loaded!", LOGTYPE.OUTPUT, true);
 	}
 	
     public void destroy() {
         super.cleanup();
         
-        Console.print("EntityShader stopped!", LOGTYPE.OUTPUT, true);
+        Console.print("ColorShader stopped!", LOGTYPE.OUTPUT, true);
     }
 }

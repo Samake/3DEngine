@@ -14,6 +14,8 @@ import samake.engine.rendering.postprocess.PostProcess;
 import samake.engine.rendering.renderer.CloudRenderer;
 import samake.engine.rendering.renderer.ColorRenderer;
 import samake.engine.rendering.renderer.EntityRenderer;
+import samake.engine.rendering.renderer.NPCRenderer;
+import samake.engine.rendering.renderer.PlayerRenderer;
 import samake.engine.rendering.renderer.SkyRenderer;
 import samake.engine.rendering.renderer.TerrainRenderer;
 import samake.engine.rendering.renderer.WaterRenderer;
@@ -35,6 +37,8 @@ public class Renderer {
 	private SkyRenderer skyRenderer;
 	private TerrainRenderer terrainRenderer;
 	private EntityRenderer entityRenderer;
+	private NPCRenderer npcRenderer;
+	private PlayerRenderer playerRenderer;
 	private CloudRenderer cloudRenderer;
 	private WaterRenderer waterRenderer;
 	private ColorRenderer colorRenderer;
@@ -61,6 +65,8 @@ public class Renderer {
 		setSkyRenderer(new SkyRenderer());
 		setTerrainRenderer(new TerrainRenderer());
 		setEntityRenderer(new EntityRenderer());
+		setNPCRenderer(new NPCRenderer());
+		setPlayerRenderer(new PlayerRenderer());
 		setCloudRenderer(new CloudRenderer());
 		setWaterRenderer(new WaterRenderer());
 		setColorRenderer(new ColorRenderer());
@@ -78,6 +84,8 @@ public class Renderer {
 		skyRenderer.update();
 		terrainRenderer.update();
 		entityRenderer.update();
+		npcRenderer.update();
+		playerRenderer.update();
 		waterRenderer.update();
 		colorRenderer.update();
 		shadowMap.update();
@@ -162,6 +170,8 @@ public class Renderer {
     	renderClouds();
     	renderTerrain();
     	renderEntities();
+    	renderNPCs();
+    	renderPlayers();
     }
 
 	private void renderSky() {
@@ -197,6 +207,36 @@ public class Renderer {
 		}
 
 		entityRenderer.render(scene.getCamera(), transformation, scene, getRenderMode(), clipPlane);
+		
+		GL43.glDisable(GL43.GL_CULL_FACE);
+	}
+	
+	private void renderNPCs() {
+    	GL43.glEnable(GL43.GL_CULL_FACE);
+    	GL43.glCullFace(GL43.GL_BACK);
+    	
+		if (getRenderMode() == 2) {
+			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_LINE);
+		} else {
+			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_FILL);
+		}
+
+		npcRenderer.render(scene.getCamera(), transformation, scene, getRenderMode(), clipPlane);
+		
+		GL43.glDisable(GL43.GL_CULL_FACE);
+	}
+	
+	private void renderPlayers() {
+    	GL43.glEnable(GL43.GL_CULL_FACE);
+    	GL43.glCullFace(GL43.GL_BACK);
+    	
+		if (getRenderMode() == 2) {
+			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_LINE);
+		} else {
+			GL43.glPolygonMode(GL43.GL_FRONT_AND_BACK, GL43.GL_FILL);
+		}
+
+		playerRenderer.render(scene.getCamera(), transformation, scene, getRenderMode(), clipPlane);
 		
 		GL43.glDisable(GL43.GL_CULL_FACE);
 	}
@@ -335,6 +375,22 @@ public class Renderer {
 		this.entityRenderer = entityRenderer;
 	}
 
+	public NPCRenderer getNPCRenderer() {
+		return npcRenderer;
+	}
+
+	public void setNPCRenderer(NPCRenderer npcRenderer) {
+		this.npcRenderer = npcRenderer;
+	}
+
+	public PlayerRenderer getPlayerRenderer() {
+		return playerRenderer;
+	}
+
+	public void setPlayerRenderer(PlayerRenderer playerRenderer) {
+		this.playerRenderer = playerRenderer;
+	}
+
 	public CloudRenderer getCloudRenderer() {
 		return cloudRenderer;
 	}
@@ -412,6 +468,8 @@ public class Renderer {
 		skyRenderer.destroy();
 		terrainRenderer.destroy();
 		entityRenderer.destroy();
+		npcRenderer.destroy();
+		playerRenderer.destroy();
 		cloudRenderer.destroy();
 		waterRenderer.destroy();
 		colorRenderer.destroy();

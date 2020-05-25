@@ -1,4 +1,4 @@
-package samake.engine.scene.fog;
+package samake.engine.scene.environment.fog;
 
 public class Fog {
 	

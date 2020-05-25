@@ -14,7 +14,7 @@ import samake.engine.models.Mesh;
 import samake.engine.rendering.buffer.ReflectionBuffer;
 import samake.engine.rendering.shader.WaterShader;
 import samake.engine.scene.Scene;
-import samake.engine.scene.water.Water;
+import samake.engine.scene.environment.water.Water;
 
 public class WaterRenderer {
 	

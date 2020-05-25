@@ -1,13 +1,12 @@
-package samake.game.editor;
+package samake.game.map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import samake.engine.config.Configuration;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.resources.ResourceLoader;
-import samake.game.map.Map;
-import samake.game.map.MapData;
 
 public class MapHandler {
 	
@@ -49,17 +48,17 @@ public class MapHandler {
 				map.getData().setWaterSplits(mapWater.getInt("watersplits"));
 				map.getData().setWaveHeight(mapWater.getFloat("waveheight"));
 				
-				JSONObject mapEntities = mapRoot.getJSONObject("entities");
-				
+				JSONArray mapEntities = mapRoot.getJSONArray("entities");
+				map.getData().setEntities(mapEntities);
 			} catch (Exception ex) {
-				Console.print(ex.toString(), LOGTYPE.ERROR, false);
+				Console.print("Loading map " + mapName + " failed! -> " + ex.getMessage(), LOGTYPE.ERROR, false);
 			}
 
 			Console.print(		map.getData().getMapName() 
 								+ " (" + map.getData().getDescription() + ")" 
 								+ " v" + map.getData().getVersion()
 								+ " by " + map.getData().getAuthor()
-								+ " was parsed!"
+								+ " was loaded!"
 								
 			, LOGTYPE.OUTPUT, true);
 			
@@ -114,7 +113,11 @@ public class MapHandler {
 
 		mapRoot.put("water", mapWater);
 		
-		JSONObject mapEntities = new JSONObject();
+		JSONArray mapEntities = new JSONArray();
+		
+		for (int i = 0; i < mapEntities.length(); i++) {
+			//JSONObject entity = mapEntities.getJSONObject(i);
+		}
 
 		mapRoot.put("entities", mapEntities);
 		

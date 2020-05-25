@@ -29,18 +29,7 @@
 		"watersplits":256,
 		"waveheight":0.65
 	},
-	"entities":{
-		"objects":{
-
-		},
-		"plants":{
-
-		},
-		"npc":{
-
-		},
-		"lights":{
-
-		}
-	}
+	"entities":[
+		{"type":"PointLight", "model":"sphere.fbx", "position":{"x":48.0, "y":85.0, "z":-136.0}, "color":{"r":1.0, "g":0.25, "b":0.25}, "intensity":256.0}
+	]
 }

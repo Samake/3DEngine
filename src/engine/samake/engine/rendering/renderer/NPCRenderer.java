@@ -9,21 +9,21 @@ import org.lwjgl.opengl.GL43;
 import samake.engine.camera.Camera;
 import samake.engine.camera.Transformation;
 import samake.engine.entity.light.Light;
+import samake.engine.entity.npc.NPC;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.models.Mesh;
-import samake.engine.rendering.shader.TerrainShader;
+import samake.engine.rendering.shader.NPCShader;
 import samake.engine.scene.Scene;
-import samake.engine.scene.environment.terrain.Terrain;
 
-public class TerrainRenderer {
+public class NPCRenderer {
 	
-	private TerrainShader shader;
+	private NPCShader shader;
 	
-	public TerrainRenderer() throws Exception {
-		shader = new TerrainShader();
+	public NPCRenderer() throws Exception {
+		shader = new NPCShader();
 		
-		Console.print("TerrainRenderer loaded!", LOGTYPE.OUTPUT, true);
+		Console.print("NPCRenderer loaded!", LOGTYPE.OUTPUT, true);
 	}
 	
 	public void update() {
@@ -31,7 +31,7 @@ public class TerrainRenderer {
 	}
 	
 	public void render(Camera camera, Transformation transformation, Scene scene, int renderMode, Vector4f clipPlane) {
-		if (!scene.getTerrains().isEmpty()) {
+		if (!scene.getEntities().isEmpty()) {
 			GL43.glEnable(GL43.GL_CLIP_DISTANCE0);
 			GL43.glEnable(GL43.GL_DEPTH_TEST);
 	    	GL43.glEnable(GL43.GL_BLEND);
@@ -63,43 +63,43 @@ public class TerrainRenderer {
 				shader.setUniformVector4f("clipPlane", clipPlane);
 			}
 
-	    	for (Terrain terrain : scene.getTerrains()) {
-	    		Matrix4f transformationMatrix = transformation.getWorldMatrix(terrain.getPosition(), terrain.getRotation(), terrain.getScale());
-	    		Matrix4f modelViewMatrix = transformation.getModelViewMatrix(terrain, viewMatrix);
+	    	for (NPC npc : scene.getNPCs()) {
+	    		Matrix4f transformationMatrix = transformation.getWorldMatrix(npc.getPosition(), npc.getRotation(), npc.getScale());
+	    		Matrix4f modelViewMatrix = transformation.getModelViewMatrix(npc, viewMatrix);
 	    		
 	    		shader.setUniformMatrix4f("transformationMatrix", transformationMatrix);
 	    		shader.setUniformMatrix4f("modelViewMatrix", modelViewMatrix);
 	    		
-	    		if (terrain.getMaterial() != null) {
-	    			shader.setUniformMaterialWorld(terrain.getMaterial());
-	    			
-    	            if (terrain.getMaterial().hasTexture() > 0) {
-    	            	GL43.glActiveTexture(GL43.GL_TEXTURE0);
-    	                GL43.glBindTexture(GL43.GL_TEXTURE_2D, terrain.getMaterial().getTexture().getID());
-    	            }
-    	            
-    	            if (terrain.getMaterial().hasNormalMap() > 0) {
-    	            	GL43.glActiveTexture(GL43.GL_TEXTURE1);
-    	                GL43.glBindTexture(GL43.GL_TEXTURE_2D, terrain.getMaterial().getNormalMap().getID());
-    	            }
-    	            
-    	            if (terrain.getMaterial().hasSpecularMap() > 0) {
-    	            	GL43.glActiveTexture(GL43.GL_TEXTURE2);
-    	                GL43.glBindTexture(GL43.GL_TEXTURE_2D, terrain.getMaterial().getSpecularMap().getID());
-    	            }
-	            }
-	    		
-	        	if (terrain.getModel() != null) {
-	    	    	List<Mesh> meshes = terrain.getModel().getMeshes();
+	        	if (npc.getModel() != null) {
+	    	    	List<Mesh> meshes = npc.getModel().getMeshes();
 	    	    	
 	    	    	for (Mesh mesh : meshes) {
+	    	    		shader.setUniformMaterialWorld(mesh.getMaterial());
+	    	    		
 	    	            GL43.glBindVertexArray(mesh.getVAO());
 	    	            
 	    	            GL43.glEnableVertexAttribArray(0);
 	    	            GL43.glEnableVertexAttribArray(1);
 	    	            GL43.glEnableVertexAttribArray(2);
 	    	            GL43.glEnableVertexAttribArray(3);
-
+	    	            
+	    	            if (mesh.getMaterial() != null) {
+		    	            if (mesh.getMaterial().hasTexture() > 0) {
+		    	            	GL43.glActiveTexture(GL43.GL_TEXTURE0);
+		    	                GL43.glBindTexture(GL43.GL_TEXTURE_2D, mesh.getMaterial().getTexture().getID());
+		    	            }
+		    	            
+		    	            if (mesh.getMaterial().hasNormalMap() > 0) {
+		    	            	GL43.glActiveTexture(GL43.GL_TEXTURE1);
+		    	                GL43.glBindTexture(GL43.GL_TEXTURE_2D, mesh.getMaterial().getNormalMap().getID());
+		    	            }
+		    	            
+		    	            if (mesh.getMaterial().hasSpecularMap() > 0) {
+		    	            	GL43.glActiveTexture(GL43.GL_TEXTURE2);
+		    	                GL43.glBindTexture(GL43.GL_TEXTURE_2D, mesh.getMaterial().getSpecularMap().getID());
+		    	            }
+	    	            }
+	    	            
 	    	            GL43.glDrawElements(GL43.GL_TRIANGLES, mesh.getNumVertices(), GL43.GL_UNSIGNED_INT, 0);
 	    	
 	    	            GL43.glDisableVertexAttribArray(0);
@@ -120,17 +120,17 @@ public class TerrainRenderer {
 		}
 	}
 
-	public TerrainShader getShader() {
+	public NPCShader getShader() {
 		return shader;
 	}
 
-	public void setShader(TerrainShader shader) {
+	public void setShader(NPCShader shader) {
 		this.shader = shader;
 	}
 	
 	public void destroy() {
 		shader.destroy();
 		
-		Console.print("TerrainRenderer stopped!", LOGTYPE.OUTPUT, true);
+		Console.print("NPCRenderer stopped!", LOGTYPE.OUTPUT, true);
 	}
 }

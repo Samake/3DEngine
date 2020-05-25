@@ -1,4 +1,4 @@
-package samake.engine.scene;
+package samake.engine.scene.environment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +11,10 @@ import samake.engine.config.Configuration;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.resources.ResourceLoader;
-import samake.engine.scene.fog.Fog;
-import samake.engine.scene.sky.Moon;
-import samake.engine.scene.sky.Sky;
-import samake.engine.scene.sky.Sun;
+import samake.engine.scene.environment.fog.Fog;
+import samake.engine.scene.environment.sky.Moon;
+import samake.engine.scene.environment.sky.Sky;
+import samake.engine.scene.environment.sky.Sun;
 import samake.engine.utils.Utils;
 
 public class Environment {

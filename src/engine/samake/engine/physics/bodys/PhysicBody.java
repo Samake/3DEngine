@@ -177,7 +177,9 @@ public class PhysicBody {
 		transform.origin.y = position.y;
 		transform.origin.z = position.z;
 		
-		rigidBody.setWorldTransform(transform);
+		if (rigidBody != null) {
+			rigidBody.setWorldTransform(transform);
+		}
 	}
 	
 	public org.joml.Vector3f getRotation() {

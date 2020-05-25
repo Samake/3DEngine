@@ -6,8 +6,11 @@ import java.util.List;
 import samake.engine.camera.Camera;
 import samake.engine.entity.Entity;
 import samake.engine.entity.light.Light;
-import samake.engine.scene.terrain.Terrain;
-import samake.engine.scene.water.Water;
+import samake.engine.entity.npc.NPC;
+import samake.engine.entity.npc.Player;
+import samake.engine.scene.environment.Environment;
+import samake.engine.scene.environment.terrain.Terrain;
+import samake.engine.scene.environment.water.Water;
 
 public class Scene {
 
@@ -15,6 +18,8 @@ public class Scene {
 	private Camera camera;
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	private List<Entity> entities = new ArrayList<Entity>();
+	private List<NPC> npcs = new ArrayList<NPC>();
+	private List<Player> players = new ArrayList<Player>();
 	private List<Water> waters = new ArrayList<Water>();
 	private List<Light> lights = new ArrayList<Light>();
 	
@@ -26,9 +31,27 @@ public class Scene {
 	public void update() {
 		environment.update();
 		
+		for (Terrain terrain : terrains) {
+			if (terrain.isUpdatedEntity()) {
+				terrain.update();
+			}
+		}
+		
 		for (Entity entity : entities) {
 			if (entity.isUpdatedEntity()) {
 				entity.update();
+			}
+		}
+		
+		for (NPC npc : npcs) {
+			if (npc.isUpdatedEntity()) {
+				npc.update();
+			}
+		}
+		
+		for (Player player : players) {
+			if (player.isUpdatedEntity()) {
+				player.update();
 			}
 		}
 		
@@ -42,6 +65,10 @@ public class Scene {
 			if (light.isUpdatedEntity()) {
 				light.update();
 			}
+		}
+		
+		if (camera != null) {
+			camera.update();
 		}
 	}
 
@@ -101,6 +128,46 @@ public class Scene {
 		}
 	}
 
+	public List<NPC> getNPCs() {
+		return npcs;
+	}
+
+	public void setNPCs(List<NPC> npcs) {
+		this.npcs = npcs;
+	}
+	
+	public void addNPC(NPC npc) {
+		if (!npcs.contains(npc)) {
+			npcs.add(npc);
+		}
+	}
+	
+	public void removeNPC(NPC npc) {
+		if (npcs.contains(npc)) {
+			npcs.remove(npc);
+		}
+	}
+
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+	
+	public void addPlayer(Player player) {
+		if (!players.contains(player)) {
+			players.add(player);
+		}
+	}
+	
+	public void removePlayer(Player player) {
+		if (players.contains(player)) {
+			players.remove(player);
+		}
+	}
+
 	public List<Water> getWaters() {
 		return waters;
 	}
@@ -143,6 +210,8 @@ public class Scene {
 	
 	public void clear() {
 		entities.clear();
+		npcs.clear();
+		players.clear();
 		lights.clear();
 		waters.clear();
 		terrains.clear();
@@ -155,6 +224,14 @@ public class Scene {
 		
 		for (Entity entity : entities) {
 			entity.destroy();
+		}
+		
+		for (NPC npc : npcs) {
+			npc.destroy();
+		}
+		
+		for (Player player : players) {
+			player.destroy();
 		}
 		
 		for (Water water : waters) {

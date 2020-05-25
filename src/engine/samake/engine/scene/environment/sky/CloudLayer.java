@@ -1,4 +1,4 @@
-package samake.engine.scene.sky;
+package samake.engine.scene.environment.sky;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;

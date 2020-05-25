@@ -1,18 +1,18 @@
-package samake.engine.scene.sky;
+package samake.engine.scene.environment.sky;
 
 import org.joml.Vector3f;
 
 import samake.engine.entity.light.DirectionalLight;
 
-public class Moon extends DirectionalLight {
+public class Sun extends DirectionalLight {
 
 	private float angle;
 	private float distance;
 	
-	public Moon() {
+	public Sun() {
 		setIntensity(3.0f, true);
-		setColor(new Vector3f(0.025f, 0.025f, 0.04f));
-		setAngle(225.0f);
+		setColor(new Vector3f(0.95f, 0.82f, 0.72f));
+		setAngle(45.0f);
 		setDistance(1000.0f);
 	}
 	
