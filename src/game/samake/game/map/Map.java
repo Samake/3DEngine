@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 import org.json.JSONObject;
 
 import samake.engine.core.Engine;
+import samake.engine.entity.npc.Player;
 import samake.engine.perlin.PerlinGenerator;
 import samake.engine.resources.ResourceLoader;
 import samake.engine.scene.Scene;
@@ -15,6 +16,7 @@ public class Map extends Scene {
 	
 	private MapData data;
 	private Controls controls;
+	private Player player;
 	
 	public Map() {
 		setControls(new Controls());
@@ -84,7 +86,16 @@ public class Map extends Scene {
 	@Override
 	public void update() {
 		super.update();
-		controls.update(this);
+		controls.update(this, player);
+	}
+	
+	@Override
+	public void addPlayer(Player player) {
+		super.addPlayer(player);
+		
+		if (getPlayer() == null) {
+			setPlayer(player);
+		}
 	}
 
 	public Controls getControls() {
@@ -101,6 +112,14 @@ public class Map extends Scene {
 
 	public void setData(MapData data) {
 		this.data = data;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	@Override

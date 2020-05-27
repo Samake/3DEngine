@@ -1,7 +1,5 @@
 package samake.engine.scene.environment.water;
 
-import javax.vecmath.Vector2f;
-
 import org.joml.Vector3f;
 
 import samake.engine.entity.Entity;
@@ -9,7 +7,6 @@ import samake.engine.material.MaterialWater;
 import samake.engine.models.Mesh;
 import samake.engine.models.MeshBuilder;
 import samake.engine.models.Model;
-import samake.engine.physics.bodys.PhysicTriangleMeshBody;
 
 public class Water extends Entity {
 
@@ -17,18 +14,16 @@ public class Water extends Entity {
 	
 	public Water() {
 		setMaterial(new MaterialWater());
-		setUpdatedEntity(true);
+		setUpdatedEntity(false);
 	}
 	
 	public void generateModel(Vector3f position, int rows, float size) {
 		Model model = new Model();
 		
-		Mesh mesh = MeshBuilder.generatePlane(position.x, position.y, position.z, rows, size, false, false, true);
+		Mesh mesh = MeshBuilder.generatePlane(position.x, position.y, position.z, rows, size, false, false, false);
 		model.addMesh(mesh);
 		
-		setModel(model);
-		
-		setPhysicBody(new PhysicTriangleMeshBody(mesh, 0.0f, 0.0f, 0.95f, new Vector2f(0.25f, 0.25f)));
+		setModel(model, false);
 	}
 	
 	@Override

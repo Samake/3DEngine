@@ -10,7 +10,7 @@ public interface IEntity {
 	
 	public void update();
 	public Model getModel();
-	public void setModel(Model model);
+	public void setModel(Model model, boolean updatePhysicModel);
 	public Model getCollissionModel();
 	public void setCollissionModel(Model collissionModel);
 	public Vector3f getPosition();

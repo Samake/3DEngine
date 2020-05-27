@@ -31,7 +31,7 @@ public class PlayerRenderer {
 	}
 	
 	public void render(Camera camera, Transformation transformation, Scene scene, int renderMode, Vector4f clipPlane) {
-		if (!scene.getEntities().isEmpty()) {
+		if (!scene.getPlayers().isEmpty()) {
 			GL43.glEnable(GL43.GL_CLIP_DISTANCE0);
 			GL43.glEnable(GL43.GL_DEPTH_TEST);
 	    	GL43.glEnable(GL43.GL_BLEND);

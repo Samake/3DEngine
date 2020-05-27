@@ -28,7 +28,7 @@ public class Light extends Entity {
 	private double pulsingBase = 0;
 	
 	public Light() {
-		setModel(ResourceLoader.load3DModel("sphere.fbx", false));
+		setModel(ResourceLoader.load3DModel("sphere.fbx", false), false);
 		setScale(1.0f);
 		setType(LIGHTTYPE.NONE);
 		setColor(new Vector3f(1.0f, 1.0f, 1.0f));

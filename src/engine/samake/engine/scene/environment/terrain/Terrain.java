@@ -25,7 +25,7 @@ public class Terrain extends Entity {
 		Mesh mesh = MeshBuilder.generatePlane(position.x, position.y, position.z, rows, size, useHeightGenerator, colorGenerator, true);
 		model.addMesh(mesh);
 		
-		setModel(model);
+		setModel(model, true);
 
 		setPhysicBody(new PhysicTriangleMeshBody(mesh, 0.0f, 0.2f, 0.55f, new Vector2f(0.65f, 0.25f)));
 	}

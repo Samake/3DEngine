@@ -13,8 +13,8 @@ public class StaticObject extends Entity {
 	}
 	
 	@Override
-	public void setModel(Model model) {
-		super.setModel(model);
+	public void setModel(Model model, boolean updatePhysicModel) {
+		super.setModel(model, updatePhysicModel);
 		
 		if (getPhysicBody() == null) {
 			setPhysicBody(new PhysicHullMeshBody(getCollissionModel().getMesh(), 0.0f, 0.5f, 0.5f, new Vector2f(0.15f, 0.15f)));

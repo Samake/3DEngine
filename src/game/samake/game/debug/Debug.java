@@ -62,7 +62,7 @@ public class Debug {
 	
 	public void spawnSphere() {
 		DynamicObject object = new DynamicObject();
-		object.setModel(ResourceLoader.load3DModel("sphere.fbx", false));
+		object.setModel(ResourceLoader.load3DModel("sphere.fbx", false), true);
 		object.setCollissionModel(ResourceLoader.load3DModel("sphereHull.fbx", true));
 		object.getMaterial(0).setShininess(128.0f);
 		object.getMaterial(0).setReflectance(0.5f);
@@ -78,7 +78,7 @@ public class Debug {
 	
 	public void spawnBox() {
 		DynamicObject object = new DynamicObject();
-		object.setModel(ResourceLoader.load3DModel("box.fbx", false));
+		object.setModel(ResourceLoader.load3DModel("box.fbx", false), true);
 		object.setCollissionModel(ResourceLoader.load3DModel("boxHull.fbx", true));
 		object.getMaterial(0).setShininess(16.0f);
 		object.getMaterial(0).setReflectance(0.2f);
@@ -94,7 +94,7 @@ public class Debug {
 	
 	public void spawnCone() {
 		DynamicObject object = new DynamicObject();
-		object.setModel(ResourceLoader.load3DModel("player.fbx", false));
+		object.setModel(ResourceLoader.load3DModel("player.fbx", false), true);
 		object.setCollissionModel(ResourceLoader.load3DModel("playerHull.fbx", true));
 		object.getMaterial(0).setShininess(32.0f);
 		object.getMaterial(0).setReflectance(0.75f);

@@ -2,10 +2,9 @@ package samake.game.editor;
 
 import org.joml.Vector3f;
 
-import samake.engine.entity.objects.StaticObject;
+import samake.engine.entity.npc.Player;
 import samake.engine.logging.Console;
 import samake.engine.logging.Console.LOGTYPE;
-import samake.engine.resources.ResourceLoader;
 import samake.game.debug.Debug;
 import samake.game.map.Map;
 import samake.game.map.MapHandler;
@@ -14,8 +13,8 @@ public class MapEditor {
 	
 	private Map map;
 	private Debug debug;
-	
-	private StaticObject testObject;
+
+	private Player player;
 	
 	public MapEditor() {
 		Console.print("LevelEditor started.", LOGTYPE.OUTPUT, true);
@@ -24,29 +23,27 @@ public class MapEditor {
 		
 		if (map != null) {
 			debug = new Debug(map);
-			map.getCamera().setPosition(0.0f, 128.0f, -256.0f);
+			map.getCamera().setPosition(0.0f, 32.0f, -32.0f);
 			map.getCamera().setLookAt(0.0f, 5.0f, 0.0f);
 			map.init();
+
+			player = new Player();
+			player.setPosition(new Vector3f(0.0f, 8.0f, 0.0f));
+			player.setRotation(new Vector3f(270.0f, 0.0f, 0.0f));
 			
-			testObject = new StaticObject();
-			testObject.setModel(ResourceLoader.load3DModel("sphere.fbx", false));
-			testObject.setUpdatedEntity(true);
-			testObject.setPosition(new Vector3f(-1024, 64, 0));
-			testObject.setUpdatePosition(new Vector3f(1.0f, 0.0f, 0.0f));
-			testObject.getMaterial().setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
-			testObject.getMaterial().setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
-			testObject.getMaterial().setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
-			testObject.setScale(10);
-			
-			map.addEntity(testObject);
-			
-			map.getCamera().setTarget(testObject);
+			map.addPlayer(player);
+
+			map.getCamera().setTarget(player);
 		}
 	}
 	
 	public void update() {
 		if (map != null) {
 			map.update();
+		}
+		
+		if (player != null) {
+			player.update();
 		}
 		
 		if (debug != null) {
@@ -74,8 +71,8 @@ public class MapEditor {
 			debug.destroy();
 		}
 		
-		if (testObject != null) {
-			testObject.destroy();
+		if (player != null) {
+			player.destroy();
 		}
 		
 		Console.print("LevelEditor stopped", LOGTYPE.OUTPUT, true);

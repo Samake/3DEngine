@@ -163,11 +163,13 @@ public class PhysicBody {
 	public org.joml.Vector3f getPosition() {
 		org.joml.Vector3f position = new org.joml.Vector3f();
 		
-		Vector3f currentPosition = rigidBody.getWorldTransform(transform).origin;
-		
-		position.x = currentPosition.x;
-		position.y = currentPosition.y;
-		position.z = currentPosition.z;
+		if (rigidBody != null) {
+			Vector3f currentPosition = rigidBody.getWorldTransform(transform).origin;
+			
+			position.x = currentPosition.x;
+			position.y = currentPosition.y;
+			position.z = currentPosition.z;
+		}
 		
 		return position;
 	}

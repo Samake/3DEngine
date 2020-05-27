@@ -47,10 +47,10 @@ public class Entity implements IEntity {
 		return model;
 	}
 
-	public void setModel(Model model) {
+	public void setModel(Model model, boolean updatePhysicModel) {
 		this.model = model;
 		
-		if (getCollissionModel() == null) {
+		if (getCollissionModel() == null && updatePhysicModel) {
 			setCollissionModel(model);
 		}
 	}

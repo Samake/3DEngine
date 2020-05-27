@@ -4,83 +4,70 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
+import com.bulletphysics.dynamics.RigidBody;
+
 import samake.engine.camera.Camera;
+import samake.engine.camera.Camera.CAMERATYPE;
 import samake.engine.core.Engine;
+import samake.engine.entity.npc.Player;
 import samake.engine.input.Input;
 import samake.engine.rendering.Renderer.RENDERMODE;
 import samake.game.map.Map;
 
 public class Controls {
 	
-	private final float CAMERA_POS_STEP = 0.1f;
+	private final float POS_STEP = 0.1f;
 	private final float MOUSE_SENSITIVITY = 0.25f;
 	
-	private Vector3f cameraInc = new Vector3f();
+	private Vector3f moveVector = new Vector3f();
 	private float speedValue = 1.0f;
-	private float currentSpeed = 0.0f;
+	private float moveSpeed = 0.0f;
 	
 	public Controls() {
 		
 	}
 
-	public void update(Map map) {
+	public void update(Map map, Player player) {
 		Input input = Engine.instance.getInput();
+		Camera camera = map.getCamera();
 		
-		if (input != null) {
+		if (input != null && camera != null) {
 		    if (input.isKeyPressed(GLFW.GLFW_KEY_W)) {
-		        cameraInc.z = -1;
+		        moveVector.z = -1;
 		    } else if (input.isKeyPressed(GLFW.GLFW_KEY_S)) {
-		        cameraInc.z = 1;
+		        moveVector.z = 1;
 		    } else {
-		    	cameraInc.z = 0;
+		    	moveVector.z = 0;
 		    }
 		    
 		    if (input.isKeyPressed(GLFW.GLFW_KEY_A)) {
-		        cameraInc.x = -1;
+		        moveVector.x = -1;
 		    } else if (input.isKeyPressed(GLFW.GLFW_KEY_D)) {
-		        cameraInc.x = 1;
+		        moveVector.x = 1;
 		    } else {
-		    	cameraInc.x = 0;
+		    	moveVector.x = 0;
 		    }
 		    
 		    if (input.isKeyPressed(GLFW.GLFW_KEY_Z)) {
-		        cameraInc.y = -1;
+		        moveVector.y = -1;
 		    } else if (input.isKeyPressed(GLFW.GLFW_KEY_X)) {
-		        cameraInc.y = 1;
+		        moveVector.y = 1;
 		    } else {
-		    	cameraInc.y = 0;
+		    	moveVector.y = 0;
 		    }
-		    
-		    Camera camera = map.getCamera();
 			
-		    currentSpeed = speedValue;
+		    moveSpeed = speedValue;
 		    
 		    if (input.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-		    	currentSpeed = speedValue * 8;
+		    	moveSpeed = speedValue * 8;
 		    }
 		    
 		    if (input.isKeyPressed(GLFW.GLFW_KEY_LEFT_CONTROL)) {
-		    	currentSpeed = speedValue / 8;
+		    	moveSpeed = speedValue / 8;
 		    }
 		    
-			if (camera != null) {
-				// Update camera position
-			    camera.movePosition(
-			    	cameraInc.x * CAMERA_POS_STEP * currentSpeed,
-			        cameraInc.y * CAMERA_POS_STEP * currentSpeed,
-			        cameraInc.z * CAMERA_POS_STEP * currentSpeed);
-			    
-			    // Update camera based on mouse            
-			    if (input.isRightMouseButtonPressed()) {
-			        Vector2f rotVec = input.getCursorMoveVector();
-			        
-			        camera.moveRotation(
-			        		rotVec.x * MOUSE_SENSITIVITY, 
-			        		rotVec.y * MOUSE_SENSITIVITY, 
-			        		0);
-			    }
-			}
-			
+		    updateMovement(input, camera, player);
+		    
 			if (input.isKeyPressed(GLFW.GLFW_KEY_ESCAPE)) {
 				Engine.instance.destroy();
 			}
@@ -120,6 +107,61 @@ public class Controls {
 			if (input.isKeyPressed(GLFW.GLFW_KEY_F9)) {
 				Engine.instance.getRenderer().changeRenderMode(RENDERMODE.COLOR);
 			}
+			
+			if (input.isKeyPressed(GLFW.GLFW_KEY_SPACE)) {
+				updateJump(player);
+			}
 		}
+	}
+	
+	private void updateMovement(Input input, Camera camera, Player player) {
+		CAMERATYPE camType = camera.getType();
+		
+		if (camType.equals(CAMERATYPE.CINEMATIC)) {
+			camera.movePosition(moveVector.x * POS_STEP * moveSpeed, moveVector.y * POS_STEP * moveSpeed, moveVector.z * POS_STEP * moveSpeed);
+	
+			if (input.isRightMouseButtonPressed()) {
+		        Vector2f rotVec = input.getCursorMoveVector();
+		        
+		        camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+		    }
+		} else if (camType.equals(CAMERATYPE.FREECAM)) {
+			camera.movePosition(moveVector.x * POS_STEP * moveSpeed, moveVector.y * POS_STEP * moveSpeed, moveVector.z * POS_STEP * moveSpeed);
+			
+			if (input.isRightMouseButtonPressed()) {
+		        Vector2f rotVec = input.getCursorMoveVector();
+		        
+		        camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+		    }
+		} else if (camType.equals(CAMERATYPE.FIRSTPERSON)) {
+			if (player != null) {
+		    	player.movePosition(moveVector.x * POS_STEP * moveSpeed, moveVector.z * POS_STEP * moveSpeed);
+		    	
+		    	if (input.isRightMouseButtonPressed()) {
+			        Vector2f rotVec = input.getCursorMoveVector();
+			        
+			        player.moveRotation(rotVec.y * MOUSE_SENSITIVITY);
+			        camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, 0, 0);
+			    }
+		    }
+		} else if (camType.equals(CAMERATYPE.THIRDPERSON)) {
+			if (player != null) {
+		    	player.movePosition(moveVector.x * POS_STEP * moveSpeed, moveVector.z * POS_STEP * moveSpeed);
+		    	
+		    	if (input.isRightMouseButtonPressed()) {
+			        Vector2f rotVec = input.getCursorMoveVector();
+			        
+			        player.moveRotation(rotVec.y * MOUSE_SENSITIVITY);
+			        camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, 0, 0);
+			    }
+		    }
+		}
+	}
+	
+	private void updateJump(Player player) {
+		RigidBody rigidBody = player.getPhysicBody().getRigidBody();
+		javax.vecmath.Vector3f jumpVector = new javax.vecmath.Vector3f(0.0f, 0.5f, 0.0f);
+
+		rigidBody.applyCentralImpulse(jumpVector);
 	}
 }

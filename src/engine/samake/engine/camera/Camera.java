@@ -8,17 +8,23 @@ import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.utils.Utils;
 
 public class Camera {
-
+	
+	public enum CAMERATYPE {
+		CINEMATIC, FREECAM, FIRSTPERSON, THIRDPERSON
+	}
+	
 	private Vector3f position;
     private Vector3f rotation;
     private Vector3f lookAt;
     private Entity target;
+    private CAMERATYPE type;
 
     public Camera() {
     	setPosition(new Vector3f(0.0f, 0.0f, 0.0f));
     	setRotation(new Vector3f(0.0f, 0.0f, 0.0f));
     	setLookAt(new Vector3f(0.0f, 0.0f, 0.0f));
-        
+    	setType(CAMERATYPE.THIRDPERSON);
+    	
         Console.print("Camera loaded!", LOGTYPE.OUTPUT, true);
     }
 
@@ -29,8 +35,22 @@ public class Camera {
     }
     
 	public void update() {
-		if (target != null) {
-			setLookAt(target.getPosition());
+		if (type.equals(CAMERATYPE.CINEMATIC)) {
+			if (target != null) {
+				setLookAt(target.getPosition());
+			}
+		} else if (type.equals(CAMERATYPE.FREECAM)) {
+
+		} else if (type.equals(CAMERATYPE.FIRSTPERSON)) {
+			if (target != null) {
+				
+			}
+		} else if (type.equals(CAMERATYPE.THIRDPERSON)) {
+			if (target != null) {
+				setLookAt(target.getPosition().x, target.getPosition().y + 1.0f, target.getPosition().z);
+				setPosition(target.getPosition().x, target.getPosition().y + 1.0f, target.getPosition().z);
+				setRotation(rotation.x, target.getRotation().z, rotation.z);
+			}
 		}
 	}
 
@@ -115,5 +135,13 @@ public class Camera {
 
 	public void setTarget(Entity target) {
 		this.target = target;
+	}
+
+	public CAMERATYPE getType() {
+		return type;
+	}
+
+	public void setType(CAMERATYPE type) {
+		this.type = type;
 	}
 }
