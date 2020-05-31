@@ -29,7 +29,7 @@ public class ColorRenderer {
 	}
 	
 	public void render(Camera camera, Transformation transformation, Scene renderList) {
-		if (!renderList.getEntities().isEmpty()) {
+		if (!renderList.getLights().isEmpty()) {
 			GL43.glEnable(GL43.GL_DEPTH_TEST);
 	    	GL43.glEnable(GL43.GL_BLEND);
 	    	GL43.glBlendFunc(GL43.GL_SRC_ALPHA, GL43.GL_ONE_MINUS_SRC_ALPHA);

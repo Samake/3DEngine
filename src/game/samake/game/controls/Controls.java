@@ -4,8 +4,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
-import com.bulletphysics.dynamics.RigidBody;
-
 import samake.engine.camera.Camera;
 import samake.engine.camera.Camera.CAMERATYPE;
 import samake.engine.core.Engine;
@@ -22,6 +20,8 @@ public class Controls {
 	private Vector3f moveVector = new Vector3f();
 	private float speedValue = 1.0f;
 	private float moveSpeed = 0.0f;
+	
+	private boolean jumpReady = true;
 	
 	public Controls() {
 		
@@ -109,7 +109,14 @@ public class Controls {
 			}
 			
 			if (input.isKeyPressed(GLFW.GLFW_KEY_SPACE)) {
-				updateJump(player);
+				if (jumpReady) {
+					player.jump(25.0f);
+					jumpReady = !jumpReady;
+				}
+			} else {
+				if (!jumpReady) {
+					jumpReady = true;
+				}
 			}
 		}
 	}
@@ -156,12 +163,5 @@ public class Controls {
 			    }
 		    }
 		}
-	}
-	
-	private void updateJump(Player player) {
-		RigidBody rigidBody = player.getPhysicBody().getRigidBody();
-		javax.vecmath.Vector3f jumpVector = new javax.vecmath.Vector3f(0.0f, 0.5f, 0.0f);
-
-		rigidBody.applyCentralImpulse(jumpVector);
 	}
 }

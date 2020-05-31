@@ -56,7 +56,7 @@ public class Map extends Scene {
 
 		if (data.isGenerateWater()) {
 			Water water = new Water();
-			water.generateModel(new Vector3f(-data.getWaterSize() / 2, 0.0f, -data.getWaterSize() / 2), data.getWaterSplits(), data.getWaterSize());
+			water.generateModel(new Vector3f(-data.getWaterSize() / 2, data.getWaterHeight(), -data.getWaterSize() / 2), data.getWaterSplits(), data.getWaterSize());
 			water.getMaterial().setWaveheight(data.getWaveHeight());
 			
 			addWater(water);

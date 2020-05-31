@@ -25,7 +25,7 @@ public class MeshBuilder {
 	    List<Float> normals = new ArrayList<Float>();
 	    List<Float> colors = new ArrayList<Float>();
 	    List<Integer> indices = new ArrayList<Integer>();
-		
+
 		for (int i = 0; i < vertexesPerLine; i++) {
 			for (int j = 0; j < vertexesPerLine; j++) {
 				
@@ -36,18 +36,20 @@ public class MeshBuilder {
 				float yValue = 0;
 				
 				if (useHeightGenerator) {
-					yValue += PerlinGenerator.getTurbolenceNoise(xValue, yValue, zValue, 0.8f); // base
-					yValue += PerlinGenerator.getFBMNoise(xValue, yValue, zValue, 0.5f); // rocks
-					yValue += PerlinGenerator.getRidgeNoise(xValue, yValue, zValue, 0.5f); // hills
-					yValue *= PerlinGenerator.getPerlinNoise(xValue, yValue, zValue, 2.0f); // flatten
+					yValue += PerlinGenerator.getTurbulenceNoise(xValue, yValue, zValue);
+					yValue += PerlinGenerator.getTurbulenceNoise(xValue, yValue, zValue, 2048.0f, 3.5f, 0.3f, 4);
+					yValue *= PerlinGenerator.getTurbulenceNoise(xValue, yValue, zValue, 1024.0f, 5.5f, 0.25f, 8);
 				}
 				
-				heights[j][i] = vertexHeight + yValue * PerlinGenerator.getHeightModifier();
+				float height = (vertexHeight + yValue * PerlinGenerator.getHeightModifier());
+				height -= PerlinGenerator.getHeightModifier() / 15;
+				
+				heights[j][i] = height;
 				rawHeights[j][i] = yValue;
 				
-				vertices.add(xValue);
-				vertices.add(heights[j][i]);
-				vertices.add(zValue);
+				vertices.add((float) xValue);
+				vertices.add((float) height);
+				vertices.add((float) zValue);
 				
 				Vector3f color = new Vector3f(0.5f, 0.5f, 0.5f);
 				

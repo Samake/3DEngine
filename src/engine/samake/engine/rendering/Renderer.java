@@ -21,6 +21,7 @@ import samake.engine.rendering.renderer.TerrainRenderer;
 import samake.engine.rendering.renderer.WaterRenderer;
 import samake.engine.rendering.shadowmapping.ShadowMap;
 import samake.engine.scene.Scene;
+import samake.engine.scene.environment.water.Water;
 
 public class Renderer {
 	
@@ -121,31 +122,37 @@ public class Renderer {
     }
     
     private void renderBufferTextures() {
-		float waterHeight = 0.0f;
-		float distance = scene.getCamera().getPosition().y * 2.0f;
+    	if (!scene.getWaters().isEmpty()) {
+    		Water water = scene.getWaters().get(0);
+    		
+    		if (water != null) {
+    			float waterHeight = water.getPosition().y;
+    			float distance = scene.getCamera().getPosition().y * 2.0f;
 
-		reflectionBuffer.bindReflectionBuffer();
-		scene.getCamera().getPosition().y -= distance;
-		transformation.invert();
-		clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.5f);
-		
-		renderScene();
-		
-		reflectionBuffer.bindRefractionBuffer();
-		scene.getCamera().getPosition().y += distance;
-		transformation.invert();
-		
-		if (distance > waterHeight) {
-			clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + 0.5f);
-		} else {
-			clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.75f);
-		}
-		
-		renderScene();
-		
-    	reflectionBuffer.unbind();
-		
-		clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, 10000.0f);
+    			reflectionBuffer.bindReflectionBuffer();
+    			scene.getCamera().getPosition().y -= distance;
+    			transformation.invert();
+    			clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 0.5f);
+    			
+    			renderScene();
+    			
+    			reflectionBuffer.bindRefractionBuffer();
+    			scene.getCamera().getPosition().y += distance;
+    			transformation.invert();
+    			
+    			if (scene.getCamera().getPosition().y > waterHeight) {
+    				clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, waterHeight + 5.0f);
+    			} else {
+    				clipPlane = new Vector4f(0.0f, 1.0f, 0.0f, waterHeight + 10000.0f);
+    			}
+    			
+    			renderScene();
+    			
+    	    	reflectionBuffer.unbind();
+    			
+    			clipPlane = new Vector4f(0.0f, -1.0f, 0.0f, 10000.0f);
+    		}
+    	}
 	}
     
     public void startFrame() {

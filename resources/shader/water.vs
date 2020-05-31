@@ -20,16 +20,16 @@ out vec3 worldPosition;
 out vec4 clipSpace;
 out vec3 cameraVector;
 out float movingCoords;
+out float modelHeight;
 
 vec3 getWavePositions(vec3 positions, float moveBase) {
 	vec3 pos = vec3(0.0f, -waveStrength, 0.0f) + positions;
 
-	float waveValue = sin((pos.x / 32 + moveBase * 8)) - cos(pos.z / 32 + moveBase * 4);
-	waveValue *= sin((pos.x / 64 + moveBase * 4)) - cos(pos.z / 64 + moveBase * 8);
-	waveValue *= sin((pos.x / 128 + moveBase * 4)) - cos(pos.z / 128 + moveBase * 4);
-	waveValue *= sin((pos.x / 256 + moveBase * 8)) - cos(pos.z / 256 + moveBase * 8);
+	float waveValue = sin((pos.x / 64 + moveBase * 8)) * cos(pos.z / 64 + moveBase * 4);
+	waveValue += sin((pos.x / 16 + moveBase * 12)) * cos(pos.z / 16 + moveBase * 8);
+	waveValue -= sin((pos.x / 4 + moveBase * 12)) * cos(pos.z / 4 + moveBase * 16);
 	
-    pos.y *= waveStrength * waveValue;
+    pos.y *= waveStrength * waveValue * 0.25f;
 
     return pos;
 }
@@ -37,8 +37,9 @@ vec3 getWavePositions(vec3 positions, float moveBase) {
 void main() {
  	movingCoords = animValue * 0.75f * gameSpeed;
  	uv = inUV;
-
-	vec4 position = transformationMatrix * vec4(getWavePositions(inPosition, movingCoords), 1.0);
+	
+	vec4 wavePosition = vec4(getWavePositions(inPosition, movingCoords), 1.0);
+	vec4 position = transformationMatrix * wavePosition;
     gl_Position = projectionMatrix * viewMatrix * position;
 
 	clipSpace = projectionMatrix * viewMatrix * position;
@@ -46,5 +47,6 @@ void main() {
     color = inColor;
     normal = (transformationMatrix * vec4(inNormal, 0.0)).xyz;
     worldPosition = position.xyz;
+    modelHeight = wavePosition.y * 0.5;
     cameraVector = cameraPosition - position.xyz;
 }

@@ -5,6 +5,7 @@ import javax.vecmath.Vector2f;
 import org.joml.Vector3f;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestRayResultCallback;
+import com.bulletphysics.dynamics.RigidBody;
 
 import samake.engine.core.Engine;
 import samake.engine.models.Model;
@@ -15,11 +16,23 @@ public class Player extends NPC {
 
 	public Player() {
 		setUpdatedEntity(true);
-		setModel(ResourceLoader.load3DModel("player.fbx", false), true);
+		setModel(ResourceLoader.load3DModel("player.fbx", false), false);
 		setCollissionModel(ResourceLoader.load3DModel("sphereHull.fbx", true));
 		getMaterial().setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
 		getMaterial().setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
 		getMaterial().setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
+	}
+	
+	@Override
+	public void setCollissionModel(Model model) {
+		super.setCollissionModel(model);
+		
+		if (getPhysicBody() == null) {
+			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 5.0f, 0.5f, 0.25f, new Vector2f(0.25f, 0.25f)));
+		} else {
+			getPhysicBody().destroy();
+			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 5.0f, 0.5f, 0.25f, new Vector2f(0.25f, 0.25f)));
+		}
 	}
 	
 	@Override
@@ -39,8 +52,9 @@ public class Player extends NPC {
 			
 			if (rayTest.hasHit()) {
 				if (!rayTest.collisionObject.equals(getPhysicBody().getRigidBody())) {
-					if (heightValue < rayTest.hitPointWorld.y) {
-						heightValue = rayTest.hitPointWorld.y;
+					
+					if (heightValue < rayTest.hitPointWorld.y + 0.05f) {
+						heightValue = rayTest.hitPointWorld.y + 0.05f;
 					}
 				}
 			}
@@ -67,17 +81,12 @@ public class Player extends NPC {
         getRotation().z += offset;
     }
 	
-	@Override
-	public void setCollissionModel(Model model) {
-		super.setCollissionModel(model);
-		
-		if (getPhysicBody() == null) {
-			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 15.0f, 0.5f, 0.25f, new Vector2f(0.25f, 0.25f)));
-		} else {
-			getPhysicBody().destroy();
-			setPhysicBody(new PhysicHullMeshBody(model.getMesh(), 15.0f, 0.5f, 0.25f, new Vector2f(0.25f, 0.25f)));
-		}
-	}
+	public void jump(float jumpStrength) {
+		RigidBody rigidBody = getPhysicBody().getRigidBody();
+		javax.vecmath.Vector3f jumpVector = new javax.vecmath.Vector3f(0.0f, jumpStrength, 0.0f);
+
+		rigidBody.applyCentralImpulse(jumpVector);
+    }
 	
 	@Override
 	public void destroy() {

@@ -45,6 +45,7 @@ public class MapHandler {
 				JSONObject mapWater = mapRoot.getJSONObject("water");
 				map.getData().setGenerateWater(mapWater.getBoolean("generatewater"));
 				map.getData().setWaterSize(mapWater.getInt("watersize"));
+				map.getData().setWaterHeight(mapWater.getFloat("waterheight"));
 				map.getData().setWaterSplits(mapWater.getInt("watersplits"));
 				map.getData().setWaveHeight(mapWater.getFloat("waveheight"));
 				

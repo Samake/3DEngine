@@ -20,14 +20,15 @@ public class MaterialWater extends MaterialWorld {
 		setDUDVTexture(ResourceLoader.loadTexture("water\\dudv.png", true));
 		setNormalTexture(ResourceLoader.loadTexture("water\\normal.png", true));
 		setFoamTexture(ResourceLoader.loadTexture("water\\foam.png", true));
-		setColor(new Vector3f(0.45f, 0.55f, 0.62f));
-    	setShininess(256.0f);
-    	setReflectance(1.2f);
-    	setTiling(64);
+		setColor(new Vector3f(0.7f, 0.8f, 0.85f));
+    	setShininess(512.0f);
+    	setReflectance(1.5f);
+    	setTiling(512);
+    	setWaveheight(0.15f);
 	}
 	
 	public void update() {
-		animCounter = (animCounter + 0.002f)%360;
+		animCounter = (animCounter + 0.001f)%360;
 		setAnimValue(animCounter);
 	}
 

@@ -14,16 +14,18 @@ public class Water extends Entity {
 	
 	public Water() {
 		setMaterial(new MaterialWater());
-		setUpdatedEntity(false);
+		setUpdatedEntity(true);
 	}
 	
 	public void generateModel(Vector3f position, int rows, float size) {
 		Model model = new Model();
 		
-		Mesh mesh = MeshBuilder.generatePlane(position.x, position.y, position.z, rows, size, false, false, false);
+		Mesh mesh = MeshBuilder.generatePlane(position.x, 0.0f, position.z, rows, size, false, false, false);
 		model.addMesh(mesh);
 		
 		setModel(model, false);
+		
+		getPosition().y = position.y;
 	}
 	
 	@Override

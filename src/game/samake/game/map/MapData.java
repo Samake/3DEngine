@@ -28,6 +28,7 @@ public class MapData {
 	
 	private boolean generateWater;
 	private int waterSize;
+	private float waterHeight;
 	private int waterSplits;
 	private float waveHeight;
 	
@@ -197,6 +198,14 @@ public class MapData {
 		this.waterSize = waterSize;
 	}
 
+	public float getWaterHeight() {
+		return waterHeight;
+	}
+
+	public void setWaterHeight(float waterHeight) {
+		this.waterHeight = waterHeight;
+	}
+
 	public int getWaterSplits() {
 		return waterSplits;
 	}
@@ -246,6 +255,7 @@ public class MapData {
 		
 		setGenerateWater(true);
 		setWaterSize(2048);
+		setWaterHeight(0.0f);
 		setWaterSplits(256);
 		setWaveHeight(0.5f);
 		

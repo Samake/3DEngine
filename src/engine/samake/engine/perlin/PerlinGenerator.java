@@ -10,24 +10,24 @@ public class PerlinGenerator {
     private static int octaves = 4;
     private static int heightModifier = 32;
 
-	public static float getTurbolenceNoise(float x, float y, float z, float multiplier) {
-		float currentTurbulence = turbolence * multiplier;
-		return STBPerlin.stb_perlin_turbulence_noise3(x / currentTurbulence, y / currentTurbulence, z / currentTurbulence, lacunarity * multiplier, gain * multiplier, octaves);
+    public static float getTurbulenceNoise(float x, float y, float z) {
+		return STBPerlin.stb_perlin_turbulence_noise3(x / turbolence, y / turbolence, z / turbolence, lacunarity, gain, octaves);
+	}
+    
+	public static float getTurbulenceNoise(float x, float y, float z, float turbolence) {
+		return STBPerlin.stb_perlin_turbulence_noise3(x / turbolence, y / turbolence, z / turbolence, lacunarity, gain, octaves);
 	}
 	
-	public static float getFBMNoise(float x, float y, float z, float multiplier) {
-		float currentTurbulence = turbolence * multiplier;
-		return STBPerlin.stb_perlin_fbm_noise3(x / currentTurbulence, y / currentTurbulence, z / currentTurbulence, lacunarity * multiplier, gain * multiplier, octaves);
+	public static float getTurbulenceNoise(float x, float y, float z, float turbolence, float lacunarity) {
+		return STBPerlin.stb_perlin_turbulence_noise3(x / turbolence, y / turbolence, z / turbolence, lacunarity, gain, octaves);
 	}
 	
-	public static float getRidgeNoise(float x, float y, float z, float multiplier) {
-		float currentTurbulence = turbolence * multiplier;
-		return STBPerlin.stb_perlin_ridge_noise3(x / currentTurbulence, y / currentTurbulence, z / currentTurbulence, lacunarity * multiplier, gain * multiplier, 0, octaves);
+	public static float getTurbulenceNoise(float x, float y, float z, float turbolence, float lacunarity, float gain) {
+		return STBPerlin.stb_perlin_turbulence_noise3(x / turbolence, y / turbolence, z / turbolence, lacunarity, gain, octaves);
 	}
 	
-	public static float getPerlinNoise(float x, float y, float z, float multiplier) {
-		float currentTurbulence = turbolence * multiplier;
-		return STBPerlin.stb_perlin_noise3(x / currentTurbulence, y / currentTurbulence, z / currentTurbulence, 0, 0, 0);
+	public static float getTurbulenceNoise(float x, float y, float z, float turbolence, float lacunarity, float gain, int octaves) {
+		return STBPerlin.stb_perlin_turbulence_noise3(x / turbolence, y / turbolence, z / turbolence, lacunarity, gain, octaves);
 	}
 
 	public static float getTurbolence() {

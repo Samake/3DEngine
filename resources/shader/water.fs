@@ -9,6 +9,7 @@ in vec3 worldPosition;
 in vec4 clipSpace;
 in vec3 cameraVector;
 in float movingCoords;
+in float modelHeight;
 
 layout (location = 0) out vec4 outColor;
 layout (location = 1) out vec4 brightColor;
@@ -172,7 +173,7 @@ vec4 calculateLuminance(vec4 color) {
 }
 
 void main() {
-	vec3 diffuseMap = material.color;
+	vec3 diffuseMap = vec3(0.0, 0.0, 0.0);
 	vec3 specularMap = vec3(0.0, 0.0, 0.0);
 	float specValue = 1.0f;
 	
@@ -187,13 +188,13 @@ void main() {
 	float depthBase = (floorDistance - waterDistance);
 	float depthBorder = clamp(depthBase * 2, 0.0f, 1.0f);
 	float depthBorderNeg = 1 - depthBorder;
-	float waterDepth = clamp(depthBase / 64.0f, 0.0f, 1.0f);
+	float waterDepth = clamp(depthBase / 128.0f, 0.0f, 1.0f);
 	float waterDepthNeg = 1 - waterDepth;
 	
 	vec2 baseUV = uv * material.tiling;
-	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y) * 2).rg * 0.2f;
+	vec2 distortedTexCoords = texture(dudvSampler, vec2(baseUV.x + movingCoords, baseUV.y) * 2).rg * 0.5f;
 	distortedTexCoords = baseUV + vec2(distortedTexCoords.x - movingCoords, distortedTexCoords.y + movingCoords);
-	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords / 2).rg * 2.0f - 1.0f) * 0.025f;
+	vec2 totalDistortion = (texture(dudvSampler, distortedTexCoords / 2).rg * 2.0f - 1.0f) * 0.03f;
 	
 	float blurValue = 0.0015f;
 	
@@ -222,7 +223,7 @@ void main() {
 	
 	reflection = calculateLuminance(reflection);
 	
-	vec4 normalMap = texture(normalSampler, totalDistortion * 2);
+	vec4 normalMap = texture(normalSampler, totalDistortion);
 	vec3 texNormal = vec3(normalMap.r * 2.0f - 1.0f, normalMap.b * 5.0f, normalMap.g * 2.0f - 1.0f);
 	texNormal = normalize(texNormal);
 	
@@ -250,11 +251,11 @@ void main() {
 		specularMap *= depthBorder;
 	}
 	
-	vec2 foamUV = uv * (material.tiling * 8);
+	vec2 foamUV = uv * (material.tiling * 16);
 	vec3 foamColor = texture(foamSampler, vec2(foamUV.x + movingCoords * 2, foamUV.y) * 1.25).rgb;
 	foamColor += texture(foamSampler, vec2(foamUV.x, foamUV.y + movingCoords * 3) * 1.5).rgb;
 	foamColor += texture(foamSampler, vec2(foamUV.x + movingCoords * 4, foamUV.y + movingCoords * 2) * 1.75).rgb;
-	vec3 foamColor1 = clamp(foamColor * ambientStrength * depthBorderNeg, 0.0f, 1.0f);
+	vec3 foamColor1 = clamp(foamColor * ambientStrength * depthBorderNeg * ((1 - modelHeight) - 0.75f), 0.0f, 1.0f);
 
 	vec3 basePosition = worldPosition;
 	basePosition.x += movingCoords * 50;
@@ -270,20 +271,23 @@ void main() {
 	basePosition.x += movingCoords * 135;
 	basePosition.z -= movingCoords * 115;
 	
-	noiseValue *= noise(basePosition * 0.025f);
+	noiseValue *= noise(basePosition * 0.05f) * 2;
 	noiseValue *= (1 - refractiveValue);
 	
-	vec3 foamColor2 = clamp(foamColor * ambientStrength * worldPosition.y * 0.5f * noiseValue, 0.0f, 1.0f);
-	vec3 waterOutput = clamp(mix(reflection.rgb, refraction.rgb, refractiveValue), 0.0f, 1.0f);
+	vec3 foamColor2 = clamp(foamColor * ambientStrength * modelHeight * noiseValue, 0.0f, 1.0f);
+	vec3 waterOutput = clamp(mix(reflection.rgb, refraction.rgb, refractiveValue), 0.0f, 1.0f) * material.color;
 	
 	if (cameraPosition.y < worldPosition.y) {
-		waterOutput = refractionBase.rgb;
+		waterOutput = refractionBase.rgb * material.color;
 	}
+	
+	diffuseMap *= (1 - modelHeight);
+	
+	vec3 lightMap = ambientColor * ambientStrength + diffuseMap + specularMap;
 	
 	waterOutput += foamColor1;
 	waterOutput += foamColor2;
-	waterOutput *= diffuseMap;
-	waterOutput += specularMap;
+	waterOutput *= lightMap * 1.5;
 
 	float fogDistance = length(cameraPosition - worldPosition);
     float fogFactor = 1.0 / exp((fogDistance * fogDensity) * (fogDistance * fogDensity));
@@ -293,14 +297,13 @@ void main() {
     
     // DEFAULT, DEBUG, WIREFRAME, DIFFUSE, NORMALS, ALBEDO, DEPTH, COLOR
     if (renderMode == 0) {
-    	outColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
-    	//outColor = vec4(specularMap, 1);
+    	outColor = vec4(mix(ambientColor, waterOutput, fogFactor), depthBorder);
     } else if (renderMode == 1) {
-    	outColor = vec4(mix(ambientColor * ambientStrength, waterOutput, fogFactor), depthBorder);
+    	outColor = vec4(mix(ambientColor, waterOutput, fogFactor), depthBorder);
     } else if (renderMode == 2) {
     	outColor = vec4(0.25, 0.25, 1.0, 1.0);
     } else if (renderMode == 3) {
-    	outColor = vec4(diffuseMap + specularMap, 1);
+    	outColor = vec4(diffuseMap, 1);
     } else if (renderMode == 4) {
     	outColor = vec4(texNormal.rgb, 1);
     } else if (renderMode == 5) {
@@ -313,4 +316,8 @@ void main() {
     } else if (renderMode == 8) {
     	outColor = vec4(0.25, 0.25, 1.0, 1.0);
     }
+    
+    //refraction
+    //reflection
+    //outColor = vec4(refraction.rgb, 1.0);
 }
