@@ -14,6 +14,8 @@ public class BloomShader extends Shader {
 		createUniform("mainTexture");
 		createUniform("brightTexture");
 		createUniform("bloomLevel");
+		createUniform("cameraPosition");
+		createUniform("waterHeight");
 		
 		Console.print("BloomShader bloom!", LOGTYPE.OUTPUT, true);
 	}

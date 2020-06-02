@@ -46,7 +46,7 @@ public class PostProcess {
 		texture = underWater.render(scene, mainTexture, depthTexture);
 		
 		if (renderMode == 0) {
-			texture = bloom.render(texture, brightnessTexture);
+			texture = bloom.render(scene, texture, brightnessTexture);
 		}
 		
 		shader.bind();

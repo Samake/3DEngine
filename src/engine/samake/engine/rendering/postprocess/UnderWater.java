@@ -21,7 +21,7 @@ public class UnderWater {
 	}
 	
 	public void update() {
-		animValue = (animValue + 0.001f)%360;
+		animValue = (animValue + 0.02f)%360;
 	}
 
 	public int render(Scene scene, int mainScene, int depthScene) { 
