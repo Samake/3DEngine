@@ -11,6 +11,7 @@ import samake.engine.logging.Console.LOGTYPE;
 import samake.engine.models.BasicMesh;
 import samake.engine.models.MeshBuilder;
 import samake.engine.rendering.shader.postprocess.OutputShader;
+import samake.engine.scene.Scene;
 
 public class PostProcess {
 	
@@ -19,6 +20,7 @@ public class PostProcess {
 	
 	private OutputShader shader;
 	
+	private UnderWater underWater;
 	private Bloom bloom;
 
 	public PostProcess() throws Exception {
@@ -27,21 +29,24 @@ public class PostProcess {
 		quad = MeshBuilder.loadToVAO(POSITIONS, 2);
 		
 		setShader(new OutputShader());
+		setUnderWater(new UnderWater());
 		setBloom(new Bloom());
 	}
 	
 	public void update() {
+		underWater.update();
 		bloom.update();
 	}
 	
-	public void render(int mainTexture, int brightnessTexture, int depthTexture, int renderMode) {
+	public void render(Scene scene, int mainTexture, int brightnessTexture, int depthTexture, int renderMode) {
 		int texture = mainTexture;
 		
 		startFrame();
 		
+		texture = underWater.render(scene, mainTexture, depthTexture);
+		
 		if (renderMode == 0) {
-			bloom.render(texture, brightnessTexture);
-			texture = bloom.getResult();
+			texture = bloom.render(texture, brightnessTexture);
 		}
 		
 		shader.bind();
@@ -80,6 +85,14 @@ public class PostProcess {
 
 	public void setShader(OutputShader shader) {
 		this.shader = shader;
+	}
+
+	public UnderWater getUnderWater() {
+		return underWater;
+	}
+
+	public void setUnderWater(UnderWater underWater) {
+		this.underWater = underWater;
 	}
 
 	public Bloom getBloom() {

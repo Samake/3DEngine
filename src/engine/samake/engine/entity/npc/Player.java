@@ -53,8 +53,8 @@ public class Player extends NPC {
 			if (rayTest.hasHit()) {
 				if (!rayTest.collisionObject.equals(getPhysicBody().getRigidBody())) {
 					
-					if (heightValue < rayTest.hitPointWorld.y + 0.05f) {
-						heightValue = rayTest.hitPointWorld.y + 0.05f;
+					if (heightValue < rayTest.hitPointWorld.y) {
+						heightValue = rayTest.hitPointWorld.y;
 					}
 				}
 			}

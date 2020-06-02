@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import samake.engine.core.Engine;
 import samake.engine.entity.npc.Player;
 import samake.engine.perlin.PerlinGenerator;
-import samake.engine.resources.ResourceLoader;
 import samake.engine.scene.Scene;
 import samake.engine.scene.environment.terrain.Terrain;
 import samake.engine.scene.environment.water.Water;
@@ -46,9 +45,6 @@ public class Map extends Scene {
 			
 			Terrain terrain = new Terrain();
 			terrain.generateModel(new Vector3f(-data.getTerrainSize() / 2, 0.0f, -data.getTerrainSize() / 2), data.getTerrainSplits(), data.getTerrainSize(), true, true);
-			terrain.getMaterial().setTexture(ResourceLoader.loadTexture("debug\\debug.png", true));
-			terrain.getMaterial().setNormalMap(ResourceLoader.loadTexture("debug\\debug_n.png", true));
-			terrain.getMaterial().setSpecularMap(ResourceLoader.loadTexture("debug\\debug_s.png", true));
 			terrain.getMaterial().setTiling(data.getTerrainTiling());
 			
 			addTerrain(terrain);

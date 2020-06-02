@@ -111,7 +111,7 @@ public class Renderer {
             	colorRenderer.render(scene.getCamera(), transformation, scene);
         	}
         	
-        	postProcess.render(sceneRenderTarget.getMainTexture(), brightnessRenderTarget.getMainTexture(), sceneRenderTarget.getDepthTexture(), getRenderMode());
+        	postProcess.render(scene, sceneRenderTarget.getMainTexture(), brightnessRenderTarget.getMainTexture(), sceneRenderTarget.getDepthTexture(), getRenderMode());
         	
         	endFrame();
 		}
